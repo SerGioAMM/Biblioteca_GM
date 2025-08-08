@@ -1,7 +1,7 @@
 from flask import Blueprint, session, redirect, request,render_template,url_for
 from datetime import datetime
 import math
-from config import conexion_BD
+from src.database.db_sqlite import conexion_BD
 
 bp_usuarios = Blueprint('usuarios',__name__)
 

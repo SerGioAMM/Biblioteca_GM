@@ -13,10 +13,10 @@
     <header>
 
         <div class="navbar fondo-cristal">
-            <a href="{{ url_for('inicio') }}">Biblioteca Gabriela Mistral</a>
+            <a href="{{ url_for('main.inicio') }}">Biblioteca Gabriela Mistral</a>
             <nav>
                 <a href="{{ url_for('libros.libros') }}">Catálogo </a>
-                <a href="{{ url_for('acercade') }}">Acerca de</a>
+                <a href="{{ url_for('main.acercade') }}">Acerca de</a>
                 <a href="{{ url_for('login.login') }}">Iniciar como administrador</a>
             </nav>
         </div>
@@ -27,7 +27,7 @@
                 <button class="boton-lateral-cerrar fondo-cristal">Cerrar</button>
                 <br>
                 <a href="{{ url_for('libros.libros') }}">Catálogo de Libros</a>
-                <a href="{{ url_for('acercade') }}">Acerca de</a>
+                <a href="{{ url_for('main.acercade') }}">Acerca de</a>
                 <a href="{{ url_for('login.login') }}">Iniciar como administrador</a>
             </nav>
         </section>

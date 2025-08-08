@@ -1,5 +1,5 @@
 from flask import Blueprint, session, redirect, request,render_template,url_for
-from config import conexion_BD
+from src.database.db_sqlite import conexion_BD
 
 bp_login = Blueprint('login',__name__)
 
