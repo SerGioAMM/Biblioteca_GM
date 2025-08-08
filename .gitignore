@@ -1,4 +1,15 @@
 #Ignorar conexion a base de datos local y base de datos local
-config.py
 Biblioteca_GM.db
 
+#Ignorar variables de entorno para no exponerlas
+.env
+
+#Ignorar datos de entorno virtual
+env/
+venv/
+
+#Ignorar cache generado por flask
+__pycache__/
+
+#Ignorar cache de tests
+.pytest_cache/

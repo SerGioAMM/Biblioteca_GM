@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify
-from config import conexion_BD
+from src.database.db_sqlite import conexion_BD
 
 bp_sugerencias = Blueprint('sugerencias',__name__)
 
