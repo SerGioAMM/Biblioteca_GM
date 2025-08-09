@@ -17,6 +17,5 @@ def conexion_BD():
             RUTA_DB = os.path.join(DIR, RUTA_RELATIVA)
             return (sqlite3.connect(RUTA_DB))
     except Exception as ex:
-        pass
         logger.add_to_log("error", str(ex))
         logger.add_to_log("error", traceback.format_exc())
