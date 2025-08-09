@@ -5,7 +5,6 @@ Biblioteca_GM.db
 .env
 
 #Ignorar datos de entorno virtual
-env/
 venv/
 
 #Ignorar cache generado por flask
@@ -13,3 +12,6 @@ __pycache__/
 
 #Ignorar cache de tests
 .pytest_cache/
+
+#!Ignorar archivos de log MOMENTANEAMENTE
+src/utils/logs
