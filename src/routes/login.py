@@ -10,7 +10,7 @@ bp_login = Blueprint('login',__name__)
 @bp_login.route("/logout")
 def logout():
     session.clear()
-    return redirect(url_for("inicio"))
+    return redirect(url_for("main.inicio"))
 
 # ----------------------------------------------------- LOGIN ----------------------------------------------------- #
 
@@ -41,6 +41,8 @@ def login():
             else:
                 alerta = "Datos incorrectos"
                 session["rol"] = "false"
+                logger.add_to_log("error", str(f"{alerta} - Usuario: {usuario}"))
+                logger.add_to_log("error", traceback.format_exc())
     except Exception as ex:
         logger.add_to_log("error", str(ex))
         logger.add_to_log("error", traceback.format_exc())
