@@ -1,5 +1,6 @@
 #Ignorar conexion a base de datos local y base de datos local
 Biblioteca_GM.db
+iniciarSQLiteCloud.py
 
 #Ignorar variables de entorno para no exponerlas
 .env
