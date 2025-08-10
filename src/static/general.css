@@ -1,3 +1,15 @@
+:root{
+--fondo_principal: #FFFAEC;
+--fondo_claro: #FFFDF5;
+--fondo_oscuro: #3c2a21;
+--fondo_saturado:#FEF6D9;
+--letras_oscuras: #78350F;
+--letras_claras: #B75D17;
+--letras_saturadas: #D97D11;
+--borde_principal: #FCD34D;
+--cafe_claro: #a27b5c;
+}
+
 /*? Fondo y fuentes*/
 body {
     margin: 0;
@@ -10,12 +22,11 @@ h1 {
     margin-bottom: 20px;
 }
 .main{
-    /*
-    background-color: #6B3E2E;
-    */
-    background-image: url('img/libros-loop-v4.jpg');
+    background-color: #8a5c3b;
+    
+    /*background-image: url('img/libros-loop-v4.jpg');
     background-size: cover;
-    background-position: top;
+    background-position: top;*/
     height: 140vh;
     display: flex;
     flex-direction: column; 
