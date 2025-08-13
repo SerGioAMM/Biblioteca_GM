@@ -1,5 +1,6 @@
 from flask import Blueprint, session,render_template
 from src.database.db_sqlite import conexion_BD
+from math import floor
 
 main = Blueprint('main',__name__)
 
@@ -24,10 +25,14 @@ def inicio():
                     limit 4;""")
     libros_destacados = query.fetchall()
 
+    query.execute("select count(*) from libros")
+    total_libros = query.fetchone()[0]
+    total_libros = (floor(total_libros/10))*10
+
     query.close()
     conexion.close()
 
-    return render_template("index.html",libros_destacados=libros_destacados)
+    return render_template("index.html",libros_destacados=libros_destacados, total_libros=total_libros)
 
 # ----------------------------------------------------- ACERCA DE ----------------------------------------------------- #
 
