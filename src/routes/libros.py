@@ -291,7 +291,7 @@ def eliminar_libro():
 
     if(libroprestado):
         alerta = "Error, el libro está prestado."
-        return redirect(url_for("libros",alerta = alerta))
+        return redirect(url_for("libros.libros",alerta = alerta))
 
     query.execute("select titulo from libros where id_libro = ?",(id_libro,))
     titulo_libro = query.fetchone()[0]
