@@ -186,7 +186,6 @@ def devolver_prestamo():
 
 @bp_prestamos.route("/eliminar_prestamo", methods=["GET", "POST"])
 def eliminar_prestamo():
-    #! RECORDATORIO: Agregar el id_libro para mostrarlo en prestamos eliminados y en libros eliminados
     id_prestamo = request.form["id_prestamo"]
     motivo = request.form["motivo"]
 
