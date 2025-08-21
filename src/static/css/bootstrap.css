@@ -1,0 +1,14 @@
+@media(min-width: 768px) {
+  .dropdown:hover .dropdown-menu {
+    display: block;
+  }
+}
+
+.navbar .nav-item {
+    transition: all 0.3s ease-in-out;
+    border-radius: 5px;
+}
+
+.navbar .nav-item:hover {
+    background-color: rgba(0, 0, 0, 0.308);
+}
