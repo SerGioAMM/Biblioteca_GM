@@ -7,8 +7,8 @@ bp_libros = Blueprint('libros',__name__)
 
 # ----------------------------------------------------- INSERTAR LIBROS ----------------------------------------------------- #
 
-@bp_libros.route("/insertar", methods=["GET", "POST"])
-def insertar_libro():
+@bp_libros.route("/registro_libros", methods=["GET", "POST"])
+def registro_libros():
     if "usuario" not in session:
         return redirect("/") #Solo se puede acceder con session iniciada
 
@@ -128,18 +128,18 @@ def insertar_libro():
 
             
             registro_exitoso = "Libro registrado exitosamente."
-            return render_template("insertar.html", secciones = secciones, ultima_seccion = ultima_seccion, registro_exitoso=registro_exitoso) 
+            return render_template("registro_libros.html", secciones = secciones, ultima_seccion = ultima_seccion, registro_exitoso=registro_exitoso) 
 
         except Exception as e:
             print(f"Error: {e}")
             alerta = "Error al ingresar libro."
-            return render_template("insertar.html", secciones = secciones, ultima_seccion = ultima_seccion, alerta=alerta) 
+            return render_template("registro_libros.html", secciones = secciones, ultima_seccion = ultima_seccion, alerta=alerta) 
         finally:
             query.close()
             conexion.close()
     
 
-    return render_template("insertar.html", secciones = secciones, ultima_seccion = ultima_seccion) #Devuelve variables para poder usarlas en insert.html
+    return render_template("registro_libros.html", secciones = secciones, ultima_seccion = ultima_seccion) #Devuelve variables para poder usarlas en insert.html
 
 # ----------------------------------------------------- CATALOGO DE LIBROS ----------------------------------------------------- #
 
