@@ -36,7 +36,7 @@ h1 {
 #btn-registrar, #btn-buscar, #btn-catalogo, #btn-login, #btn-registrar-prestamo{
     text-decoration: none;
     color: white;
-    background-color: #00000071;
+    background-color: #00000070;
     padding: 12px 22px;
     font-size: 1.4rem;
     border: none;
@@ -44,8 +44,8 @@ h1 {
     transition: 0.2s ease-in-out;
 }
 #btn-catalogo{
-    background-color: #00000068;
-    scale: 1.1;
+    position: relative;
+    scale: 0.85;
 }
 
 #btn-registrar:hover, #btn-buscar:hover, #btn-catalogo:hover,#btn-login:hover, #btn-registrar-prestamo:hover{
@@ -140,8 +140,7 @@ h1 {
 
     backdrop-filter: blur(8px);
     box-shadow: 0 8px 32px 0 rgba(0,0,0,0.37);
-    border: solid 1px rgba(255, 255, 255, 0.21);
-    border-radius: 4px;
+
 }
 
 /*? Errores */
