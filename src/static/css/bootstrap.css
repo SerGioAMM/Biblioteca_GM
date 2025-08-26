@@ -9,8 +9,8 @@
     border-radius: 5px;
 }
 
-.navbar .nav-item:hover {
-    background-color: rgba(0, 0, 0, 0.308);
+.navbar .nav-item:hover, .navbar .dropdown-item:hover {
+    background-color: rgba(0, 0, 0, 0.321);
 }
 
 :root {
