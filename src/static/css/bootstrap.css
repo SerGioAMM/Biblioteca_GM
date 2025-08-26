@@ -12,3 +12,25 @@
 .navbar .nav-item:hover {
     background-color: rgba(0, 0, 0, 0.308);
 }
+
+:root {
+  --color-principal: #f2e5d0;
+  --color-oscuro: #715c3a;
+  --color-secundario: #fca72b;
+  --color-claro: #f9f3ee;
+
+}
+
+.bg-custom {
+  background-color: var(--color-principal) !important;
+}
+.bg-accent-custom {
+  background-color: var(--color-secundario) !important;
+}
+.bg-light-custom {
+  background-color: var(--color-claro) !important;
+}
+
+.text-dark-custom { color: var(--color-oscuro) !important; }
+.text-accent { color: var(--color-secundario) !important; }
+.text-light-custom { color: var(--color-claro) !important; }
