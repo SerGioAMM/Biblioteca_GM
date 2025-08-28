@@ -160,7 +160,7 @@ def libros():
     query = conexion.cursor()
 
     pagina = request.args.get("pag", 1, type=int)
-    libros_por_pagina = 16
+    libros_por_pagina = 36
     offset = (pagina - 1) * libros_por_pagina
 
     # Consulta para contar todos los libros
@@ -213,7 +213,7 @@ def buscar_libro():
 
 
     pagina = request.args.get("pag", 1, type=int)
-    libros_por_pagina = 16
+    libros_por_pagina = 36
     offset = (pagina - 1) * libros_por_pagina
 
     # Secciones Dewey para filtros
