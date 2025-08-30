@@ -5,7 +5,7 @@ from src.database.db_sqlite import conexion_BD
 
 bp_libros = Blueprint('libros',__name__)
 
-# ----------------------------------------------------- INSERTAR LIBROS ----------------------------------------------------- #
+# ----------------------------------------------------- REGISTRO LIBROS ----------------------------------------------------- #
 
 @bp_libros.route("/registro_libros", methods=["GET", "POST"])
 def registro_libros():
