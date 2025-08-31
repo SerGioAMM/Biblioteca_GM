@@ -170,6 +170,11 @@
                     {{libro[3]}}</p><!-- Anio de publicacion  -->
                 </div>
                 <div class="card-footer">
+                    {% if libro[0] in destacados %}
+                    <span class="destacado">
+                            <h4 class="h4-destacado"> <i class="bi bi-star-fill"></i> Destacado</h4>
+                    </span>
+                    {% endif %}
                     <span id="span-info-libro-d"> 
                     <h5
                         {% if (libro[7]|int) < 100 %}

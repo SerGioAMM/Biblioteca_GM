@@ -189,6 +189,22 @@ def libros():
     query.execute("select * from SistemaDewey")
     categorias = query.fetchall()
 
+    resultado = []
+    for i in range(10):
+        query.execute(f"""select l.id_libro,count(l.id_libro) as cantidad
+                        from Prestamos p
+                        join libros l on p.id_libro = l.id_libro
+                        join RegistroLibros r on r.id_libro = l.id_libro
+                        join SistemaDewey sd on sd.codigo_seccion = r.codigo_seccion 
+                        where sd.codigo_seccion LIKE "{i}%"
+                        group by p.id_libro
+                        order by cantidad desc
+                        limit 3;""")
+        destacados = query.fetchall()
+        if destacados:
+            for libro in destacados:
+                resultado.append((libro[0])) 
+
     query.close()
     conexion.close()
     
@@ -196,7 +212,7 @@ def libros():
     exito = request.args.get("exito", "")
 
     return render_template("libros.html",libros=libros,categorias=categorias,pagina=pagina,total_paginas=total_paginas,
-                           alerta=alerta, exito = exito)
+                            alerta=alerta, exito = exito, destacados=resultado)
 
 # ----------------------------------------------------- BUSCAR LIBROS ----------------------------------------------------- #
 
@@ -264,13 +280,29 @@ def buscar_libro():
 
     libros = query.fetchall()
 
+    resultado = []
+    for i in range(10):
+        query.execute(f"""select l.id_libro,count(l.id_libro) as cantidad
+                        from Prestamos p
+                        join libros l on p.id_libro = l.id_libro
+                        join RegistroLibros r on r.id_libro = l.id_libro
+                        join SistemaDewey sd on sd.codigo_seccion = r.codigo_seccion 
+                        where sd.codigo_seccion LIKE "{i}%"
+                        group by p.id_libro
+                        order by cantidad desc
+                        limit 3;""")
+        destacados = query.fetchall()
+        if destacados:
+            for libro in destacados:
+                resultado.append((libro[0]))
+
     query.close()
     conexion.close()
 
     return render_template("libros.html", libros=libros, categorias=categorias,
-                           pagina=pagina, total_paginas=total_paginas,
-                           busqueda=busqueda, filtro_busqueda=filtro_busqueda, Seccion=Seccion, 
-                           alerta = alerta, exito = exito)
+                            pagina=pagina, total_paginas=total_paginas,
+                            busqueda=busqueda, filtro_busqueda=filtro_busqueda, Seccion=Seccion, 
+                            alerta = alerta, exito = exito, destacados=resultado)
 
 # ----------------------------------------------------- ELIMINAR LIBROS ----------------------------------------------------- #
 
