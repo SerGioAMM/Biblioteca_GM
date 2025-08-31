@@ -17,14 +17,14 @@
 </head>
 <body class="bg-custom">
     <header>
-        <nav class="navbar navbar-expand-lg bg-body-tertiary bg-custom">
+        <nav class="navbar navbar-expand-lg bg-custom">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Biblioteca Gabriela Mistral</a>
+                <a class="navbar-brand" href="/">Biblioteca Gabriela Mistral</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="collapse navbar-collapse me-5" id="navbarSupportedContent">
                     <form class="d-flex" role="search" action="{{ url_for('libros.buscar_libro') }}" method="POST">
                         <input class="form-control me-2" type="search" placeholder="Buscar libro" aria-label="Search"/>
                         <button class="btn btn-outline-secondary" type="submit">Buscar</button>
@@ -36,6 +36,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('main.acercade') }}">Acerca de</a>
                         </li>
+                        
+                    </ul>
+                    <ul class="navbar-nav ms-5 mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('login.login') }}">Login</a>
                         </li>
@@ -96,7 +99,7 @@
                                 <h2>{{libro[2]}}</h2> 
                             </span><!-- Notacion  -->
                         </div>
-                        <img src="{{ url_for('static', filename='img/book.png') }}" class="card-img-top" alt="...">
+                        <img src="{{ url_for('static', filename='img/book.png') }}" class="card-img-top img-fluid mx-auto" alt="...">
                         <div class="card-body">
                             <h6 class="card-title">{{libro[3]}}</h6><!-- Titulo  --> 
                             <small class="card-text text-body-secondary">{{libro[4]}}&nbsp;{{libro[5]}} <!-- Nombre y apellido del autor  -->

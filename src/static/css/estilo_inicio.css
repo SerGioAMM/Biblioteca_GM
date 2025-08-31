@@ -1,13 +1,13 @@
 /* Secciones */
-.seccion-principal{
-    background-image: url('/static/img/portada-biblioteca-3.jpg');
+.seccion-principal, .div-busqueda{
+    background-image: url('/static/img/biblioteca.jpg');
     margin: 0 1% auto auto;
     background-size: cover;
     background-position: center;
     height: 35vh;
     width: 100%;
 }
-.seccion-principal .presentacion-biblioteca{
+.seccion-principal .presentacion-biblioteca, .fondo-principal{
     background-color: #8383834b;
     backdrop-filter: blur(10px);
     text-align: center;
@@ -37,13 +37,14 @@
 
 
 /* Seccion de libros destacados */
-.seccion-libros-destacados, .seccion-actividades{
+.seccion-libros-destacados, .seccion-actividades, .contenedor-libros{
     text-align: center;
     width: 90%;
     margin: 1% auto;
     border-radius: 20px;
     /*height: 80vh;*/
 }
+/*
 .div-contenedor-libros-destacados{
     display: flex;
     flex-direction: row;
@@ -60,9 +61,10 @@
     width: 25%;
     height: 85%;
     text-decoration: none;
-}
+}*/
 
 /*? Contenedor que tiene los datos del libro */
+/*
 .div-libro-destacado{
     background-color: rgba(255, 255, 255, 0.721);
     backdrop-filter: blur(10px);
@@ -77,7 +79,7 @@
 
 .div-libro-destacado:hover{
     scale: 1.02;
-}
+}*/
 
 .span-notacion{
     position: relative;
@@ -92,6 +94,7 @@
 }
 
 /*? Textos que muestran la informacion de los libros */
+/*
 #span-info-libro-d{
     align-items: center;
     display: flex;
@@ -117,7 +120,7 @@
 #span-info-libro-d h5{
     border-radius: 10px;
     padding: 5px;
-    font-size: 100%;
+    font-size: 90%;
 }
 
 /*? Textos que muestran la disponibilidad de los libros */

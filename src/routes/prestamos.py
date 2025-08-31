@@ -110,7 +110,7 @@ def buscar_prestamo():
     if estados == "Todos":
         SQL_where_estado =" "
     else:
-        SQL_where_estado = (f" and e.id_estado = {estados}")
+        SQL_where_estado = (f" and e.estado = '{estados}'")
 
     pagina = request.args.get("page", 1, type=int) #Recibe el parametro de la URL llamado page
     prestamos_por_pagina = 7
@@ -149,8 +149,8 @@ def buscar_prestamo():
     conexion.close()
 
     return render_template("prestamos.html",prestamos=prestamos,estados=estados,pagina=pagina,total_paginas=total_paginas,busqueda=busqueda,filtro_busqueda=filtro_busqueda,
-                           prestamos_activos=prestamos_activos,prestamos_devueltos=prestamos_devueltos,prestamos_vencidos=prestamos_vencidos,
-                           exito = exito, devuelto = devuelto)
+                            prestamos_activos=prestamos_activos,prestamos_devueltos=prestamos_devueltos,prestamos_vencidos=prestamos_vencidos,
+                            exito = exito, devuelto = devuelto)
 
 # ----------------------------------------------------- Devolver Prestamo ----------------------------------------------------- #
 
@@ -247,10 +247,10 @@ def registro_prestamos():
                 # El libro no existe
                 alerta = "El libro no existe."
                 return render_template("registro_prestamos.html", alerta=alerta,
-                       DPI=DPI, nombre_lector=NombreLector, apellido_lector=ApellidoLector,
-                       direccion=Direccion, num_telefono=Telefono, libro=Libro,
-                       grado=GradoEstudio, fecha_prestamo=fecha_prestamo,
-                       fecha_entrega_estimada=fecha_entrega_estimada)
+                        DPI=DPI, nombre_lector=NombreLector, apellido_lector=ApellidoLector,
+                        direccion=Direccion, num_telefono=Telefono, libro=Libro,
+                        grado=GradoEstudio, fecha_prestamo=fecha_prestamo,
+                        fecha_entrega_estimada=fecha_entrega_estimada)
 
 
             id_libro, numero_copias = libro_data
@@ -259,16 +259,16 @@ def registro_prestamos():
                 # No hay copias disponibles
                 alerta = "No hay copias disponibles de este libro"
                 return render_template("registro_prestamos.html", alerta=alerta,
-                       DPI=DPI, nombre_lector=NombreLector, apellido_lector=ApellidoLector,
-                       direccion=Direccion, num_telefono=Telefono, libro=Libro,
-                       grado=GradoEstudio, fecha_prestamo=fecha_prestamo,
-                       fecha_entrega_estimada=fecha_entrega_estimada)
+                    DPI=DPI, nombre_lector=NombreLector, apellido_lector=ApellidoLector,
+                    direccion=Direccion, num_telefono=Telefono, libro=Libro,
+                    grado=GradoEstudio, fecha_prestamo=fecha_prestamo,
+                    fecha_entrega_estimada=fecha_entrega_estimada)
             
             #? INSERT DE PRESTAMOS
             query.execute(f"""Insert into Prestamos
-                          (dpi_usuario,nombre,apellido,direccion,num_telefono,id_libro,grado,id_estado,fecha_prestamo,fecha_entrega_estimada,fecha_devolucion)
-                          values (?,?,?,?,?,?,?,?,?,?,NULL)""",
-                          (DPI,NombreLector,ApellidoLector,Direccion,Telefono,id_libro,GradoEstudio,Estado,fecha_prestamo,fecha_entrega_estimada))
+                    (dpi_usuario,nombre,apellido,direccion,num_telefono,id_libro,grado,id_estado,fecha_prestamo,fecha_entrega_estimada,fecha_devolucion)
+                    values (?,?,?,?,?,?,?,?,?,?,NULL)""",
+                    (DPI,NombreLector,ApellidoLector,Direccion,Telefono,id_libro,GradoEstudio,Estado,fecha_prestamo,fecha_entrega_estimada))
 
             query.execute(f"update Libros set numero_copias = (numero_copias-1) where id_libro = ?",(id_libro,))
 

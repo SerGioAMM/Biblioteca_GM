@@ -14,79 +14,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <!--? Tom Select CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg bg-custom">
-            <div class="container-fluid justify-content-start">
-                <a class="navbar-brand" href="/">Biblioteca Gabriela Mistral</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                
-                <div class="collapse navbar-collapse me-5 flex-grow-0 ms-auto" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-body-emphasis" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Libros
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ url_for('libros.libros') }}">Catalogo</a></li>
-                            <li><a class="dropdown-item border-start border-dark border-4" href="{{ url_for('libros.registro_libros') }}">Registrar libros</a></li>
-                        </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Prestamos
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ url_for('prestamos.prestamos') }}">Activos</a></li>
-                            <li><a class="dropdown-item" href="#">Devueltos</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('prestamos.registro_prestamos') }}">Registrar prestamo</a></li>
-                        </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Usuarios
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ url_for('usuarios.usuarios') }}">Todos los usuarios</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('usuarios.registrar_usuarios') }}">Registrar usuario</a></li>
-                        </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Logs
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Libros modificados</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('libros.libros_eliminados') }}">Libros eliminados</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('prestamos.prestamos_eliminados') }}">Prestamos eliminados</a></li>
-                            <li><a class="dropdown-item" href="#">Usuarios eliminados</a></li>
-                        </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('main.acercade') }}">Acerca de</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" target="_blank" href="https://www.canva.com/design/DAGnUI0PU7M/cDvkG9fCgPKL4FTZee_YLQ/edit">Ayuda</a>
-                        </li>
-                    </ul>
-                    
-                    <!--! Agreagar opcion para ir al perfil -->
-                    <ul class="navbar-nav ms-5 mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('login.login') }}">Logout</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <!--
-            <div class="navbar fondo-cristal">
-                <a href="{{ url_for('login.logout') }}">Cerrar sesión</a>
-            </div>
-        -->
+        {% include './navbar.html' %}
     </header>
     <main class="main">
         {% if ((session["rol"]) == "Administrador") or ((session["rol"]) == "Bibliotecario") %}
@@ -96,10 +30,7 @@
                         <h1 id="h1-titulo">Registrar nuevo libro</h1>
                         <h5 id="h5-nota">Complete el formulario para agregar un nuevo libro al catálogo de la biblioteca.</h5>
                         <div class="div-container-insertar">
-                            <form method="POST" action="/insertar" class="formulario-insertar">
-                                
-                                <!--TODO: REDORDENAR DATOS PARA MAYOR COMODIDAD-->
-                                
+                            <form method="POST" action="/registro_libros" class="formulario-insertar">
                                 <label for="titulo">Titulo*</label>
                                 <label for="nombre_autor apellido_autor">Datos del autor</label>
                                 
@@ -113,7 +44,7 @@
                                 <label for="editorial">Editorial</label>
                                 
                                 <input type="text" name="ISBN" placeholder="" autocomplete="off">
-                                <input type="text" name="editorial" class="input-editorial" placeholder="" autocomplete="off">
+                                <input type="text" name="editorial" id="cuadro-busqueda" class="input-editorial" placeholder="" autocomplete="off">
                                 
                                 <label for="tomo">Tomo</label>
                                 <label for="paginas">Número de Páginas*</label>
@@ -137,44 +68,15 @@
                                 <label for="lugar">Lugar de Publicación</label>
                                 <label for="anio">Año de Publicación</label>
                                 
-                                <input type="text" name="lugar" class="input-lugar" placeholder="" autocomplete="off">
+                                <input type="text" name="lugar" id="cuadro-busqueda2" class="input-lugar" placeholder="" autocomplete="off">
                                 <input type="text" name="anio" placeholder="" autocomplete="off">
                                 
-                                <ul class="ul-contenedor-sugerencias">
-                                    <li>sugerencia 1</li>
-                                    <li>sugerencia 2</li>
-                                </ul>
-                                
                                 <button id="btn-registrar" type="submit">Registrar libro</button>
-
-                            
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-        <!--
-            <section class="barra-lateral fondo-cristal">
-                <h2>Administración</h2>
-                <h4>Usuario: <br>
-                {{session["rol"]}}&nbsp;{{session["usuario"]}}</h4>
-                <nav>
-                    <button class="boton-lateral-cerrar fondo-cristal">Cerrar</button>
-                    <a href="{{ url_for('prestamos.prestamos') }}">Préstamos </a>
-                    <a href="{{ url_for('prestamos.registro_prestamos') }}">Registro Préstamos</a>
-                    <a href="{{ url_for('libros.libros') }}">Catálogo de Libros</a>
-                <a href="{{ url_for('libros.registro_libros') }}" id="pagina-actual">Registro de Libros</a>
-                {% if session["rol"] == "Administrador" %}
-                <a href="{{ url_for('usuarios.usuarios') }}">Usuarios</a>
-                <a href="{{ url_for('usuarios.registrar_usuarios') }}">Registro de Usuarios</a>
-                <a href="{{ url_for('libros.libros_eliminados') }}">Libros Eliminados</a>
-                <a href="{{ url_for('prestamos.prestamos_eliminados') }}">Préstamos Eliminados</a>
-                {% endif %}
-                <a target="_blank" href="https://www.canva.com/design/DAGnUI0PU7M/cDvkG9fCgPKL4FTZee_YLQ/edit">Ayuda</a>               
-            </nav>
-        </section>
-        <button class="boton-lateral fondo-cristal">Menú</button>
-        -->
         {% endif %}
         
         {% if (alerta) %}
@@ -197,15 +99,16 @@
             </div>
         </div>
     </footer>
-    <script src="/static/js/menu.js"></script>
     <script>
         document.getElementById('current-year').textContent = new Date().getFullYear();
     </script>
-        <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+
+    <!--? Tom Select JS -->
+    <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
     
+    <!--! Bootstrap JS -->
     <script src="{{ url_for('static', filename='js/sugerencias.js') }}"></script>
-    <script src="/static/js/menu.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 </body>
 </html>
 
