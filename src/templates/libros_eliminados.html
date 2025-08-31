@@ -23,7 +23,7 @@
     </header>
     <main>
         <div class="div-busqueda">
-            <form class="frm-prestamos" action="/buscar_libro_eliminado" method="GET">
+            <form class="frm-prestamos" action="/buscar_libro_e" method="GET">
                 <label for="buscar_libro_eliminado"><h1>Libros Eliminados</h1>Ver quién eliminó qué libro y cuál fue su motivo.</label><br><br><br>
                 <input class="buscar-libro-eliminado" id="cuadro-busqueda" type="text" name="buscar_libro_eliminado" autocomplete="off" placeholder="Buscar...">&nbsp;&nbsp;
                 
@@ -79,7 +79,7 @@
         
         <div class="paginacion">
             {% if pagina > 1 %} <!-- Verifica que la pagina actual sea despues de la primera, para mostrar un boton de "Anterior" -->
-                <a href="{{ url_for('libros.buscar_libro_eliminado', page=pagina - 1, buscar_libro_eliminado=busqueda, estados=estados, filtro_busqueda=filtro_busqueda) }}">Anterior</a> <!-- Este enlace lleva a la pagina anterior "pagina-1" -->
+                <a href="{{ url_for('eliminados.buscar_libro_e', page=pagina - 1, buscar_libro_eliminado=busqueda, estados=estados, filtro_busqueda=filtro_busqueda) }}">Anterior</a> <!-- Este enlace lleva a la pagina anterior "pagina-1" -->
             {% endif %}
         
             {% for p in range(pagina - 1, pagina + 2) %}
@@ -87,13 +87,13 @@
                     {% if p == pagina %}
                         <strong>{{ p }}</strong>
                     {% else %}
-                        <a href="{{ url_for('libros.buscar_libro_eliminado', page=p, buscar_libro_eliminado=busqueda, filtro_busqueda=filtro_busqueda) }}">{{ p }}</a>
+                        <a href="{{ url_for('eliminados.buscar_libro_e', page=p, buscar_libro_eliminado=busqueda, filtro_busqueda=filtro_busqueda) }}">{{ p }}</a>
                     {% endif %}
                 {% endif %}
             {% endfor %} 
         
             {% if pagina < total_paginas %} <!-- Verifica que la pagina actual no sea la ultima, para mostrar un boton de "Siguiente" -->
-                <a href="{{ url_for('libros.buscar_libro_eliminado', page=pagina + 1, buscar_libro_eliminado=busqueda, estados=estados, filtro_busqueda=filtro_busqueda) }}">Siguiente</a> <!-- Este enlace lleva a la pagina siguiente "pagina+1" -->
+                <a href="{{ url_for('eliminados.buscar_libro_e', page=pagina + 1, buscar_libro_eliminado=busqueda, estados=estados, filtro_busqueda=filtro_busqueda) }}">Siguiente</a> <!-- Este enlace lleva a la pagina siguiente "pagina+1" -->
             {% endif %}
         </div> 
     </main>
