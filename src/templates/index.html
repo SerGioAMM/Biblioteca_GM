@@ -17,35 +17,7 @@
 </head>
 <body class="bg-custom">
     <header>
-        <nav class="navbar navbar-expand-lg bg-custom">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/">Biblioteca Gabriela Mistral</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                
-                <div class="collapse navbar-collapse me-5" id="navbarSupportedContent">
-                    <form class="d-flex" role="search" action="{{ url_for('libros.buscar_libro') }}" method="POST">
-                        <input class="form-control me-2" type="search" placeholder="Buscar libro" aria-label="Search"/>
-                        <button class="btn btn-outline-secondary" type="submit">Buscar</button>
-                    </form>
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('libros.libros') }}">Catálogo</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('main.acercade') }}">Acerca de</a>
-                        </li>
-                        
-                    </ul>
-                    <ul class="navbar-nav ms-5 mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('login.login') }}">Login</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        {% include 'navbar.html' %}
     </header>
     <main class="bg-custom">
         
