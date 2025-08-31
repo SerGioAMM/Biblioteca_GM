@@ -25,11 +25,11 @@ def registrar_usuarios():
         contrasena = request.form["contrasena"]
         telefono = request.form["telefono"]
         rol = request.form["rol"]
-  
+
         try:
             #? INSERT DE USUARIOS
             query.execute(f"""Insert into Administradores(usuario,contrasena,telefono,id_rol)
-                          values (?,?,?,?)""",(usuario,contrasena,telefono,rol))
+                            values (?,?,?,?)""",(usuario,contrasena,telefono,rol))
 
             #? Guardar cambios
             conexion.commit()  
