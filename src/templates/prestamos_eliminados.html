@@ -69,7 +69,7 @@
                 </span><!-- Fecha  -->
                 
                 <span id="span-info-prestamos"> 
-                     <!-- Usuario  --> 
+                    <!-- Usuario  --> 
                     <p> El <strong>{{prestamo[1]}}&nbsp;{{prestamo[0]}}</strong> eliminó un préstamo 
                         del libro <strong>{{prestamo[4]}}</strong> con el lector <strong>{{prestamo[3]}}</strong>.<!-- Nombre del lector  -->
                     <br><strong>Motivo: </strong>{{prestamo[5]}}</p> 
@@ -100,10 +100,10 @@
             {% endif %}
         </div> 
     </main>
-    
+    <!-- Footer -->
+    {% include 'footer.html' %}
 
     <script src="/static/js/sugerencias.js"></script>
-    <script src="/static/js/menu.js"></script>
     <script src="/static/js/eliminar_item.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 </body>

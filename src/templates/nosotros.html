@@ -216,19 +216,7 @@
             </div>
         </section>
     </main>
-
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            
-            <div class="footer-copyright">
-                <p>&copy; <span id="current-year"></span> Biblioteca Municipal.</p>
-            </div>
-        </div>
-    </footer>
-    <script src="/static/js/menu.js"></script>
-    <script>
-        document.getElementById('current-year').textContent = new Date().getFullYear();
-    </script>
+    {% include 'footer.html' %}
 </body>
 </html>

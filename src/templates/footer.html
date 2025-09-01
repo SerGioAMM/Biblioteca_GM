@@ -1,0 +1,26 @@
+<script>
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+</script>
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer-copyright">
+            <p>&copy; <span id="current-year"></span> Biblioteca Municipal.</p>
+        </div>
+    </div>
+</footer>
+
+<!--
+<div class="container-fluid p-1" style="background-color: #100a07dc; backdrop-filter: blur(10px); ">
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-2 my-4 text-light-custom" style="border-top: 1px solid rgba(255, 255, 255, 0.195);">
+        <p class="col-md-4 mb-0">&copy; <span id="current-year"></span> Biblioteca Municipal</p> 
+            <a href="{{ url_for('main.inicio') }}" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+                <img src="{{ url_for('static',filename='/img/LOGO_BIBLIOTECA.png') }}" width="70" height="75" alt="logo">
+            </a>
+            <ul class="nav col-md-4 justify-content-end">
+                <li class="nav-item"><a href="{{ url_for('main.inicio') }}" class="nav-link px-2 text-light-custom">Pagina principal</a></li>
+                <li class="nav-item"><a href="{{ url_for('main.acercade') }}" class="nav-link px-2 text-light-custom">Acerca de</a></li>
+            </ul>
+        </footer>
+    </div>
+    -->

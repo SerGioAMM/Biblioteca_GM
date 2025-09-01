@@ -76,17 +76,7 @@
         </div>
     </main>
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            
-            <div class="footer-copyright">
-                <p>&copy; <span id="current-year"></span> Biblioteca Municipal.</p>
-            </div>
-        </div>
-    </footer>
-    <script>
-        document.getElementById('current-year').textContent = new Date().getFullYear();
-    </script>
+    {% include 'footer.html' %}
 
     <!--? Tom Select JS -->
     <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
