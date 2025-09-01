@@ -24,50 +24,53 @@
         {% if ((session["rol"]) == "Administrador") or ((session["rol"]) == "Bibliotecario") %}
             <div class="container-fluid">
                 <div class="row flex-nowrap">
-                    <div class="col py-3 bg-light-custom text-body">
+                    <div class="col py-3 bg-light-custom text-body text-center">
                         <h1 id="h1-titulo">Registrar nuevo libro</h1>
                         <h5 id="h5-nota">Complete el formulario para agregar un nuevo libro al catálogo de la biblioteca.</h5>
-                        <div class="container-fluid w-75 bg-light">
-                            <form class="row g-3"> <!--! GAP -->
-                                <div class="col-md-6">
+                        <br><br>
+                        <div class="container-fluid w-75 bg-light overflow-visible">
+                            <form method="POST" action="/registro_libros" class="row g-3 text-start">
+                                <div class="col-12 col-md-6 mb-3">
                                     <label for="inputEmail4" class="form-label">Titulo*</label>
-                                    <input class="form-control" type="text" name="titulo" placeholder="Titulo del ejemplar" autocomplete="off" required>
+                                    <input class="form-control" type="text" name="titulo" placeholder="" autocomplete="off" required>
                                 </div>
-                                <div class="row col-md-6 mt-3">
-                                    <label for="nombre_autor apellido_autor" class="form-label p-0">Datos del autor</label>
-                                    <input type="text" name="nombre_autor" class="form-control w-50" placeholder="Nombre" autocomplete="off">
-                                    <input type="text" name="apellido_autor" class="form-control w-50" placeholder="Apellido" autocomplete="off">
-
+                                <div class="col-6 col-md-3 mb-3 overflow-visible">
+                                    <label for="nombre_autor apellido_autor" class="form-label p-0 overflow-visible">Datos del autor</label>
+                                    <input type="text" name="nombre_autor" class="form-control" placeholder="Nombre" autocomplete="off">
                                 </div>
-                                <div class="col-6">
+                                <div class="col-6 col-md-3 mb-3">
+                                    <label for="nombre_autor apellido_autor" class="form-label p-0"> &nbsp; </label>
+                                    <input type="text" name="apellido_autor" class="form-control" placeholder="Apellido" autocomplete="off">
+                                </div>
+                                <div class="col-12 col-md-6 mb-3">
                                     <label for="ISBN" class="form-label">ISBN</label>
                                     <input name="ISBN" type="text" class="form-control" id="" placeholder="">
                                 </div>
-                                <div class="col-6">
+                                <div class="col-12 col-md-6 mb-3">
                                     <label for="editorial" class="form-label">Editorial</label>
                                     <input name="editorial" type="text" class="input-editorial" id="cuadro-busqueda" placeholder="">
                                 </div>
-                                <div class="col-3">
+                                <div class="col-12 col-md-3">
                                     <label for="tomo" class="form-label">Tomo</label>
                                     <input name="tomo" type="number" class="form-control" id="" placeholder="">
                                 </div>
-                                <div class="col-3">
+                                <div class="col-12 col-md-3 mb-3">
                                     <label for="anio" class="form-label">Año de Publicación</label>
                                     <input name="anio" type="text" class="form-control" id="" placeholder="">
                                 </div>
-                                <div class="col-3">
+                                <div class="col-12 col-md-3 mb-3">
                                     <label for="num_paginas" class="form-label">Número de Páginas*</label>
                                     <input name="num_paginas" type="number" class="form-control" id="" placeholder="" required>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-12 col-md-3 mb-3">
                                     <label for="num_copias" class="form-label">Número de Copias*</label>
                                     <input name="num_copias" type="text" class="form-control" id="" required>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-12 col-md-6 mb-3">
                                     <label for="lugar" class="form-label">Lugar de Publicación</label>
                                     <input name="lugar" type="text" class="input-lugar" id="cuadro-busqueda2" placeholder="">
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-12 col-md-6">
                                     <label for="inputState" class="form-label">Sistema Dewey</label>
                                     <select name="sistema_dewey" id="" class="form-select">
                                         {% for ultima in ultima_seccion %}
@@ -78,8 +81,10 @@
                                         {% endfor %}
                                 </select>
                                 </div>
-                                <div class="col-12 text-center mb-3">
-                                    <button type="submit" class="btn btn-success w-25">Registrar libro</button>
+                                <div class="col-12 col-md-6 mx-auto text-center mb-3">
+                                    <br>
+                                    <button type="submit" class="btn btn-success w-50">Registrar libro</button>
+                                    <br><br>
                                 </div>
                                 </form>
                             <!--! ======================================================================= 
