@@ -1,6 +1,7 @@
-@media(min-width: 768px) {
+@media(min-width: 992px) {
   .dropdown:hover .dropdown-menu {
     display: block;
+    transition: all 0.4s ease-in-out;
   }
 }
 
