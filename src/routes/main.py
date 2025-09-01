@@ -45,7 +45,6 @@ def inicio():
                     "destacados": destacados,
                     "aleatorios": []
             }
-        print(resultado)
         while (len(destacados) + contador_aleatorios) < 6: contador_aleatorios += 1
         query.execute(f"""SELECT l.id_libro, 0 AS cantidad, n.notacion, l.Titulo, a.nombre_autor, a.apellido_autor, l.ano_publicacion, sd.codigo_seccion, sd.seccion, l.numero_copias
                         FROM Libros l
