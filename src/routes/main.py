@@ -13,7 +13,18 @@ def inicio():
 
     conexion = conexion_BD()
     query = conexion.cursor()
-    #! Hacer un diccionario de datos para las secciones principales
+    secciones_principales = [
+        "Generalidades",
+        "Filosofia - Psicología",
+        "Religión",
+        "Estudios Sociales",
+        "Lenguas e Idioma",
+        "Ciencias Naturales - Matemáticas",
+        "Tecnología - Salud - Cocina",
+        "Arte - Deporte - Música",
+        "Literatura",
+        "Historia - Geografía - Biografía"]
+
     libros_destacados = []
     for i in range(10):
         contador_aleatorios = 0
@@ -30,10 +41,11 @@ def inicio():
                         limit 3;""")
         destacados = query.fetchall()
         resultado = {
-                    "seccion": i,
+                    "seccion": secciones_principales[i],
                     "destacados": destacados,
                     "aleatorios": []
             }
+        print(resultado)
         while (len(destacados) + contador_aleatorios) < 6: contador_aleatorios += 1
         query.execute(f"""SELECT l.id_libro, 0 AS cantidad, n.notacion, l.Titulo, a.nombre_autor, a.apellido_autor, l.ano_publicacion, sd.codigo_seccion, sd.seccion, l.numero_copias
                         FROM Libros l

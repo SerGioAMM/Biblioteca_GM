@@ -40,7 +40,7 @@
         {% for seccion in libros_destacados %}
             <br> <br>
             {% if (seccion.destacados|length > 0) %}
-                <h2 class="text-dark-custom">{{ seccion.destacados[0][8] }}</h2>
+                <h2 class="text-dark-custom">{{ seccion.seccion }}</h2>
                 <div class="row row-cols-1 row-cols-md-6 mx-2 g-4">
                 {% for libro in seccion.destacados %}
                     <div class="col">
@@ -122,7 +122,7 @@
                     -->
                     {% endfor %}
             {% elif (seccion.destacados|length == 0) %}
-                <h2 class="text-dark-custom">{{ seccion.aleatorios[0][8] }}</h2>
+                <h2 class="text-dark-custom">{{ seccion.seccion }}</h2>
                 <div class="row row-cols-1 row-cols-md-6 mx-2 g-4">
             {% endif %}
                 {% for libro in seccion.aleatorios %}
