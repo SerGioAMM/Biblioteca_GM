@@ -1,31 +1,23 @@
 /* Secciones */
-
-.seccion-principal{
-    background-image: url('img/portada-biblioteca-3.jpg');
+.seccion-principal, .div-busqueda{
+    background-image: url('/static/img/biblioteca.jpg');
+    margin: 0 1% auto auto;
     background-size: cover;
     background-position: center;
-    height: 90vh;
+    height: 35vh;
+    width: 100%;
 }
-/*
-.seccion-principal .presentacion-biblioteca{
-    background-color: #ffffff4b;
-    backdrop-filter: blur(5px);
-    position: absolute;
-    height: 90%;
+.seccion-principal .presentacion-biblioteca, .fondo-principal{
+    background-color: #8383834b;
+    backdrop-filter: blur(10px);
+    text-align: center;
+    height: 100%;
     width: 100%;
     z-index: 0;
     color: rgb(246, 242, 236);
 }
-*/
-.seccion-servicios{
-    background-color:rgb(4, 128, 128);
-    background-size: cover;
-    background-position: center;
-    height: 60vh;
-    border-top: solid 5px #77190b;
-    text-align: center;
-}
 
+/*
 .seccion-actividades{
     background-color:#77190b;
     background-size: cover;
@@ -33,7 +25,7 @@
     height: auto;
     border-top: solid 5px #77190b;
     text-align: center;
-}
+}*/
 
 
 /* Textos - Titulos */
@@ -45,15 +37,14 @@
 
 
 /* Seccion de libros destacados */
-.seccion-libros-destacados{
-    background-color: bisque;
-    background-image: url("/static/img/estanterias\ -\ v6.jpg");
-    background-size: cover;
-    background-position: center;
-    height: 80vh;
-    border-top: solid 5px #77190b;
+.seccion-libros-destacados, .seccion-actividades, .contenedor-libros{
     text-align: center;
+    width: 90%;
+    margin: 1% auto;
+    border-radius: 20px;
+    /*height: 80vh;*/
 }
+/*
 .div-contenedor-libros-destacados{
     display: flex;
     flex-direction: row;
@@ -70,9 +61,10 @@
     width: 25%;
     height: 85%;
     text-decoration: none;
-}
+}*/
 
 /*? Contenedor que tiene los datos del libro */
+/*
 .div-libro-destacado{
     background-color: rgba(255, 255, 255, 0.721);
     backdrop-filter: blur(10px);
@@ -87,24 +79,23 @@
 
 .div-libro-destacado:hover{
     scale: 1.02;
-}
+}*/
 
 .span-notacion{
     position: relative;
     display: flex;
     width: 100%;
-    height: 16%;
+    height: 100%;
     justify-content: center;
     align-items: center;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
     background-color: rgb(204, 204, 204);
 }
 
 /*? Textos que muestran la informacion de los libros */
+/*
 #span-info-libro-d{
-    top: 20px;
-    position: relative;
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -127,26 +118,32 @@
     font-size: 14px;
 }*/
 #span-info-libro-d h5{
-    margin: 10px;
     border-radius: 10px;
     padding: 5px;
-    font-size: 14px;
+    font-size: 90%;
 }
 
 /*? Textos que muestran la disponibilidad de los libros */
-#span-disponibilidad-libro-d{
-
+#span-disponibilidad-libro-d, .destacado, .aleatorio{
     width: 100%;
     display: flex;
     justify-content: center;
-
 }
 
-#span-disponibilidad-libro-d h4{
+#span-disponibilidad-libro-d h4, .destacado h4, .aleatorio h4{
     border-radius: 10px;
     padding: 5px;
     font-size: 14px;
-    
+}
+.h4-aleatorio{
+    background-color: rgb(240, 240, 255);
+    color: rgb(70, 0, 140);
+    border: solid 1px rgb(110, 0, 180);
+}
+.h4-destacado{
+    background-color: rgb(255, 250, 230);
+    color: rgb(120, 90, 0);
+    border: solid 1px rgb(200, 160, 0);
 }
 
 /* Diferentes colores para disponible o no disponible */
@@ -284,10 +281,6 @@
 
 
 .seccion-actividades {
-    background-image: url("/static/img/estanterias\ -\ v6.jpg");
-    background-size: cover;
-    background-position: center;
-    border-top: solid 5px #77190b;
     text-align: center;
     padding: 2rem 0;
     display: flex;
@@ -365,12 +358,10 @@
 /* Etiquetas de categoría */
 .etiqueta {
     font-size: 0.75rem;
-    padding: 0.3rem 0.8rem;
+    padding: 0.4rem 0.9rem;
     border-radius: 12px;
     font-weight: bold;
-    position: absolute;
-    top: 10px;
-    left: 10px;
+
 }
 
 .etiqueta-educativa {
@@ -388,11 +379,13 @@
     color: rgb(207, 124, 0);
 }
 
+/* Quizas crear una tarjeta de voluntariado */
 .etiqueta-servicio {
     background-color: rgba(156, 39, 176, 0.15);
     color: rgb(156, 39, 176);
 }
 
+/*! Borrar */
 #hora-cuento,
 #estimulacion-temprana,
 #club-tecnologia,
@@ -405,7 +398,7 @@
     background-repeat: no-repeat;
     background-position: right;
 }
-
+/*
 #hora-cuento{
     background-image: url(/static/img/actividades/hora\ del\ cuento.png);
 }
@@ -430,9 +423,9 @@
 #club-lectura{
     background-image: url(/static/img/actividades/lectura.png);
 }
+*/
 
-
-
+/*
 @media(min-width: 768px){
     .barra-lateral{
         visibility: hidden;
@@ -633,4 +626,4 @@
     width: 85%;
 }
 }
-
+*/

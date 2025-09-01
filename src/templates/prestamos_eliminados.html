@@ -5,44 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prestamos eliminados</title>
     <link rel="icon" href="/static/img/books_3145874.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='colores.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='estilo_prestamos.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='barra_lateral.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='filtros.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='general.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='estilo_prestamos_eliminados.css') }}">
 
+    <!--! Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 <body>
     <header>
-
-        <div class="navbar fondo-cristal">
-            <a href="{{ url_for('login.logout') }}">Cerrar sesión</a>
-        </div>
+        {% include './navbar.html' %}
     </header>
     <main>
-
-        {% if ((session["rol"]) == "Administrador")%}
-        <section class="barra-lateral fondo-cristal">
-            <h2>Administración</h2>
-            <h4>Usuario: <br>
-            {{session["rol"]}}&nbsp;{{session["usuario"]}}</h4>
-            <nav>
-                <button class="boton-lateral-cerrar fondo-cristal">Cerrar</button>
-                <a href="{{ url_for('prestamos.prestamos') }}">Préstamos </a>
-                <a href="{{ url_for('prestamos.registro_prestamos') }}">Registro Préstamos</a>
-                <a href="{{ url_for('libros.libros') }}">Catálogo de Libros </a>
-                <a href="{{ url_for('libros.insertar_libro') }}">Registro de Libros</a>
-                {% if session["rol"] == "Administrador" %}
-                <a href="{{ url_for('usuarios.usuarios') }}">Usuarios</a>
-                <a href="{{ url_for('usuarios.registrar_usuarios') }}">Registro de Usuarios</a>
-                <a href="{{ url_for('libros.libros_eliminados') }}">Libros Eliminados</a>
-                <a href="{{ url_for('prestamos.prestamos_eliminados') }}" id="pagina-actual">Préstamos Eliminados</a>
-                {% endif %}
-                <a target="_blank" href="https://www.canva.com/design/DAGnUI0PU7M/cDvkG9fCgPKL4FTZee_YLQ/edit">Ayuda</a>
-        </section>
-        <button class="boton-lateral fondo-cristal">Menú</button>
-        {% endif %}
-
         <div class="div-busqueda">
             <form class="frm-prestamos" action="/buscar_prestamo_eliminado" method="GET">
                 <label for="buscar_prestamo_eliminado"><h1>Préstamos Eliminados</h1>Ver quién eliminó qué préstamo y cuál fue su motivo.</label><br><br><br>
@@ -126,5 +105,6 @@
     <script src="/static/js/sugerencias.js"></script>
     <script src="/static/js/menu.js"></script>
     <script src="/static/js/eliminar_item.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 </body>
 </html>

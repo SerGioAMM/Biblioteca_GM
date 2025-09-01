@@ -9,20 +9,20 @@ h1 {
     font-size: 3rem;
     margin-bottom: 20px;
 }
+/*
 .main{
-    /*
-    background-color: #6B3E2E;
-    */
-    background-image: url('img/libros-loop-v4.jpg');
+    background-color: #8a5c3b;
+    
+    /*background-image: url('img/libros-loop-v4.jpg');
     background-size: cover;
-    background-position: top;
+    background-position: top;/
     height: 140vh;
     display: flex;
     flex-direction: column; 
-    justify-content: center;
+    /*justify-content: center;/
     align-items: center;
     color: #fffbf2; 
-}
+}*/
 
 /*? Botones*/
 .botones {
@@ -36,7 +36,7 @@ h1 {
 #btn-registrar, #btn-buscar, #btn-catalogo, #btn-login, #btn-registrar-prestamo{
     text-decoration: none;
     color: white;
-    background-color: #00000071;
+    background-color: #00000070;
     padding: 12px 22px;
     font-size: 1.4rem;
     border: none;
@@ -44,8 +44,8 @@ h1 {
     transition: 0.2s ease-in-out;
 }
 #btn-catalogo{
-    background-color: #00000068;
-    scale: 1.1;
+    position: relative;
+    scale: 0.85;
 }
 
 #btn-registrar:hover, #btn-buscar:hover, #btn-catalogo:hover,#btn-login:hover, #btn-registrar-prestamo:hover{
@@ -57,14 +57,13 @@ h1 {
 .ul-contenedor-sugerencias{
     background-color: rgba(31, 31, 31, 0.7);
     backdrop-filter: blur(10px);
-    opacity: 0;
+    /*opacity: 0;
     pointer-events: none;
-    padding: 0;
+    padding: 0;*/
     overflow-y: auto;
-    border-radius: 10px;
+    border-radius: 6px;
 
     position: absolute;
-    top: 83%;
     width: 20%;
     transition: 0.1s ease-out;
     z-index: 1;
@@ -91,7 +90,7 @@ h1 {
 
     padding: 12px 16px;
     cursor:pointer;
-    border-radius: 10px;
+    border-radius: 6px;
     transition: 0.1s ease-in-out;
     
 }
@@ -102,6 +101,7 @@ h1 {
 
 
 /*? Barra de navegacion*/
+/*
 .navbar{
     background-color: #00000071;
     width: 100%;
@@ -115,8 +115,9 @@ h1 {
     border-right: none !important;
     z-index: 50;
     
-}
+}*/
 
+/*
 .navbar a{
     text-decoration: none;
     color: white;
@@ -124,11 +125,12 @@ h1 {
     font-size: 1.3rem;
     transition: 0.1s ease-in;
     border-radius: 4px;
-}
-
+}*/
+/*
 .navbar a:hover{
     background-color: #0000005d;
 }
+    */
 .fondo-cristal{
     /*
     background: linear-gradient(rgba(255,255,255,0.1),rgba(255,255,255,0));
@@ -137,8 +139,7 @@ h1 {
 
     backdrop-filter: blur(8px);
     box-shadow: 0 8px 32px 0 rgba(0,0,0,0.37);
-    border: solid 1px rgba(255, 255, 255, 0.21);
-    border-radius: 4px;
+
 }
 
 /*? Errores */

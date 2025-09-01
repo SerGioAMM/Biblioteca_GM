@@ -110,7 +110,7 @@ def buscar_prestamo():
     if estados == "Todos":
         SQL_where_estado =" "
     else:
-        SQL_where_estado = (f" and e.id_estado = {estados}")
+        SQL_where_estado = (f" and e.estado = '{estados}'")
 
     pagina = request.args.get("page", 1, type=int) #Recibe el parametro de la URL llamado page
     prestamos_por_pagina = 7
@@ -149,8 +149,8 @@ def buscar_prestamo():
     conexion.close()
 
     return render_template("prestamos.html",prestamos=prestamos,estados=estados,pagina=pagina,total_paginas=total_paginas,busqueda=busqueda,filtro_busqueda=filtro_busqueda,
-                           prestamos_activos=prestamos_activos,prestamos_devueltos=prestamos_devueltos,prestamos_vencidos=prestamos_vencidos,
-                           exito = exito, devuelto = devuelto)
+                            prestamos_activos=prestamos_activos,prestamos_devueltos=prestamos_devueltos,prestamos_vencidos=prestamos_vencidos,
+                            exito = exito, devuelto = devuelto)
 
 # ----------------------------------------------------- Devolver Prestamo ----------------------------------------------------- #
 
@@ -186,7 +186,6 @@ def devolver_prestamo():
 
 @bp_prestamos.route("/eliminar_prestamo", methods=["GET", "POST"])
 def eliminar_prestamo():
-    #! RECORDATORIO: Agregar el id_libro para mostrarlo en prestamos eliminados y en libros eliminados
     id_prestamo = request.form["id_prestamo"]
     motivo = request.form["motivo"]
 
@@ -248,10 +247,10 @@ def registro_prestamos():
                 # El libro no existe
                 alerta = "El libro no existe."
                 return render_template("registro_prestamos.html", alerta=alerta,
-                       DPI=DPI, nombre_lector=NombreLector, apellido_lector=ApellidoLector,
-                       direccion=Direccion, num_telefono=Telefono, libro=Libro,
-                       grado=GradoEstudio, fecha_prestamo=fecha_prestamo,
-                       fecha_entrega_estimada=fecha_entrega_estimada)
+                        DPI=DPI, nombre_lector=NombreLector, apellido_lector=ApellidoLector,
+                        direccion=Direccion, num_telefono=Telefono, libro=Libro,
+                        grado=GradoEstudio, fecha_prestamo=fecha_prestamo,
+                        fecha_entrega_estimada=fecha_entrega_estimada)
 
 
             id_libro, numero_copias = libro_data
@@ -260,16 +259,16 @@ def registro_prestamos():
                 # No hay copias disponibles
                 alerta = "No hay copias disponibles de este libro"
                 return render_template("registro_prestamos.html", alerta=alerta,
-                       DPI=DPI, nombre_lector=NombreLector, apellido_lector=ApellidoLector,
-                       direccion=Direccion, num_telefono=Telefono, libro=Libro,
-                       grado=GradoEstudio, fecha_prestamo=fecha_prestamo,
-                       fecha_entrega_estimada=fecha_entrega_estimada)
+                    DPI=DPI, nombre_lector=NombreLector, apellido_lector=ApellidoLector,
+                    direccion=Direccion, num_telefono=Telefono, libro=Libro,
+                    grado=GradoEstudio, fecha_prestamo=fecha_prestamo,
+                    fecha_entrega_estimada=fecha_entrega_estimada)
             
             #? INSERT DE PRESTAMOS
             query.execute(f"""Insert into Prestamos
-                          (dpi_usuario,nombre,apellido,direccion,num_telefono,id_libro,grado,id_estado,fecha_prestamo,fecha_entrega_estimada,fecha_devolucion)
-                          values (?,?,?,?,?,?,?,?,?,?,NULL)""",
-                          (DPI,NombreLector,ApellidoLector,Direccion,Telefono,id_libro,GradoEstudio,Estado,fecha_prestamo,fecha_entrega_estimada))
+                    (dpi_usuario,nombre,apellido,direccion,num_telefono,id_libro,grado,id_estado,fecha_prestamo,fecha_entrega_estimada,fecha_devolucion)
+                    values (?,?,?,?,?,?,?,?,?,?,NULL)""",
+                    (DPI,NombreLector,ApellidoLector,Direccion,Telefono,id_libro,GradoEstudio,Estado,fecha_prestamo,fecha_entrega_estimada))
 
             query.execute(f"update Libros set numero_copias = (numero_copias-1) where id_libro = ?",(id_libro,))
 
@@ -288,85 +287,4 @@ def registro_prestamos():
 
 
     return render_template("registro_prestamos.html")
-
-# ----------------------------------------------------- Prestamos Eliminados ----------------------------------------------------- #
-
-@bp_prestamos.route("/prestamos_eliminados",methods = ["POST","GET"])
-def prestamos_eliminados():
-    if "usuario" not in session:
-        return redirect("/") #Solo se puede acceder con session iniciada
-    
-    conexion = conexion_BD()
-    query = conexion.cursor()
-
-    #Paginacion
-    pagina = request.args.get("page", 1, type=int) #Recibe el parametro de la URL llamado page
-    prestamos_por_pagina = 10
-    offset = (pagina - 1) * prestamos_por_pagina
-
-    # Consulta para contar todos los libros
-    query.execute("select count(*) from prestamos_eliminados")
-    total_prestamos = query.fetchone()[0]
-    total_paginas = math.ceil(total_prestamos / prestamos_por_pagina)
-    
-    _query = (f"""select a.usuario,r.rol,strftime('%d-%m-%Y', pe.fecha),pe.nombre_lector,pe.titulo,pe.motivo from prestamos_eliminados pe
-                        join Administradores a on pe.id_administrador = a.id_administrador
-                        join roles r on a.id_rol =  r.id_rol
-                        order by pe.fecha desc
-                        limit {prestamos_por_pagina} offset {offset}""")
-
-    query.execute(_query)
-    prestamos_eliminados = query.fetchall()
-
-    query.close()
-    conexion.close()
-
-
-    return render_template("prestamos_eliminados.html",prestamos_eliminados=prestamos_eliminados,pagina=pagina,total_paginas=total_paginas)
-
-
-# ----------------------------------------------------- BUSCAR Prestamo Eliminado ----------------------------------------------------- #
-
-@bp_prestamos.route("/buscar_prestamo_eliminado", methods = ["GET"])
-def buscar_prestamo_eliminado():
-    if "usuario" not in session:
-        return redirect("/") #Solo se puede acceder con session iniciada
-    conexion = conexion_BD()
-    query = conexion.cursor()
-
-    busqueda = request.args.get("buscar_prestamo_eliminado","")
-    #Obtiene los datos del formulario filtros en libros.html
-    filtro_busqueda = request.args.get("filtro-busqueda","Titulo")
-
-    if filtro_busqueda == "Titulo":
-        SQL_where_busqueda = (f" where pe.titulo like '%{busqueda}%'")
-    else:
-        SQL_where_busqueda = (f" where a.usuario = '{busqueda}'")
-
-    pagina = request.args.get("page", 1, type=int) #Recibe el parametro de la URL llamado page
-    prestamos_por_pagina = 10
-    offset = (pagina - 1) * prestamos_por_pagina
-
-    # Consulta para contar todos los prestamos conforme a la busqueda
-    query.execute(f"""select count(*) from prestamos_eliminados pe
-                        join administradores a on pe.id_administrador = a.id_administrador
-                        {SQL_where_busqueda}""")
-    total_prestamos_eliminados = query.fetchone()[0]
-    total_paginas = math.ceil(total_prestamos_eliminados / prestamos_por_pagina) #Calculo para cantidad de paginas, redondeando hacia arriba (ej, 2.1 = 3)
-
-    query_busqueda = (f"""select a.usuario,r.rol,strftime('%d-%m-%Y', pe.fecha),pe.nombre_lector,pe.titulo,pe.motivo from prestamos_eliminados pe
-                            join Administradores a on pe.id_administrador = a.id_administrador
-                            join roles r on a.id_rol =  r.id_rol
-                            {SQL_where_busqueda}
-                            order by pe.fecha desc
-                            limit {prestamos_por_pagina} offset {offset}""")
-
-    query.execute(query_busqueda)
-    prestamos_eliminados = query.fetchall()
-
-    query.close()
-    conexion.close()
-
-    return render_template("prestamos_eliminados.html",prestamos_eliminados=prestamos_eliminados,pagina=pagina,total_paginas=total_paginas,busqueda=busqueda,filtro_busqueda=filtro_busqueda)
-
 

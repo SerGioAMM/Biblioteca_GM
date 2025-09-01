@@ -5,38 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="icon" href="/static/img/books_3145874.png">
-    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='general.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/colores.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
+
+    <!--! Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
 </head>
 <body>
     <header>
-
-        <div class="navbar fondo-cristal">
-            <a href="{{ url_for('main.inicio') }}">Biblioteca Gabriela Mistral</a>
-        </div>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary bg-custom">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">Biblioteca Gabriela Mistral</a>                
+            </div>
+        </nav>
     </header>
-    <main class="main">
+    <main class="main bg-light-custom">
         {% if (alerta) %}
         <span class="error-eliminacion">
             <h4><strong>{{alerta}}</strong></h4>
         </span>
         {% endif %}
-        <div class="div-container-login fondo-cristal">
-            
-            <form method="POST" action="/login" class="formulario-login">
-                <label for=""> <h2> Inicio de Sesión </h2> </label>
-                
-                <label for="usuario">Usuario administrador</label>
-                <input type="text" name="usuario" placeholder="" required autocomplete="off">
-                
-                <label for="password">Contraseña</label>
-                <input type="password" name="password" placeholder="" required>
-                
-                <button type="submit" id="btn-login"> Entrar </button>
-                
-            </form>
-        </div>
+        <!-- Main Content -->
+	<div class="container-fluid div-container-login">
+		<div class="row main-content bg-custom text-center m-auto mt-5 w-50">
+			<div class="col-md-4 text-center company__info p-3">
+				<span class="company__logo"><h2><span class="fa fa-android"></span></h2></span>
+				<h6 class="company_title text-dark-custom"> <i class="bi bi-exclamation-triangle"></i> ATENCIÓN <br><br> Este login es unicamente para uso del personal de la biblioteca.</h6>
+			</div>
+			<div class="col-md-8 col-xs-12 col-sm-12 login_form p-5">
+				<div class="container-fluid">
+					<div class="row mb-4">
+						<h2 class="text-dark-custom"><i class="bi bi-person-fill-gear"></i> <br>Inicio de sesión</h2>
+					</div>
+					<div class="row">
+						<form  method="POST" action="/login" control="" class="form-group">
+							<div class="row w-75 mx-auto">
+								<input type="text" name="usuario" id="username" class="form__input" placeholder="Usuario" value="sergio" required autocomplete="off">
+							</div>
+							<div class="row w-75 mx-auto">
+								<span class="fa fa-lock"></span>
+								<input type="password" name="password" id="password" class="form__input" placeholder="Contraseña" value="Admin1234" required autocomplete="off">
+							</div>
+							<div class="row">
+								<input type="submit" value="Entrar" class="btn mx-auto">
+							</div>
+						</form>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+    
     </main>
     <!-- Footer -->
     <footer class="footer">

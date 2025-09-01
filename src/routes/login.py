@@ -42,7 +42,6 @@ def login():
                 alerta = "Datos incorrectos"
                 session["rol"] = "false"
                 logger.add_to_log("error", str(f"{alerta} - Usuario: {usuario}"))
-                logger.add_to_log("error", traceback.format_exc())
     except Exception as ex:
         logger.add_to_log("error", str(ex))
         logger.add_to_log("error", traceback.format_exc())

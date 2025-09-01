@@ -1,0 +1,51 @@
+@media(min-width: 768px) {
+  .dropdown:hover .dropdown-menu {
+    display: block;
+  }
+}
+
+.navbar .nav-item {
+    transition: all 0.3s ease-in-out;
+    border-radius: 5px;
+}
+
+.navbar .nav-item:hover, .navbar .dropdown-item:hover {
+    background-color: rgba(0, 0, 0, 0.321);
+}
+
+:root {
+  --color-principal: #f2e5d0;
+  --color-oscuro: #715c3a;
+  --color-secundario: #fca72b;
+  --color-claro: #f9f3ee;
+
+}
+
+.bg-custom {
+  background-color: var(--color-principal) !important;
+}
+.bg-accent-custom {
+  background-color: var(--color-secundario) !important;
+}
+.bg-light-custom {
+  background-color: var(--color-claro) !important;
+}
+
+.text-dark-custom { color: var(--color-oscuro) !important; }
+.text-accent { color: var(--color-secundario) !important; }
+.text-light-custom { color: var(--color-claro) !important; }
+
+
+/*
+:root{
+--fondo_principal: #FFFAEC;
+--fondo_claro: #FFFDF5;
+--fondo_oscuro: #3c2a21;
+--fondo_saturado:#FEF6D9;
+--letras_oscuras: #78350F;
+--letras_claras: #B75D17;
+--letras_saturadas: #D97D11;
+--borde_principal: #FCD34D;
+--cafe_claro: #a27b5c;
+}
+*/

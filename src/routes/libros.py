@@ -5,10 +5,10 @@ from src.database.db_sqlite import conexion_BD
 
 bp_libros = Blueprint('libros',__name__)
 
-# ----------------------------------------------------- INSERTAR LIBROS ----------------------------------------------------- #
+# ----------------------------------------------------- REGISTRO LIBROS ----------------------------------------------------- #
 
-@bp_libros.route("/insertar", methods=["GET", "POST"])
-def insertar_libro():
+@bp_libros.route("/registro_libros", methods=["GET", "POST"])
+def registro_libros():
     if "usuario" not in session:
         return redirect("/") #Solo se puede acceder con session iniciada
 
@@ -128,18 +128,18 @@ def insertar_libro():
 
             
             registro_exitoso = "Libro registrado exitosamente."
-            return render_template("insertar.html", secciones = secciones, ultima_seccion = ultima_seccion, registro_exitoso=registro_exitoso) 
+            return render_template("registro_libros.html", secciones = secciones, ultima_seccion = ultima_seccion, registro_exitoso=registro_exitoso) 
 
         except Exception as e:
             print(f"Error: {e}")
             alerta = "Error al ingresar libro."
-            return render_template("insertar.html", secciones = secciones, ultima_seccion = ultima_seccion, alerta=alerta) 
+            return render_template("registro_libros.html", secciones = secciones, ultima_seccion = ultima_seccion, alerta=alerta) 
         finally:
             query.close()
             conexion.close()
     
 
-    return render_template("insertar.html", secciones = secciones, ultima_seccion = ultima_seccion) #Devuelve variables para poder usarlas en insert.html
+    return render_template("registro_libros.html", secciones = secciones, ultima_seccion = ultima_seccion) #Devuelve variables para poder usarlas en insert.html
 
 # ----------------------------------------------------- CATALOGO DE LIBROS ----------------------------------------------------- #
 
@@ -160,7 +160,7 @@ def libros():
     query = conexion.cursor()
 
     pagina = request.args.get("pag", 1, type=int)
-    libros_por_pagina = 16
+    libros_por_pagina = 36
     offset = (pagina - 1) * libros_por_pagina
 
     # Consulta para contar todos los libros
@@ -189,6 +189,22 @@ def libros():
     query.execute("select * from SistemaDewey")
     categorias = query.fetchall()
 
+    resultado = []
+    for i in range(10):
+        query.execute(f"""select l.id_libro,count(l.id_libro) as cantidad
+                        from Prestamos p
+                        join libros l on p.id_libro = l.id_libro
+                        join RegistroLibros r on r.id_libro = l.id_libro
+                        join SistemaDewey sd on sd.codigo_seccion = r.codigo_seccion 
+                        where sd.codigo_seccion LIKE "{i}%"
+                        group by p.id_libro
+                        order by cantidad desc
+                        limit 3;""")
+        destacados = query.fetchall()
+        if destacados:
+            for libro in destacados:
+                resultado.append((libro[0])) 
+
     query.close()
     conexion.close()
     
@@ -196,7 +212,7 @@ def libros():
     exito = request.args.get("exito", "")
 
     return render_template("libros.html",libros=libros,categorias=categorias,pagina=pagina,total_paginas=total_paginas,
-                           alerta=alerta, exito = exito)
+                            alerta=alerta, exito = exito, destacados=resultado)
 
 # ----------------------------------------------------- BUSCAR LIBROS ----------------------------------------------------- #
 
@@ -213,7 +229,7 @@ def buscar_libro():
 
 
     pagina = request.args.get("pag", 1, type=int)
-    libros_por_pagina = 16
+    libros_por_pagina = 36
     offset = (pagina - 1) * libros_por_pagina
 
     # Secciones Dewey para filtros
@@ -264,13 +280,29 @@ def buscar_libro():
 
     libros = query.fetchall()
 
+    resultado = []
+    for i in range(10):
+        query.execute(f"""select l.id_libro,count(l.id_libro) as cantidad
+                        from Prestamos p
+                        join libros l on p.id_libro = l.id_libro
+                        join RegistroLibros r on r.id_libro = l.id_libro
+                        join SistemaDewey sd on sd.codigo_seccion = r.codigo_seccion 
+                        where sd.codigo_seccion LIKE "{i}%"
+                        group by p.id_libro
+                        order by cantidad desc
+                        limit 3;""")
+        destacados = query.fetchall()
+        if destacados:
+            for libro in destacados:
+                resultado.append((libro[0]))
+
     query.close()
     conexion.close()
 
     return render_template("libros.html", libros=libros, categorias=categorias,
-                           pagina=pagina, total_paginas=total_paginas,
-                           busqueda=busqueda, filtro_busqueda=filtro_busqueda, Seccion=Seccion, 
-                           alerta = alerta, exito = exito)
+                            pagina=pagina, total_paginas=total_paginas,
+                            busqueda=busqueda, filtro_busqueda=filtro_busqueda, Seccion=Seccion, 
+                            alerta = alerta, exito = exito, destacados=resultado)
 
 # ----------------------------------------------------- ELIMINAR LIBROS ----------------------------------------------------- #
 
@@ -291,7 +323,7 @@ def eliminar_libro():
 
     if(libroprestado):
         alerta = "Error, el libro está prestado."
-        return redirect(url_for("libros",alerta = alerta))
+        return redirect(url_for("libros.libros",alerta = alerta))
 
     query.execute("select titulo from libros where id_libro = ?",(id_libro,))
     titulo_libro = query.fetchone()[0]
@@ -309,81 +341,3 @@ def eliminar_libro():
     return redirect(url_for("libros.libros",exito = exito))
 
 
-# ----------------------------------------------------- Libros Eliminados ----------------------------------------------------- #
-
-@bp_libros.route("/libros_eliminados",methods = ["POST","GET"])
-def libros_eliminados():
-    if "usuario" not in session:
-        return redirect("/") #Solo se puede acceder con session iniciada
-    
-    conexion = conexion_BD()
-    query = conexion.cursor()
-
-    #Paginacion
-    pagina = request.args.get("page", 1, type=int) #Recibe el parametro de la URL llamado page
-    libros_por_pagina = 10
-    offset = (pagina - 1) * libros_por_pagina
-
-    # Consulta para contar todos los libros
-    query.execute("select count(*) from libros_eliminados")
-    total_libros = query.fetchone()[0]
-    total_paginas = math.ceil(total_libros / libros_por_pagina)
-    
-    query_busqueda = (f"""select a.usuario,r.rol,strftime('%d-%m-%Y', le.fecha),le.titulo,le.motivo from libros_eliminados le
-                            join Administradores a on le.id_administrador = a.id_administrador
-                            join roles r on a.id_rol =  r.id_rol
-                            order by le.fecha desc
-                            limit {libros_por_pagina} offset {offset}""")
-
-    query.execute(query_busqueda)
-    libros_eliminados = query.fetchall()
-
-    query.close()
-    conexion.close()
-
-
-    return render_template("libros_eliminados.html",libros_eliminados=libros_eliminados,pagina=pagina,total_paginas=total_paginas)
-
-# ----------------------------------------------------- Buscar Libro Eliminado ----------------------------------------------------- #
-
-@bp_libros.route("/buscar_libro_eliminado", methods = ["GET"])
-def buscar_libro_eliminado():
-    if "usuario" not in session:
-        return redirect("/") #Solo se puede acceder con session iniciada
-    conexion = conexion_BD()
-    query = conexion.cursor()
-
-    busqueda = request.args.get("buscar_libro_eliminado","")
-    #Obtiene los datos del formulario filtros en libros.html
-    filtro_busqueda = request.args.get("filtro-busqueda","Titulo")
-
-    if filtro_busqueda == "Titulo":
-        SQL_where_busqueda = (f" where le.titulo like '%{busqueda}%'")
-    else:
-        SQL_where_busqueda = (f" where a.usuario = '{busqueda}'")
-
-    #Paginacion
-    pagina = request.args.get("page", 1, type=int) #Recibe el parametro de la URL llamado page
-    libros_por_pagina = 10
-    offset = (pagina - 1) * libros_por_pagina
-
-    # Consulta para contar todos los libros
-    query.execute("select count(*) from libros_eliminados")
-    total_libros = query.fetchone()[0]
-    total_paginas = math.ceil(total_libros / libros_por_pagina)
-    
-    query_busqueda = (f"""select a.usuario,r.rol,strftime('%d-%m-%Y', le.fecha),le.titulo,le.motivo from libros_eliminados le
-                            join Administradores a on le.id_administrador = a.id_administrador
-                            join roles r on a.id_rol =  r.id_rol
-                            {SQL_where_busqueda}
-                            order by le.fecha desc
-                            limit {libros_por_pagina} offset {offset}""")
-
-    query.execute(query_busqueda)
-    libros_eliminados = query.fetchall()
-
-    query.close()
-    conexion.close()
-
-
-    return render_template("libros_eliminados.html",libros_eliminados=libros_eliminados,pagina=pagina,total_paginas=total_paginas,busqueda=busqueda,filtro_busqueda=filtro_busqueda)

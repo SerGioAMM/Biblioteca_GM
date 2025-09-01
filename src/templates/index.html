@@ -5,231 +5,245 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biblioteca Comunitaria Gabriela Mistral</title>
     <link rel="icon" href="/static/img/books_3145874.png">
-    <link rel="stylesheet" href="{{ url_for('static', filename='barra_lateral.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='estilo_inicio.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='general.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/colores.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/barra_lateral.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo_inicio.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
+    
+    <!--! Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
-<body>
+<body class="bg-custom">
     <header>
-
-        <div class="navbar fondo-cristal">
-            <a href="{{ url_for('main.inicio') }}">Biblioteca Gabriela Mistral</a>
-            <nav>
-                <a href="{{ url_for('libros.libros') }}">Catálogo </a>
-                <a href="{{ url_for('main.acercade') }}">Acerca de</a>
-                <a href="{{ url_for('login.login') }}">Iniciar como administrador</a>
-            </nav>
-        </div>
+        {% include 'navbar.html' %}
     </header>
-    <main>
-        <section class="barra-lateral fondo-cristal">
-            <nav>
-                <button class="boton-lateral-cerrar fondo-cristal">Cerrar</button>
-                <br>
-                <a href="{{ url_for('libros.libros') }}">Catálogo de Libros</a>
-                <a href="{{ url_for('main.acercade') }}">Acerca de</a>
-                <a href="{{ url_for('login.login') }}">Iniciar como administrador</a>
-            </nav>
-        </section>
-        <button class="boton-lateral fondo-cristal">Menú</button>
-
+    <main class="bg-custom">
+        
         <!-- SECCION PRINCIPAL -->
-        <section class="seccion-principal">
-            <!--
-                <div class="presentacion-biblioteca">
+        <section class="seccion-principal bg-custom h-50">
+                <div class="presentacion-biblioteca pb-5">
                     <h1><br>Biblioteca Comunitaria Gabriela Mistral</h1>
                     <h3>San Juan Chamelco</h3>
-                </div>
-            -->
-                <div class="botones">
-                    <a class="fondo-cristal" id="btn-catalogo" href="{{ url_for('libros.libros') }}"> Explora nuestro catálogo </a>
+                    <br>
+                    <a href="{{ url_for('libros.libros') }}"> 
+                        <button type="button" class="btn btn-secondary">Explora nuestro catálogo con mas de {{total_libros}} libros</button>
+                    </a>
                 </div>
         </section>
 
     <!-- SECCION LIBROS DESTACADOS -->
-    <section class="seccion-libros-destacados">
-        <h1 class="h1-titulo">Libros destácados</h1>
-        <!--select l.id_libro,count(l.id_libro) as cantidad, n.notacion, l.Titulo, a.nombre_autor, 
-        a.apellido_autor, l.ano_publicacion, sd.codigo_seccion, sd.seccion, l.numero_copias-->
-        <div class="div-contenedor-libros-destacados">
-            {% for libro in libros_destacados %}
-            <a href="{{ url_for('libros.buscar_libro', buscar=libro[3], filtro_busqueda='Titulo', categorias='Todas') }}">
-            <div class="div-libro-destacado">
-            
-                <span class="span-notacion"
-                    {% if (libro[7]|int) < 100 %}
-                        id="h2-seccion-0"
-                    {% elif (libro[7]|int) < 200 %}
-                        id="h2-seccion-1"
-                    {% elif (libro[7]|int) < 300 %}
-                        id="h2-seccion-2"
-                    {% elif (libro[7]|int) < 400 %}
-                        id="h2-seccion-3"
-                    {% elif (libro[7]|int) < 500 %}
-                        id="h2-seccion-4"
-                    {% elif (libro[7]|int) < 600 %}
-                        id="h2-seccion-5"
-                    {% elif (libro[7]|int) < 700 %}
-                        id="h2-seccion-6"
-                    {% elif (libro[7]|int) < 800 %}
-                        id="h2-seccion-7"
-                    {% elif (libro[7]|int) < 900 %}
-                        id="h2-seccion-8"
-                    {% else %}
-                        id="h2-seccion-9"
-                    {% endif %} > 
-                    <h2>{{libro[2]}}</h2> 
-                </span><!-- Notacion  -->
-                
-                <span id="span-info-libro-d"> 
-                    <h3>{{libro[3]}}</h3> <!-- Titulo  --> 
-                    <h4>{{libro[4]}}&nbsp;{{libro[5]}} <!-- Nombre y apellido del autor  -->
-                    {{libro[6]}} </h4> <!-- Anio de publicacion  -->
-                    
-                    <h5
-                        {% if (libro[7]|int) < 100 %}
-                            id="h4-seccion-0"
-                        {% elif (libro[7]|int) < 200 %}
-                            id="h4-seccion-1"
-                        {% elif (libro[7]|int) < 300 %}
-                            id="h4-seccion-2"
-                        {% elif (libro[7]|int) < 400 %}
-                            id="h4-seccion-3"
-                        {% elif (libro[7]|int) < 500 %}
-                            id="h4-seccion-4"
-                        {% elif (libro[7]|int) < 600 %}
-                            id="h4-seccion-5"
-                        {% elif (libro[7]|int) < 700 %}
-                            id="h4-seccion-6"
-                        {% elif (libro[7]|int) < 800 %}
-                            id="h4-seccion-7"
-                        {% elif (libro[7]|int) < 900 %}
-                            id="h4-seccion-8"
+    <section class="seccion-libros-destacados bg-light-custom">
+        <h1 class="h1-titulo text-dark-custom">Libros destacados</h1>
+        
+        {% for seccion in libros_destacados %}
+            <br> <br>
+            {% if (seccion.destacados|length > 0) %}
+                <h2 class="text-dark-custom">{{ seccion.seccion }}</h2>
+                <div class="row row-cols-1 row-cols-md-6 mx-2 g-4">
+                {% for libro in seccion.destacados %}
+                    <div class="col">
+                        <div class="card h-100">
+                        <div class="card-header bg-transparent border-secondary p-0">
+                            <span class="span-notacion"
+                                {% if (libro[7]|int) < 100 %}
+                                    id="h2-seccion-0"
+                                {% elif (libro[7]|int) < 200 %}
+                                    id="h2-seccion-1"
+                                {% elif (libro[7]|int) < 300 %}
+                                    id="h2-seccion-2"
+                                {% elif (libro[7]|int) < 400 %}
+                                    id="h2-seccion-3"
+                                {% elif (libro[7]|int) < 500 %}
+                                    id="h2-seccion-4"
+                                {% elif (libro[7]|int) < 600 %}
+                                    id="h2-seccion-5"
+                                {% elif (libro[7]|int) < 700 %}
+                                    id="h2-seccion-6"
+                                {% elif (libro[7]|int) < 800 %}
+                                    id="h2-seccion-7"
+                                {% elif (libro[7]|int) < 900 %}
+                                    id="h2-seccion-8"
+                                {% else %}
+                                    id="h2-seccion-9"
+                                {% endif %} > 
+                                <h2>{{libro[2]}}</h2> 
+                            </span><!-- Notacion  -->
+                        </div>
+                        <img src="{{ url_for('static', filename='img/book.png') }}" class="card-img-top img-fluid mx-auto" alt="...">
+                        <div class="card-body">
+                            <h6 class="card-title">{{libro[3]}}</h6><!-- Titulo  --> 
+                            <small class="card-text text-body-secondary">{{libro[4]}}&nbsp;{{libro[5]}} <!-- Nombre y apellido del autor  -->
+                            {{libro[6]}}</small><!-- Anio de publicacion  -->
+                        </div>
+                        <div class="card-footer">
+                            <span class="destacado">
+                            <h4 class="h4-destacado"> <i class="bi bi-star-fill"></i> Destacado</h4>
+                            </span>
+                            <span id="span-info-libro-d"> 
+                            <h5
+                                {% if (libro[7]|int) < 100 %}
+                                    id="h4-seccion-0"
+                                {% elif (libro[7]|int) < 200 %}
+                                    id="h4-seccion-1"
+                                {% elif (libro[7]|int) < 300 %}
+                                    id="h4-seccion-2"
+                                {% elif (libro[7]|int) < 400 %}
+                                    id="h4-seccion-3"
+                                {% elif (libro[7]|int) < 500 %}
+                                    id="h4-seccion-4"
+                                {% elif (libro[7]|int) < 600 %}
+                                    id="h4-seccion-5"
+                                {% elif (libro[7]|int) < 700 %}
+                                    id="h4-seccion-6"
+                                {% elif (libro[7]|int) < 800 %}
+                                    id="h4-seccion-7"
+                                {% elif (libro[7]|int) < 900 %}
+                                    id="h4-seccion-8"
+                                {% else %}
+                                    id="h4-seccion-9"
+                                {% endif %} >
+                                {{libro[7]}} - {{libro[8]}} 
+                            </h5> <!-- Codigo de seccion + seccion  --> 
+                        </span>
+                        {% if libro[9]|int == 1 %}
+                            <span id="span-disponibilidad-libro-d"> <h4 id="h4-disponible">Disponible: {{libro[9]}} copia</h4></span>
+                        {% elif libro[9]|int > 1 %}
+                            <span id="span-disponibilidad-libro-d"> <h4 id="h4-disponible">Disponible: {{libro[9]}} copias</h4></span>
                         {% else %}
-                            id="h4-seccion-9"
-                        {% endif %} >
-                        {{libro[7]}} - {{libro[8]}} 
-                    </h5> <!-- Codigo de seccion + seccion  --> 
-                </span>
-                {% if libro[9]|int == 1 %}
-                <span id="span-disponibilidad-libro-d"> <h4 id="h4-disponible">Disponible: {{libro[9]}} copia</h4></span>
-                {% elif libro[9]|int > 1 %}
-                <span id="span-disponibilidad-libro-d"> <h4 id="h4-disponible">Disponible: {{libro[9]}} copias</h4></span>
-                {% else %}
-                <span id="span-disponibilidad-libro-d"> <h4 id="h4-no_disponible">No disponible</h4></span>
-                {% endif %}
+                            <span id="span-disponibilidad-libro-d"> <h4 id="h4-no_disponible">No disponible</h4></span>
+                        {% endif %}
+                        </div>
+                        </div>
+                    </div>
+                    <!--
+                    <a href="{{ url_for('libros.buscar_libro', buscar=libro[3], filtro_busqueda='Titulo', categorias='Todas') }}">ENLACE</a>
+                    -->
+                    {% endfor %}
+            {% elif (seccion.destacados|length == 0) %}
+                <h2 class="text-dark-custom">{{ seccion.seccion }}</h2>
+                <div class="row row-cols-1 row-cols-md-6 mx-2 g-4">
+            {% endif %}
+                {% for libro in seccion.aleatorios %}
+                <div class="col">
+                    <div class="card h-100">
+                    <div class="card-header bg-transparent border-secondary p-0">
+                        <span class="span-notacion"
+                            {% if (libro[7]|int) < 100 %}
+                                id="h2-seccion-0"
+                            {% elif (libro[7]|int) < 200 %}
+                                id="h2-seccion-1"
+                            {% elif (libro[7]|int) < 300 %}
+                                id="h2-seccion-2"
+                            {% elif (libro[7]|int) < 400 %}
+                                id="h2-seccion-3"
+                            {% elif (libro[7]|int) < 500 %}
+                                id="h2-seccion-4"
+                            {% elif (libro[7]|int) < 600 %}
+                                id="h2-seccion-5"
+                            {% elif (libro[7]|int) < 700 %}
+                                id="h2-seccion-6"
+                            {% elif (libro[7]|int) < 800 %}
+                                id="h2-seccion-7"
+                            {% elif (libro[7]|int) < 900 %}
+                                id="h2-seccion-8"
+                            {% else %}
+                                id="h2-seccion-9"
+                            {% endif %} > 
+                            <h2>{{libro[2]}}</h2> 
+                        </span><!-- Notacion  -->
+                    </div>
+                    <img src="{{ url_for('static', filename='img/book.png') }}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h6 class="card-title">{{libro[3]}}</h6><!-- Titulo  --> 
+                        <small class="card-text text-body-secondary">{{libro[4]}}&nbsp;{{libro[5]}} <!-- Nombre y apellido del autor  -->
+                        {{libro[6]}}</small><!-- Anio de publicacion  -->
+                    </div>
+                    <div class="card-footer">
+                        <span class="aleatorio">
+                        <h4 class="h4-aleatorio"> <i class="bi bi-shuffle"></i> Aleatorio</h4>
+                        </span>
+                        <span id="span-info-libro-d"> 
+                        <h5
+                            {% if (libro[7]|int) < 100 %}
+                                id="h4-seccion-0"
+                            {% elif (libro[7]|int) < 200 %}
+                                id="h4-seccion-1"
+                            {% elif (libro[7]|int) < 300 %}
+                                id="h4-seccion-2"
+                            {% elif (libro[7]|int) < 400 %}
+                                id="h4-seccion-3"
+                            {% elif (libro[7]|int) < 500 %}
+                                id="h4-seccion-4"
+                            {% elif (libro[7]|int) < 600 %}
+                                id="h4-seccion-5"
+                            {% elif (libro[7]|int) < 700 %}
+                                id="h4-seccion-6"
+                            {% elif (libro[7]|int) < 800 %}
+                                id="h4-seccion-7"
+                            {% elif (libro[7]|int) < 900 %}
+                                id="h4-seccion-8"
+                            {% else %}
+                                id="h4-seccion-9"
+                            {% endif %} >
+                            {{libro[7]}} - {{libro[8]}} 
+                        </h5> <!-- Codigo de seccion + seccion  --> 
+                    </span>
+                    {% if libro[9]|int == 1 %}
+                        <span id="span-disponibilidad-libro-d"> <h4 id="h4-disponible">Disponible: {{libro[9]}} copia</h4></span>
+                    {% elif libro[9]|int > 1 %}
+                        <span id="span-disponibilidad-libro-d"> <h4 id="h4-disponible">Disponible: {{libro[9]}} copias</h4></span>
+                    {% else %}
+                        <span id="span-disponibilidad-libro-d"> <h4 id="h4-no_disponible">No disponible</h4></span>
+                    {% endif %}
+                    </div>
+                    </div>
+                </div>
+                <!--
+                <a href="{{ url_for('libros.buscar_libro', buscar=libro[3], filtro_busqueda='Titulo', categorias='Todas') }}">ENLACE</a>
+                -->
+                {% endfor %}
             </div>
-            </a>
             {% endfor %}
-    </div>
+            <br><br>
     </section>
 
-        <!-- SECCION Actividades -->
-        <section class="seccion-actividades">
-    <h1 class="h1-titulo">Actividades</h1>
-    <div class="contenedor-actividades fondo-cristal">
-               
-        <div class="cuadricula-actividades">
-            <div class="tarjeta-actividad" data-categoria="educativa" id="hora-cuento">
-                <h3>Hora de Cuento</h3>
-                <span class="etiqueta etiqueta-educativa">Educativa</span>
-                <h5>Lectura dirigida a niños de 4 a 7 años de edad con previa programación por bibliotecario y docente.</h5>
-            </div>
-            
-            <div class="tarjeta-actividad" data-categoria="educativa" id="estimulacion-temprana">
-                <h3>Estimulación Temprana</h3>
-                <span class="etiqueta etiqueta-educativa">Educativa</span>
-                <h5>Desarrollo de la motricidad mediante juego y lecturas con niños de 0 a 3 años de edad Horario: Lunes de 9:00AM a 10:00AM</h5>
-            </div>
-            
-            <div class="tarjeta-actividad" data-categoria="educativa" id="club-tecnologia">
-                <h3>Club de Tecnología</h3>
-                <span class="etiqueta etiqueta-educativa">Educativa</span>
-                <h5>Jovenes voluntarios imparten clases o talleres básicos de temas de computación y tecnología.</h5>
-            </div>
-            
-            <div class="tarjeta-actividad" data-categoria="educativa" id="mentes-brillantes">
-                <h3>Club de Mentes Brillantes</h3>
-                <span class="etiqueta etiqueta-educativa">Educativa</span>
-                <h5>Grupo de jóvenes voluntarios que llevan lecturas a los centros básicos de la comunidad y alrededores con previa programación entre docentes y voluntarios.</h5>
-            </div>
-            
-            <div class="tarjeta-actividad" data-categoria="educativa" id="clases-vacacionales">
-                <h3>Clases Vacacionales</h3>
-                <span class="etiqueta etiqueta-educativa">Educativa</span>
-                <h5>Planificación de actividades manuales y creativas en el periodo de vacaciones.</h5>
-            </div>
-            
-            <div class="tarjeta-actividad" data-categoria="recreativa" id="juegos">
-                <h3>Juegos</h3>
-                <span class="etiqueta etiqueta-recreativa">Recreativa</span>
-                <h5>-Ajedrez <br> -Damas <br> -Legos <br> -Juegos de memorización</h5>
-            </div>
-            
-            <div class="tarjeta-actividad" data-categoria="recreativa" id="recreativas">
-                <h3>Actividades Recreativas</h3>
-                <span class="etiqueta etiqueta-recreativa">Recreativa</span>
-                <h5>Tarde de Película <br> Tarde de Karaoke</h5>
-            </div>
-            
-            <div class="tarjeta-actividad" data-categoria="social" id="club-lectura">
-                <h3>Club de Lectura</h3>
-                <span class="etiqueta etiqueta-social">Social</span>
-                <h5>Se llevan lecturas de cuentos, fabulas o narrativas cortas, a escuelas ya establecidas para leer y comentar con los niños.</h5>
-            </div>
-
+    <!-- SECCION Actividades -->
+    <section class="seccion-actividades bg-light-custom">
+    <h1 class="h1-titulo text-dark-custom">Actividades</h1>
+        <div class="row row-cols-1 row-cols-md-4 mx-2 g-4">
+            {% for actividad in actividades %}
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-header"> <h5 class="card-title">{{actividad.titulo}}</h5></div>
+                        <img src="{{ actividad.imagen }}" class="card-img-top img-fluid mx-auto my-3" style="width: 40%;" alt="...">
+                        <div class="card-body">
+                            <p class="card-text" style="white-space: pre-line;">{{actividad.descripcion}}</p>
+                        </div>
+                        <div class="card-footer">
+                            <span class="etiqueta etiqueta-{{actividad.tipo|lower}}">{{actividad.tipo}}</span>
+                        </div>      
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-    </div>
-</section>
+    </section>
 
     </main>
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            
             <div class="footer-copyright">
                 <p>&copy; <span id="current-year"></span> Biblioteca Municipal.</p>
             </div>
         </div>
     </footer>
     <script src="/static/js/menu.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
     <script>
         document.getElementById('current-year').textContent = new Date().getFullYear();
     </script>
-    <script src="/static/js/menu.js"></script>
     </body>
 </html>
-
-
-        <!--
-        <!-- SECCION LIBROS DESTACADOS
-        <section class="seccion-libros-destacados">
-            <h1 class="h1-titulo">Libros destacados</h1>
-            <div class="div-contenedor-libros-destacados">
-                <!--! Dibujar a mano la forma del libro, con objetos y contenedores 
-                <div class="div-libro-destacado">
-                
-                    <span class="span-notacion" id="h2-seccion-9"> 
-                        <h2>notacion</h2> 
-                    </span>
-                    
-                    <span id="span-info-libro-d"> 
-                        <h2>titulo</h2>  
-                        <h3>nombre y apellido del autor 
-                        anio de publicacion </h3> 
-                        
-                        <h4 id="h4-seccion-9">
-                            codigo de secicon + seccion
-                        </h4> 
-                    
-                    </span>
-                    
-                    <span id="span-disponibilidad-libro-d"> <h4 id="h4-disponible">Disponible: x copias</h4></span>
-                    <!--
-                        <span id="span-disponibilidad-libro-d"> <h4 id="h4-no_disponible">No disponible</h4></span>
-
-                </div>
-
-            </div>
-        </section>
-        -->
