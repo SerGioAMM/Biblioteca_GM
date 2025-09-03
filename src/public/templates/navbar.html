@@ -1,0 +1,131 @@
+{% set libros_items = [
+    ('libros.libros', 'Catálogo'),
+    ('libros.registro_libros', 'Registrar libros'),
+] %}
+<!--
+('libros.importar_libros', 'Importar libros'),
+('libros.exportar_libros', 'Exportar libros')-->
+
+{% set prestamos_items = [
+    ('prestamos.prestamos', 'Activos'),
+    ('prestamos.devueltos', 'Devueltos'),
+    ('prestamos.registro_prestamos', 'Registrar préstamo')
+] %}
+
+{% set usuarios_items = [
+    ('usuarios.usuarios', 'Todos los usuarios'),
+    ('usuarios.registrar_usuarios', 'Registrar usuario')
+] %}
+
+{% set logs_items = [
+    ('eliminados.libros_modificados', 'Libros modificados'),
+    ('eliminados.libros', 'Libros eliminados'),
+    ('eliminados.prestamos', 'Préstamos eliminados'),
+    ('eliminados.usuarios', 'Usuarios eliminados')
+] %}
+
+
+
+{% if ((session["rol"]) == "Administrador") or ((session["rol"]) == "Bibliotecario") %}
+<nav class="navbar navbar-expand-lg bg-custom">
+            <div class="container-fluid justify-content-start">
+                <a class="navbar-brand" href="/">Biblioteca Gabriela Mistral</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse me-5 flex-grow-0 ms-auto" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('libros.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Libros
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% for endpoint, label in libros_items %}
+                                <li>
+                                    <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
+                                        href="{{ url_for(endpoint) }}">
+                                        {{ label }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('prestamos.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Prestamos
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item {% if request.endpoint == 'prestamos.prestamos' %} border-start border-dark border-4 {% endif %}" href="{{ url_for('prestamos.prestamos') }}">Activos</a></li>
+                            <li><a class="dropdown-item {% if request.endpoint == 'prestamos.prestamos' %} border-start border-dark border-4 {% endif %}" href="#">Devueltos</a></li>
+                            <li><a class="dropdown-item {% if request.endpoint == 'prestamos.registro_prestamos' %} border-start border-dark border-4 {% endif %}" href="{{ url_for('prestamos.registro_prestamos') }}">Registrar prestamo</a></li>
+                        </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('usuarios.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Usuarios
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item {% if request.endpoint == 'usuarios.usuarios' %} border-start border-dark border-4 {% endif %}" href="{{ url_for('usuarios.usuarios') }}">Todos los usuarios</a></li>
+                            <li><a class="dropdown-item {% if request.endpoint == 'usuarios.registrar_usuarios' %} border-start border-dark border-4 {% endif %}" href="{{ url_for('usuarios.registrar_usuarios') }}">Registrar usuario</a></li>
+                        </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('eliminados.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Logs
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!--! AGREGAR LOGICA FOR, ACTUALMENTE NO EXISTEN ALGUNAS PAGINAS POR ESO NO ESTA PUESTO -->
+                            <li><a class="dropdown-item {% if request.endpoint == 'eliminados.libros' %} border-start border-dark border-4 {% endif %}" href="#">Libros modificados</a></li>
+                            <li><a class="dropdown-item {% if request.endpoint == 'eliminados.libros' %} border-start border-dark border-4 {% endif %}" href="{{ url_for('eliminados.libros_e') }}">Libros eliminados</a></li>
+                            <li><a class="dropdown-item {% if request.endpoint == 'eliminados.prestamos' %} border-start border-dark border-4 {% endif %}" href="{{ url_for('eliminados.prestamos_e') }}">Prestamos eliminados</a></li>
+                            <li><a class="dropdown-item {% if request.endpoint == 'eliminados.usuarios' %} border-start border-dark border-4 {% endif %}" href="#">Usuarios eliminados</a></li>
+                        </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" target="_blank" href="https://www.canva.com/design/DAGnUI0PU7M/cDvkG9fCgPKL4FTZee_YLQ/edit">Ayuda</a>
+                        </li>
+                    </ul>
+                    
+                    <!--! Agreagar opcion para ir al perfil -->
+                    <ul class="navbar-nav ms-5 mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('login.login') }}">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+{% else %}
+        <nav class="navbar navbar-expand-lg bg-custom">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">Biblioteca Gabriela Mistral</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse me-5" id="navbarSupportedContent">
+                    {% if (request.endpoint == 'main.inicio') or (request.endpoint == 'main.acercade') %}
+                    <form class="d-flex" role="search" action="{{ url_for('libros.buscar_libro') }}" method="POST">
+                        <input class="form-control me-2" type="search" placeholder="Buscar libro" aria-label="Search"/>
+                        <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+                    </form>
+                    {% endif %}
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('libros.libros') }}">Catálogo</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('main.acercade') }}">Acerca de</a>
+                        </li>
+                        
+                    </ul>
+                    <ul class="navbar-nav ms-5 mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('login.login') }}">Login</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+{% endif %}

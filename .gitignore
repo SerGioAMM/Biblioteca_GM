@@ -2,6 +2,7 @@
 Biblioteca_GM.db
 iniciarSQLiteCloud.py
 creacion_db.sql
+db_backup.py
 
 #Ignorar variables de entorno para no exponerlas
 .env
