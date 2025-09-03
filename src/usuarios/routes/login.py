@@ -3,7 +3,7 @@ from src.database.db_sqlite import conexion_BD
 from src.utils.logger import logger
 import traceback
 
-bp_login = Blueprint('login',__name__)
+bp_login = Blueprint('login',__name__, template_folder="../templates")
 
 # ----------------------------------------------------- LOGOUT ----------------------------------------------------- #
 

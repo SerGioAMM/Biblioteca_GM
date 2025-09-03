@@ -3,7 +3,7 @@ from datetime import datetime
 import math
 from src.database.db_sqlite import conexion_BD
 
-bp_prestamos = Blueprint('prestamos',__name__)
+bp_prestamos = Blueprint('prestamos',__name__, template_folder="../templates")
 
 # ----------------------------------------------------- Verificar prestamos vencidos ----------------------------------------------------- #
 
@@ -66,8 +66,8 @@ def prestamos():
                     from Prestamos p
                     join Libros l on p.id_libro = l.id_libro
                     join Estados e on p.id_estado = e.id_estado
-                  order by e.id_estado asc, p.fecha_prestamo desc
-                  limit ? offset ?""",(prestamos_por_pagina,offset))
+                    order by e.id_estado asc, p.fecha_prestamo desc
+                    limit ? offset ?""",(prestamos_por_pagina,offset))
     prestamos = query.fetchall()
     
     query.execute("Select Count(*) from prestamos where id_estado = 1") #Prestamos vencidos
@@ -83,8 +83,8 @@ def prestamos():
     conexion.close()
 
     return render_template("prestamos.html",prestamos=prestamos,estados=estados,pagina=pagina,total_paginas=total_paginas,
-                           prestamos_activos=prestamos_activos,prestamos_devueltos=prestamos_devueltos,prestamos_vencidos=prestamos_vencidos,
-                           exito = exito, devuelto = devuelto)
+                            prestamos_activos=prestamos_activos,prestamos_devueltos=prestamos_devueltos,prestamos_vencidos=prestamos_vencidos,
+                            exito = exito, devuelto = devuelto)
 
 # ----------------------------------------------------- BUSCAR Prestamo ----------------------------------------------------- #
 

@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biblioteca Comunitaria Gabriela Mistral</title>
     <link rel="icon" href="/static/img/books_3145874.png">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/colores.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/barra_lateral.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo_inicio.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
     
@@ -106,15 +104,16 @@
                                 {% endif %} >
                                 {{libro[7]}} - {{libro[8]}} 
                             </h5> <!-- Codigo de seccion + seccion  --> 
-                        </span>
-                        {% if libro[9]|int == 1 %}
-                            <span id="span-disponibilidad-libro-d"> <h4 id="h4-disponible">Disponible: {{libro[9]}} copia</h4></span>
-                        {% elif libro[9]|int > 1 %}
-                            <span id="span-disponibilidad-libro-d"> <h4 id="h4-disponible">Disponible: {{libro[9]}} copias</h4></span>
-                        {% else %}
-                            <span id="span-disponibilidad-libro-d"> <h4 id="h4-no_disponible">No disponible</h4></span>
-                        {% endif %}
-                        </div>
+                            </span>
+                            {% if libro[9]|int == 1 %}
+                                <span id="span-disponibilidad-libro-d"> <h4 id="h4-disponible">Disponible: {{libro[9]}} copia</h4></span>
+                            {% elif libro[9]|int > 1 %}
+                                <span id="span-disponibilidad-libro-d"> <h4 id="h4-disponible">Disponible: {{libro[9]}} copias</h4></span>
+                            {% else %}
+                                <span id="span-disponibilidad-libro-d"> <h4 id="h4-no_disponible">No disponible</h4></span>
+                            {% endif %}
+                            </div>
+                            <a href="{{ url_for('libros.detalle_libro', ID=libro[0], Titulo=libro[3]) }}">ENLACE</a>
                         </div>
                     </div>
                     <!--
@@ -189,22 +188,24 @@
                             {% endif %} >
                             {{libro[7]}} - {{libro[8]}} 
                         </h5> <!-- Codigo de seccion + seccion  --> 
-                    </span>
-                    {% if libro[9]|int == 1 %}
-                        <span id="span-disponibilidad-libro-d"> <h4 id="h4-disponible">Disponible: {{libro[9]}} copia</h4></span>
-                    {% elif libro[9]|int > 1 %}
-                        <span id="span-disponibilidad-libro-d"> <h4 id="h4-disponible">Disponible: {{libro[9]}} copias</h4></span>
-                    {% else %}
-                        <span id="span-disponibilidad-libro-d"> <h4 id="h4-no_disponible">No disponible</h4></span>
-                    {% endif %}
-                    </div>
+                        </span>
+                        {% if libro[9]|int == 1 %}
+                            <span id="span-disponibilidad-libro-d"> <h4 id="h4-disponible">Disponible: {{libro[9]}} copia</h4></span>
+                        {% elif libro[9]|int > 1 %}
+                            <span id="span-disponibilidad-libro-d"> <h4 id="h4-disponible">Disponible: {{libro[9]}} copias</h4></span>
+                        {% else %}
+                            <span id="span-disponibilidad-libro-d"> <h4 id="h4-no_disponible">No disponible</h4></span>
+                        {% endif %}
+                        </div>
+                        
                     </div>
                 </div>
                 <!--
-                <a href="{{ url_for('libros.buscar_libro', buscar=libro[3], filtro_busqueda='Titulo', categorias='Todas') }}">ENLACE</a>
+                    <a href="{{ url_for('libros.buscar_libro', buscar=libro[3], filtro_busqueda='Titulo', categorias='Todas') }}">ENLACE</a>
                 -->
                 {% endfor %}
             </div>
+
             {% endfor %}
             <br><br>
     </section>

@@ -3,7 +3,7 @@ from datetime import datetime
 import math
 from src.database.db_sqlite import conexion_BD
 
-bp_libros = Blueprint('libros',__name__)
+bp_libros = Blueprint('libros',__name__, template_folder="../templates")
 
 # ----------------------------------------------------- REGISTRO LIBROS ----------------------------------------------------- #
 
@@ -341,3 +341,63 @@ def eliminar_libro():
     return redirect(url_for("libros.libros",exito = exito))
 
 
+# ----------------------------------------------------- DETALLE LIBROS ----------------------------------------------------- #
+
+def get_detalle_libro(id_libro):
+    import sqlite3
+
+    conexion = conexion_BD()
+    conexion.row_factory = sqlite3.Row
+    query = conexion.cursor()
+
+    query.execute("""select l.id_libro, Titulo, tomo, ano_publicacion, ISBN, numero_paginas, numero_copias,
+        sd.codigo_seccion, sd.seccion, a.nombre_autor, a.apellido_autor, e.editorial, n.notacion, lu.lugar
+        from Libros l
+        join RegistroLibros r on r.id_libro = l.id_libro
+        join SistemaDewey sd on sd.codigo_seccion = r.codigo_seccion 
+        join notaciones n on n.id_notacion = r.id_notacion
+        join Autores a on a.id_autor = n.id_autor
+        join Editoriales e on e.id_editorial = n.id_editorial
+        join Lugares lu on r.id_lugar = lu.id_lugar 
+        where l.id_libro = ?;""",(id_libro,))
+    detalle = query.fetchall()
+    query.close()
+    conexion.close()
+
+    return [dict(fila) for fila in detalle]
+
+'''
+def get_descripcion(Titulo):
+    import requests
+
+    url = f"https://openlibrary.org/search.json?title={Titulo}"
+    respuesta = requests.get(url)
+    respuesta = respuesta.json()
+
+    if respuesta["numFound"] > 0:
+        primer_libro = respuesta["docs"][0]
+        work_key = primer_libro.get("key") 
+
+        # Obtener detalles más completos
+        work_url = f"https://openlibrary.org{work_key}.json"
+        work_response = requests.get(work_url)
+        work_data = work_response.json()
+
+        return {
+            "description": (
+                work_data.get("description", "Sin descripción disponible")
+                if isinstance(work_data.get("description"), str)
+                else work_data.get("description", {}).get("value", "Sin descripción disponible")
+            )
+        }
+    else:
+        return None
+'''
+
+@bp_libros.route("/detalle_libro/<ID>/<Titulo>", methods=["GET", "POST"])
+def detalle_libro(ID,Titulo):
+    
+    detalle = get_detalle_libro(ID)
+    #descripcion = get_descripcion(Titulo)
+    
+    return render_template("detalle_libro.html",detalle=detalle, descripcion="Nada")

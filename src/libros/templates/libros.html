@@ -168,13 +168,17 @@
                     <h5 class="card-title">{{libro[1]}}</h5><!-- Titulo  -->
                     <p class="card-text">{{libro[9]}}&nbsp;{{libro[10]}} <!-- Nombre y apellido del autor  -->
                     {{libro[3]}}</p><!-- Anio de publicacion  -->
-                </div>
-                <div class="card-footer">
                     {% if libro[0] in destacados %}
                     <span class="destacado">
                             <h4 class="h4-destacado"> <i class="bi bi-star-fill"></i> Destacado</h4>
                     </span>
                     {% endif %}
+                    
+                </div>
+                <div class="card-footer">
+                    <a href="{{ url_for('libros.detalle_libro', ID=libro[0], Titulo=libro[1]) }}">
+                    <button class="btn btn-outline-primary btn-sm m-2" >Ver detalles</button>
+                    </a>
                     <span id="span-info-libro-d"> 
                     <h5
                         {% if (libro[7]|int) < 100 %}
@@ -208,6 +212,7 @@
                 {% else %}
                     <span id="span-disponibilidad-libro-d"> <h4 id="h4-no_disponible">No disponible</h4></span>
                 {% endif %}
+                
                 </div>
                 </div>
             </div>

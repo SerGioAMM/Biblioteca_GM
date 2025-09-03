@@ -3,7 +3,8 @@ from src.database.db_sqlite import conexion_BD
 from math import floor
 import json
 
-main = Blueprint('main',__name__)
+
+main = Blueprint('main',__name__, template_folder="../templates")
 
 # ----------------------------------------------------- PRINCIPAL ----------------------------------------------------- #
 
@@ -43,9 +44,10 @@ def inicio():
         resultado = {
                     "seccion": secciones_principales[i],
                     "destacados": destacados,
-                    "aleatorios": []
+                    "aleatorios": [],
+                    "nuevos":[]
             }
-        while (len(destacados) + contador_aleatorios) < 6: contador_aleatorios += 1
+        while ((len(destacados) + contador_aleatorios) < 6): contador_aleatorios += 1
         query.execute(f"""SELECT l.id_libro, 0 AS cantidad, n.notacion, l.Titulo, a.nombre_autor, a.apellido_autor, l.ano_publicacion, sd.codigo_seccion, sd.seccion, l.numero_copias
                         FROM Libros l
                         JOIN RegistroLibros r ON r.id_libro = l.id_libro
@@ -59,6 +61,19 @@ def inicio():
         resultado["aleatorios"] = aleatorios    
         libros_destacados.append(resultado)
     
+    #?Recien aniadidos
+    query.execute("""SELECT l.id_libro, 0 AS cantidad, n.notacion, l.Titulo, a.nombre_autor, a.apellido_autor, l.ano_publicacion, sd.codigo_seccion, sd.seccion, l.numero_copias
+                        FROM Libros l
+                        JOIN RegistroLibros r ON r.id_libro = l.id_libro
+                        JOIN SistemaDewey sd ON sd.codigo_seccion = r.codigo_seccion
+                        JOIN Notaciones n ON n.id_notacion = r.id_notacion
+                        JOIN Autores a ON a.id_autor = n.id_autor
+                        order by l.id_libro desc
+                        limit 12""")
+    nuevos = query.fetchall()
+    resultado["nuevos"] = nuevos
+
+    #? Conteo de total de libros para la pagina principal
     query.execute("select count(*) from libros")
     total_libros = query.fetchone()[0]
     total_libros = (floor(total_libros/10))*10

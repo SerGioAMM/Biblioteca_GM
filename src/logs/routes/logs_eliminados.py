@@ -3,7 +3,7 @@ from datetime import datetime
 import math
 from src.database.db_sqlite import conexion_BD
 
-bp_eliminados = Blueprint('eliminados',__name__)
+bp_eliminados = Blueprint('eliminados',__name__, template_folder="../templates")
 
 # ----------------------------------------------------- Libros Eliminados ----------------------------------------------------- #
 
