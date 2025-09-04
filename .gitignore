@@ -4,6 +4,8 @@ iniciarSQLiteCloud.py
 creacion_db.sql
 db_backup.py
 src/database/SQLAlchemy.py
+src/database/Biblioteca_GM.db.sql
+src/database/Biblioteca_GM.sqbpro
 
 #Ignorar variables de entorno para no exponerlas
 .env
