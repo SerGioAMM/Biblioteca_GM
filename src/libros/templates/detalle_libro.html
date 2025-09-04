@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo_inicio.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
     
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/detalle_libro.css') }}">
     <!--! Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
@@ -32,9 +31,10 @@
                     </div>
                     <div class="d-grid m-0">
                     {% if session %}
-                    <button class="btn btn-outline-primary my-1" type="button" id="btn-editar"> <i class="bi bi-pencil-square"></i> Editar</button>
+                        <button class="btn btn-outline-primary my-1" type="button" id="btn-editar"> <i class="bi bi-pencil-square"></i> <span>Editar</span></button>
+                        <button type="submit" class="btn btn-outline-primary my-1 d-none" id="btn-guardar" form="form-editar-libro" disabled><i class="bi bi-floppy"></i> Guardar cambios</button>
                     {% endif %}
-                    <button class="btn btn-outline-primary my-1" type="button" id="btn-opinar"> <i class="bi bi-chat-right-text"></i> Opinar</button>
+                    <button class="btn btn-outline-primary my-1" type="button" id="btn-resena"> <i class="bi bi-chat-right-text"></i> Escribir reseña</button>
                     </div>
                 </div>
                 </div>
@@ -47,11 +47,11 @@
                 {% if detalle %}
                 {% set libro = detalle[0] %}
                 <div class="tab-content pt-4" id="profileTabContent">
-                <div class="tab-pane fade show active" id="overview-tab-pane detalles-libro" role="tabpanel" aria-labelledby="overview-tab" tabindex="0">
+                <div class="tab-pane fade show active detalles-libro" id="overview-tab-pane" role="tabpanel" aria-labelledby="overview-tab" tabindex="0">
                         <h1> {{libro.Titulo}} </h1>
                         <h4 class="text-body-secondary"> de {{libro.nombre_autor}}&nbsp;{{libro.apellido_autor}}</h4>
                         <p> Seccion: {{ libro.codigo_seccion }} - {{ libro.seccion }}</p>
-                        
+                        <p> Número de copias: {{libro.numero_copias}}</p>
                         <div class="col-12 col-md-12 mb-3 align-items-stretch">
                             <br>
                             <h6>Detalles</h6>
@@ -90,13 +90,13 @@
                                 <p>RATINGS</p>
                             </div>
                         </div>
-
                     </div>
-                    <form action="#!" class="row gy-3 gy-xxl-4 d-none" id="form-editar-libro">
+                    <form action="/editar_libro" method="GET" class="row gy-3 gy-xxl-4 d-none" id="form-editar-libro">
+                        <input type="hidden" name="id_libro" value="{{libro.id_libro}}" class="" readonly>
                         <div class="col-12">
-                            <div class="row gy-2 border border-gray p-3 rounded w-50">
-                                <label class="col-12 form-label m-0">Imagen de portada</label>
-                                <div class="col-12">
+                            <div class="row gy-2 border border-gray p-3 rounded w-100">
+                                <label class="col-3 form-label m-a">Imagen de portada</label>
+                                <div class="col-6">
                                     <a href="#!" class="d-inline-block bg-primary text-light-custom lh-1 p-2 rounded link-underline link-underline-opacity-0">
                                     Subir <i class="bi bi-arrow-up-circle"></i>
                                     </a>
@@ -106,56 +106,55 @@
                                 </div>
                             </div>
                         </div>
-                    <div class="col-24 col-md-12 mb-3">
-                    <label for="inputEmail4" class="form-label">Titulo-</label>
-                        <input class="form-control" type="text" name="titulo" placeholder="" autocomplete="off" value="{{ libro.Titulo }}" disabled>
-                    </div>
-                    <div class="col-6 col-md-3 mb-3">
-                        <label for="nombre_autor apellido_autor" class="form-label p-0">Datos del autor</label>
-                        <input type="text" name="nombre_autor" class="form-control" placeholder="Nombre" autocomplete="off">
-                    </div>
-                    <div class="col-6 col-md-3 mb-3">
-                        <label for="nombre_autor apellido_autor" class="form-label p-0"> &nbsp; </label>
-                        <input type="text" name="apellido_autor" class="form-control" placeholder="Apellido" autocomplete="off">
-                    </div>
-                    <div class="col-12 col-md-6 mb-3">
-                        <label for="ISBN" class="form-label">ISBN</label>
-                        <input name="ISBN" type="text" class="form-control" id="" placeholder="">
-                    </div>
-                    <div class="col-12 col-md-6 mb-3">
-                        <label for="editorial" class="form-label">Editorial</label>
-                        <input name="editorial" type="text" class="form-control" id="" placeholder="">
-                    </div>
-                    <div class="col-12 col-md-3">
-                        <label for="tomo" class="form-label">Tomo-</label>
-                        <input name="tomo" type="number" class="form-control" id="" placeholder="">
-                    </div>
-                    <div class="col-12 col-md-3 mb-3">
-                        <label for="anio" class="form-label">Año de Publicación</label>
-                        <input name="anio" type="text" class="form-control" id="" placeholder="">
-                    </div>
-                    <div class="col-12 col-md-3 mb-3">
-                        <label for="num_paginas" class="form-label">Número de Páginas-</label>
-                        <input name="num_paginas" type="number" class="form-control" id="" placeholder="" required>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="inputEmail4" class="form-label">Titulo-</label>
+                            <input class="form-control editable" type="text" name="titulo" placeholder="" autocomplete="off" value="{{ libro.Titulo }}" required>
                         </div>
-                    <div class="col-12 col-md-3 mb-3">
-                        <label for="num_copias" class="form-label">Número de Copias-</label>
-                        <input name="num_copias" type="text" class="form-control" id="" required>
-                    </div>
-                    <div class="col-12 col-md-6 mb-3">
-                        <label for="lugar" class="form-label">Lugar de Publicación</label>
-                            <input name="lugar" type="text" class="form-control" id="" placeholder="">
-                    </div>
-                    <div class="col-12 col-md-6">
-                        <label for="sistema_dewey" class="form-label">Sistema Dewey</label>
-                        <input name="sistema_dewey" type="text" class="form-control" id="" placeholder="">
-                    </div>
-                    <div class="col-12 col-md-6 mx-auto text-center mb-3">
-                        <br>
-                        <button type="submit" class="btn btn-primary w-50"><i class="bi bi-floppy"></i> Guardar cambios</button>
-                        <br><br>
-                    </div>
-                </form>
+                        <div class="col-6 col-md-3 mb-3">
+                            <label for="nombre_autor" class="form-label p-0">Nombre del autor</label>
+                            <input type="text" name="nombre_autor" class="form-control" placeholder="-" autocomplete="off" value="{{ libro.nombre_autor }}" disabled>
+                        </div>
+                        <div class="col-6 col-md-3 mb-3">
+                            <label for="apellido_autor" class="form-label p-0">Apellido del autor</label>
+                            <input type="text" name="apellido_autor" class="form-control" placeholder="-" autocomplete="off" value="{{libro.apellido_autor}}" disabled>
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="ISBN" class="form-label">ISBN</label>
+                            <input name="ISBN" type="text" class="form-control" id="" placeholder="" autocomplete="off" value="{{libro.ISBN}}" disabled>
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="editorial" class="form-label">Editorial</label>
+                            <input name="editorial" type="text" class="form-control" id="" placeholder="" autocomplete="off" value="{{libro.editorial}}" disabled>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <label for="tomo" class="form-label">Tomo-</label>
+                            <input name="tomo" type="number" class="form-control editable" id="" placeholder="" autocomplete="off" value="{{libro.tomo}}">
+                        </div>
+                        <div class="col-12 col-md-3 mb-3">
+                            <label for="anio" class="form-label">Año de Publicación</label>
+                            <input name="anio" type="text" class="form-control" id="" placeholder="" autocomplete="off" value="{{libro.ano_publicacion}}" disabled>
+                        </div>
+                        <div class="col-12 col-md-3 mb-3">
+                            <label for="numero_paginas" class="form-label">Número de Páginas-</label>
+                            <input name="numero_paginas" type="number" class="form-control editable" id="" placeholder="" autocomplete="off" value="{{libro.numero_paginas}}" required>
+                            </div>
+                        <div class="col-12 col-md-3 mb-3">
+                            <label for="numero_copias" class="form-label">Número de Copias-</label>
+                            <input name="numero_copias" type="text" class="form-control editable" id="" required autocomplete="off" value="{{libro.numero_copias}}" required>
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="lugar" class="form-label">Lugar de Publicación</label>
+                            <input name="lugar" type="text" class="form-control" id="" placeholder="" autocomplete="off" value="{{libro.lugar}}" disabled>
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="sistema_dewey" class="form-label">Sistema Dewey</label>
+                            <input name="sistema_dewey" type="text" class="form-control" id="" placeholder="" value="{{libro.codigo_seccion}} - {{libro.seccion}}" disabled>
+                        </div>
+                        <div class="col-12 col-md-12 mb-2">
+                            <label for="motivo" class="form-label">Motivo de modificación</label>
+                            <input name="motivo" type="text-area" class="form-control" id="motivo" placeholder="Escribe un motivo" required autocomplete="off" disabled>
+                        </div>
+                    </form>
                 </div>
                 {% else %}
                 <h4>No se encontro el libro.</h4>
@@ -172,7 +171,7 @@
 {% include 'footer.html' %}
 
 <!-- Custom Scripts -->
-<script src="/src/static/js/detalle_libro.js"></script>
+<script src="{{ url_for('static', filename='js/detalle_libro.js') }}"></script>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>

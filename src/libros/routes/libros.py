@@ -401,3 +401,21 @@ def detalle_libro(ID,Titulo):
     #descripcion = get_descripcion(Titulo)
     
     return render_template("detalle_libro.html",detalle=detalle, descripcion="Nada")
+
+@bp_libros.route("/editar_libro", methods=["GET"])
+def editar_libro():
+    if(request.method=="GET"):
+        id_libro = request.args.get("id_libro")
+        new_titulo = request.args.get("titulo")
+        new_portada = request.args.get("portada")
+        new_tomo = request.args.get("tomo","")
+        new_numero_paginas = request.args.get("numero_paginas")
+        new_numero_copias = request.args.get("numero_copias")
+    
+    conexion = conexion_BD()
+    query = conexion.cursor()
+    #! EN CONSTRUCCION
+    query.execute("")
+
+        
+    return redirect(url_for('libros.detalle_libro', ID=id_libro, Titulo=new_titulo))
