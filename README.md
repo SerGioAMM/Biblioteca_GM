@@ -7,7 +7,7 @@ Este proyecto es un sistema de gestión bibliotecario desarrollado con Flask y S
 - Catálogo completo de libros organizado según el Sistema Decimal Dewey
 - Registro de información detallada de libros (título, autor, editorial, etc.)
 - Control de disponibilidad de ejemplares
-- Interfaz web fácil de usar para insertar y consultar libros
+- Interfaz web intuitiva para registrar y consultar libros
 
 ## Tecnologías utilizadas
 
