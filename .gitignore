@@ -21,3 +21,7 @@ __pycache__/
 
 #!Ignorar archivos de log MOMENTANEAMENTE
 src/utils/logs
+
+#!Ignorar partes del modulo libros en construccion ORM
+src/libros/models/
+src/libros/services/
