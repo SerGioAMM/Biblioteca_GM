@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catalogo de libros</title>
-    <link rel="icon" href="/static/img/books_3145874.png">
+    <link rel="icon" href="{{ url_for('static', filename='img/books_3145874.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo_inicio.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
 
@@ -29,7 +29,6 @@
                 <div class="input-group mx-auto" style="width: 45%;">
                 <select class="w-75" name="buscar" id="cuadro-busqueda" data-placeholder="Buscar..."  autocomplete="off" cursor="text"></select>
                 <button class="btn btn-success w-25" type="submit">Buscar</button>
-
                 </div>
                 <div class="input-group mx-auto" style="width: 45%;">
                     <select name="filtro-busqueda" id="filtro-busqueda" class="form-select mt-3 btn btn-secondary">
