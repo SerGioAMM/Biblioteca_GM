@@ -1,19 +1,12 @@
-from flask import Flask
-
-from .prestamos.routes import prestamos
-
-from .public.routes import main, sugerencias
-
-from .usuarios.routes import login, usuarios
-
-from .libros.routes import libros
-
 #Rutas
+from flask import Flask
+from .prestamos.routes import prestamos
+from .public.routes import main, sugerencias
+from .usuarios.routes import login, usuarios
+from .libros.routes import libros
 from .logs.routes import logs_eliminados
 
-#, template_folder="templates", static_folder="static"
-
-app = Flask(__name__)
+app = Flask(__name__, static_folder="static")
 
 def init_app(config):
     # Configuration
