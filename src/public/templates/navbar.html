@@ -103,11 +103,12 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                
+                <script src="{{ url_for('static', filename='js/sugerencias.js') }}"></script>
                 <div class="collapse navbar-collapse me-5" id="navbarSupportedContent">
                     {% if (request.endpoint == 'main.inicio') or (request.endpoint == 'main.acercade') %}
-                    <form class="d-flex" role="search" action="{{ url_for('libros.buscar_libro') }}" method="POST">
-                        <input class="form-control me-2" type="search" placeholder="Buscar libro" aria-label="Search"/>
+                    <form class="d-flex" role="search" action="/buscar_libro" method="GET" id="form-busqueda">
+                        <input class="d-none" value="Titulo" id="filtro-busqueda" type="text">
+                        <select class="w-a" name="buscar" id="cuadro-busqueda" data-placeholder="Buscar..."  autocomplete="off" cursor="text"></select>
                         <button class="btn btn-outline-secondary" type="submit">Buscar</button>
                     </form>
                     {% endif %}
@@ -120,7 +121,7 @@
                         </li>
                         
                     </ul>
-                    <ul class="navbar-nav ms-5 mb-2 mb-lg-0">
+                    <ul class="navbar-nav mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('login.login') }}">Login</a>
                         </li>
