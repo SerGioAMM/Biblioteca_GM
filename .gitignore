@@ -3,7 +3,7 @@ Biblioteca_GM.db
 iniciarSQLiteCloud.py
 creacion_db.sql
 db_backup.py
-db.py
+src/database/SQLAlchemy.py
 
 #Ignorar variables de entorno para no exponerlas
 .env
