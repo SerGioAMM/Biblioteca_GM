@@ -23,7 +23,5 @@ __pycache__/
 src/utils/logs
 
 #!Ignorar partes del modulo libros en construccion ORM
-src/libros/models/
 src/libros/services/
-src/public/models/
 src/public/services/
