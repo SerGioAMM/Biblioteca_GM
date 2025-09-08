@@ -10,7 +10,7 @@ def get_catalogo(libros_por_pagina,offset):
     # Consulta paginada
     query.execute("""
         select l.id_libro, titulo, tomo, ano_publicacion, ISBN, numero_paginas, numero_copias,
-        sd.codigo_seccion, sd.seccion, a.nombre_autor, a.apellido_autor, e.editorial, n.notacion,lu.lugar
+        sd.codigo_seccion, sd.seccion, a.nombre_autor, a.apellido_autor, e.editorial, n.notacion,lu.lugar, l.portada
         from Libros l
         join RegistroLibros r ON r.id_libro = l.id_libro
         join SistemaDewey sd ON sd.codigo_seccion = r.codigo_seccion 
@@ -42,7 +42,7 @@ def get_detalle_libro(id_libro):
     query = conexion.cursor()
 
     query.execute("""select l.id_libro, Titulo, tomo, ano_publicacion, ISBN, numero_paginas, numero_copias,
-        sd.codigo_seccion, sd.seccion, a.nombre_autor, a.apellido_autor, e.editorial, n.notacion, lu.lugar
+        sd.codigo_seccion, sd.seccion, a.nombre_autor, a.apellido_autor, e.editorial, n.notacion, lu.lugar , l.portada
         from Libros l
         join RegistroLibros r on r.id_libro = l.id_libro
         join SistemaDewey sd on sd.codigo_seccion = r.codigo_seccion 
