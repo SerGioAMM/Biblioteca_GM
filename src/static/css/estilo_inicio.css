@@ -124,13 +124,13 @@
 }
 
 /*? Textos que muestran la disponibilidad de los libros */
-#span-disponibilidad-libro-d, .destacado, .aleatorio{
+#span-disponibilidad-libro-d{
     width: 100%;
     display: flex;
     justify-content: center;
 }
 
-#span-disponibilidad-libro-d h4, .destacado h4, .aleatorio h4{
+#span-disponibilidad-libro-d h4, .destacado h4, .aleatorio h4, .nuevo h4{
     border-radius: 10px;
     padding: 5px;
     font-size: 14px;
@@ -144,6 +144,11 @@
     background-color: rgb(255, 250, 230);
     color: rgb(120, 90, 0);
     border: solid 1px rgb(200, 160, 0);
+}
+.h4-nuevo{
+    background-color: rgb(230, 255, 255);
+    color: rgb(0, 96, 120);
+    border: solid 1px rgb(0, 147, 200);
 }
 
 /* Diferentes colores para disponible o no disponible */
