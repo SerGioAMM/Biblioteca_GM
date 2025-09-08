@@ -84,7 +84,7 @@
                             </div>
                             <div class="col-3 bg-light rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
                                 <p class="m-0 p-2"> <span class="text-body-secondary">ISBN</span><br>
-                                <span> {{ libro.ISBN }} </span></p>
+                                <span> {% if libro.ISBN %}{{ libro.ISBN }}{% else %}-{% endif %} </span></p>
                             </div>
                             <div class="col-12 col-md-12 mb-3">
                                 <p>RATINGS</p>
@@ -120,15 +120,15 @@
                         </div>
                         <div class="col-12 col-md-6 mb-3">
                             <label for="ISBN" class="form-label">ISBN</label>
-                            <input name="ISBN" type="text" class="form-control" id="" placeholder="" autocomplete="off" value="{{libro.ISBN}}" disabled>
+                            <input name="ISBN" type="text" class="form-control" id="" placeholder="-" autocomplete="off" value="{{libro.ISBN}}" disabled>
                         </div>
                         <div class="col-12 col-md-6 mb-3">
                             <label for="editorial" class="form-label">Editorial</label>
-                            <input name="editorial" type="text" class="form-control" id="" placeholder="" autocomplete="off" value="{{libro.editorial}}" disabled>
+                            <input name="editorial" type="text" class="form-control" id="" placeholder="-" autocomplete="off" value="{{libro.editorial}}" disabled>
                         </div>
                         <div class="col-12 col-md-3">
                             <label for="tomo" class="form-label">Tomo-</label>
-                            <input name="tomo" type="number" class="form-control editable" id="" placeholder="" autocomplete="off" value="{{libro.tomo}}">
+                            <input name="tomo" type="number" class="form-control editable" id="" placeholder="-" autocomplete="off" value="{{libro.tomo}}">
                         </div>
                         <div class="col-12 col-md-3 mb-3">
                             <label for="anio" class="form-label">Año de Publicación</label>
@@ -136,7 +136,7 @@
                         </div>
                         <div class="col-12 col-md-3 mb-3">
                             <label for="numero_paginas" class="form-label">Número de Páginas-</label>
-                            <input name="numero_paginas" type="number" class="form-control editable" id="" placeholder="" autocomplete="off" value="{{libro.numero_paginas}}" required>
+                            <input name="numero_paginas" type="number" class="form-control editable" id="" placeholder="-" autocomplete="off" value="{{libro.numero_paginas}}" required>
                             </div>
                         <div class="col-12 col-md-3 mb-3">
                             <label for="numero_copias" class="form-label">Número de Copias-</label>
@@ -144,7 +144,7 @@
                         </div>
                         <div class="col-12 col-md-6 mb-3">
                             <label for="lugar" class="form-label">Lugar de Publicación</label>
-                            <input name="lugar" type="text" class="form-control" id="" placeholder="" autocomplete="off" value="{{libro.lugar}}" disabled>
+                            <input name="lugar" type="text" class="form-control" id="" placeholder="-" autocomplete="off" value="{{libro.lugar}}" disabled>
                         </div>
                         <div class="col-12 col-md-6 mb-3">
                             <label for="sistema_dewey" class="form-label">Sistema Dewey</label>
