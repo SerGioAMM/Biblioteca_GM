@@ -23,11 +23,17 @@
         <div class="row gy-4 gy-lg-0">
         <div class="col-12 col-lg-4 col-xl-3">
             <div class="row gy-4">
-            <div class="col-12">
+                <div class="col-12">
+                {% if detalle %}
+                {% set libro = detalle[0] %}
                 <div class="card widget-card border-light shadow-sm">
-                <div class="card-body">
-                    <div class="text-center mb-3">
-                    <img src="{{ url_for('static',filename='img/book.png')}}" class="img-fluid" alt="portada">
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                        {% if libro.portada == "book.png" %}
+                        <img src="{{ url_for('static', filename='img/book.png') }}" class="card-img-top" alt="...">
+                        {% else %}
+                        <img src="{{ libro.portada }}" class="card-img-top" alt="...">
+                        {% endif %}
                     </div>
                     <div class="d-grid m-0">
                     {% if session %}
@@ -44,8 +50,7 @@
         <div class="col-12 col-lg-8 col-xl-9">
             <div class="card widget-card border-light shadow-sm">
             <div class="card-body p-4">
-                {% if detalle %}
-                {% set libro = detalle[0] %}
+                
                 <div class="tab-content pt-4" id="profileTabContent">
                 <div class="tab-pane fade show active detalles-libro" id="overview-tab-pane" role="tabpanel" aria-labelledby="overview-tab" tabindex="0">
                         <h1> {{libro.Titulo}} </h1>
@@ -157,7 +162,7 @@
                     </form>
                 </div>
                 {% else %}
-                <h4>No se encontro el libro.</h4>
+                <h4>No se encontró el libro.</h4>
                 {% endif %}
                 
                 </div>
