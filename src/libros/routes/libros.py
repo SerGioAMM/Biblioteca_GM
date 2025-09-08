@@ -204,8 +204,7 @@ def buscar_libro():
     offset = (pagina - 1) * libros_por_pagina
 
     # Secciones Dewey para filtros
-    query.execute("select * from SistemaDewey")
-    categorias = query.fetchall()
+    categorias = libros_model.get_categorias()
 
     if filtro_busqueda == "Titulo":
         SQL_where_busqueda = (f"where l.titulo like '%{busqueda}%'")
@@ -220,52 +219,17 @@ def buscar_libro():
     filtro_total = SQL_where_busqueda + SQL_where_seccion
 
     # Conteo total para paginación
-    query.execute(f"""
-        select count(*) from Libros l
-        join RegistroLibros r on r.id_libro = l.id_libro
-        join SistemaDewey sd on sd.codigo_seccion = r.codigo_seccion 
-        join notaciones n on n.id_notacion = r.id_notacion
-        join Autores a on a.id_autor = n.id_autor
-        join Editoriales e on e.id_editorial = n.id_editorial
-        join Lugares lu on r.id_lugar = lu.id_lugar
-        {filtro_total}
-    """)
-    total_libros = query.fetchone()[0]
-    total_paginas = math.ceil(total_libros / libros_por_pagina) #Redondea el resultado hacia arriba, si hay (11 libros / 10 libros por pagina) = 1.1, math.ceil(1.1) = 2 paginas
+    total_paginas = math.ceil((libros_model.total_libros(filtro_total)) / libros_por_pagina) #Redondea el resultado hacia arriba, si hay (11 libros / 10 libros por pagina) = 1.1, math.ceil(1.1) = 2 paginas
 
     # Consulta paginada
-    query.execute(f"""
-        select l.id_libro, Titulo, tomo, ano_publicacion, ISBN, numero_paginas, numero_copias,
-        sd.codigo_seccion, sd.seccion, a.nombre_autor, a.apellido_autor, e.editorial, n.notacion, lu.lugar
-        from Libros l
-        join RegistroLibros r on r.id_libro = l.id_libro
-        join SistemaDewey sd on sd.codigo_seccion = r.codigo_seccion 
-        join notaciones n on n.id_notacion = r.id_notacion
-        join Autores a on a.id_autor = n.id_autor
-        join Editoriales e on e.id_editorial = n.id_editorial
-        join Lugares lu on r.id_lugar = lu.id_lugar
-        {filtro_total}
-        order by sd.codigo_seccion asc,Titulo asc
-        limit ? offset ?
-    """, (libros_por_pagina, offset))
-
-    libros = query.fetchall()
+    libros = libros_model.get_catalogo_filtrado(libros_por_pagina,offset,filtro_total)
 
     destacados = []
     for i in range(10):
-        query.execute(f"""select l.id_libro,count(l.id_libro) as cantidad
-                        from Prestamos p
-                        join libros l on p.id_libro = l.id_libro
-                        join RegistroLibros r on r.id_libro = l.id_libro
-                        join SistemaDewey sd on sd.codigo_seccion = r.codigo_seccion 
-                        where sd.codigo_seccion LIKE "{i}%"
-                        group by p.id_libro
-                        order by cantidad desc
-                        limit 3;""")
-        resultado = query.fetchall()
+        resultado = libros_model.get_destacados(i)
         if resultado:
             for libro in resultado:
-                destacados.append((libro[0]))
+                destacados.append((libro[0])) 
 
     query.close()
     conexion.close()

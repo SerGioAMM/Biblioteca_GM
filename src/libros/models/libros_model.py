@@ -26,6 +26,32 @@ def get_catalogo(libros_por_pagina,offset):
     conexion.close()
     return [dict(fila) for fila in libros]
 
+def get_catalogo_filtrado(libros_por_pagina,offset,filtro):
+    conexion = conexion_BD()
+    conexion.row_factory = sqlite3.Row
+    query = conexion.cursor()
+
+    #? Selecciona todos los libros disponibles
+    # Consulta paginada
+    query.execute(f"""
+        select l.id_libro, Titulo, tomo, ano_publicacion, ISBN, numero_paginas, numero_copias,
+        sd.codigo_seccion, sd.seccion, a.nombre_autor, a.apellido_autor, e.editorial, n.notacion, lu.lugar, l.portada
+        from Libros l
+        join RegistroLibros r on r.id_libro = l.id_libro
+        join SistemaDewey sd on sd.codigo_seccion = r.codigo_seccion 
+        join notaciones n on n.id_notacion = r.id_notacion
+        join Autores a on a.id_autor = n.id_autor
+        join Editoriales e on e.id_editorial = n.id_editorial
+        join Lugares lu on r.id_lugar = lu.id_lugar
+        {filtro}
+        order by sd.codigo_seccion asc,Titulo asc
+        limit ? offset ?
+    """, (libros_por_pagina, offset))
+    libros = query.fetchall()
+    query.close()
+    conexion.close()
+    return [dict(fila) for fila in libros]
+
 def get_categorias():
     conexion = conexion_BD()
     query = conexion.cursor()
@@ -74,3 +100,20 @@ def get_destacados(seccion):
     query.close()
     conexion.close()
     return resultado
+
+def total_libros(filtro):
+    conexion = conexion_BD()
+    query = conexion.cursor()
+    query.execute(f"""
+        select count(*) from Libros l
+        join RegistroLibros r on r.id_libro = l.id_libro
+        join SistemaDewey sd on sd.codigo_seccion = r.codigo_seccion 
+        join notaciones n on n.id_notacion = r.id_notacion
+        join Autores a on a.id_autor = n.id_autor
+        join Editoriales e on e.id_editorial = n.id_editorial
+        join Lugares lu on r.id_lugar = lu.id_lugar
+        {filtro}""")
+    total = query.fetchone()[0]
+    query.close()
+    conexion.close()
+    return total
