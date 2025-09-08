@@ -89,7 +89,11 @@
                     </span><!-- Notacion  -->
                 </div>
 
+                {% if libro.portada == "book.png" %}
                 <img src="{{ url_for('static', filename='img/book.png') }}" class="card-img-top" alt="...">
+                {% else %}
+                <img src="{{ libro.portada   }}" class="card-img-top" alt="...">
+                {% endif %}
 
                 <div class="card-body">
                     <h6 class="card-title">{{libro.Titulo}}</h6><!-- Titulo  -->
