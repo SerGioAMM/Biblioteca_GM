@@ -67,60 +67,6 @@
             </form>
         </div>
     </div>
-
-    <!--
-    <ul class="ul-contenedor-sugerencias ms-5">
-                        <li>sugerencia 1</li>
-                    </ul>
-    <div class="div-busqueda">
-            <form class="frm-buscar" action="/buscar_libro" method="GET">
-                <label for="buscar"><h1>Catálogo de Libros</h1>Explora nuestra colección de libros y encuentra tu próxima lectura.</label><br><br><br>
-                <input class="buscar" id="cuadro-busqueda" type="text" name="buscar" autocomplete="off" placeholder="Buscar...">&nbsp;&nbsp;
-                <section class="menu-filtros">
-                            <h4> Buscar por: &nbsp;&nbsp;</h4>
-                            <select name="filtro-busqueda" id="filtro-busqueda">
-                                <!-- Estas decisiones sirven para guardar la seleccion de filtros --
-                                <option value="Titulo" 
-                                    {% if filtro_busqueda == "Titulo" %}
-                                        selected
-                                    {% endif %}>
-                                    Titulo
-                                </option>
-                                <option value="Autor" 
-                                    {% if filtro_busqueda == "Autor" %}
-                                        selected
-                                    {% endif %}>
-                                    Autor
-                                </option>
-                            </select>
-                        </section>
-                        <section>
-                            <h4> Categorias: &nbsp;&nbsp; </h4>
-                            <select name="categorias" id="categorias">
-                                <option value="Todas" 
-                                    {% if Seccion == "Todas" %}
-                                        selected
-                                    {% endif %}>
-                                    Todas
-                                </option>
-                                {% for categoria in categorias %}
-                                    <option value="{{ categoria[0] }}" 
-                                        {% if Seccion == categoria[0]|string %}
-                                            selected
-                                        {% endif %}>
-                                        {{ categoria[0] }} - {{ categoria[1] }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </section>
-                    
-                <button id="btn-buscar" type="submit">Buscar</button>
-                <ul class="ul-contenedor-sugerencias">
-                    <li>sugerencia 1</li>
-                </ul>
-            </form>
-        </div>
-        -->
         {% if (alerta) %}
         <span class="error-eliminacion">
             <h4><strong>{{alerta}}</strong></h4>
@@ -138,76 +84,39 @@
                 <div class="card h-100">
                 <div class="card-header bg-transparent border-secondary p-0">
                     <span class="span-notacion"
-                        {% if (libro[7]|int) < 100 %}
-                            id="h2-seccion-0"
-                        {% elif (libro[7]|int) < 200 %}
-                            id="h2-seccion-1"
-                        {% elif (libro[7]|int) < 300 %}
-                            id="h2-seccion-2"
-                        {% elif (libro[7]|int) < 400 %}
-                            id="h2-seccion-3"
-                        {% elif (libro[7]|int) < 500 %}
-                            id="h2-seccion-4"
-                        {% elif (libro[7]|int) < 600 %}
-                            id="h2-seccion-5"
-                        {% elif (libro[7]|int) < 700 %}
-                            id="h2-seccion-6"
-                        {% elif (libro[7]|int) < 800 %}
-                            id="h2-seccion-7"
-                        {% elif (libro[7]|int) < 900 %}
-                            id="h2-seccion-8"
-                        {% else %}
-                            id="h2-seccion-9"
-                        {% endif %} > 
-                        <h2>{{libro[12]}}</h2> 
+                        id="h2-seccion-{{ (libro.codigo_seccion|int // 100) if (libro.codigo_seccion|int < 1000) else 9 }}">
+                        <h2>{{ libro.notacion }}</h2> 
                     </span><!-- Notacion  -->
                 </div>
+
                 <img src="{{ url_for('static', filename='img/book.png') }}" class="card-img-top" alt="...">
+
                 <div class="card-body">
-                    <h5 class="card-title">{{libro[1]}}</h5><!-- Titulo  -->
-                    <p class="card-text">{{libro[9]}}&nbsp;{{libro[10]}} <!-- Nombre y apellido del autor  -->
-                    {{libro[3]}}</p><!-- Anio de publicacion  -->
-                    {% if libro[0] in destacados %}
+                    <h6 class="card-title">{{libro.Titulo}}</h6><!-- Titulo  -->
+                    <small class="card-text">{{libro.nombre_autor}}&nbsp;{{libro.apellido_autor}} <!-- Nombre y apellido del autor  -->
+                    {{libro.ano_publicacion}}</small><!-- Anio de publicacion  -->
+                    
+                    {% if libro.id_libro in destacados %}
                     <span class="destacado">
                             <h4 class="h4-destacado"> <i class="bi bi-star-fill"></i> Destacado</h4>
                     </span>
                     {% endif %}
+                    <!--!CREAR TARJETA INVISIBLE PARA-->
                     
                 </div>
                 <div class="card-footer">
-                    <a href="{{ url_for('libros.detalle_libro', ID=libro[0], Titulo=libro[1]) }}">
-                    <button class="btn btn-outline-primary btn-sm m-2" >Ver detalles</button>
+                    <a href="{{ url_for('libros.detalle_libro', ID=libro.id_libro, Titulo=libro.Titulo) }}">
+                    <button class="btn btn-outline-primary btn-sm m-2 rounded-3" >Ver detalles</button>
                     </a>
                     <span id="span-info-libro-d"> 
-                    <h5
-                        {% if (libro[7]|int) < 100 %}
-                            id="h4-seccion-0"
-                        {% elif (libro[7]|int) < 200 %}
-                            id="h4-seccion-1"
-                        {% elif (libro[7]|int) < 300 %}
-                            id="h4-seccion-2"
-                        {% elif (libro[7]|int) < 400 %}
-                            id="h4-seccion-3"
-                        {% elif (libro[7]|int) < 500 %}
-                            id="h4-seccion-4"
-                        {% elif (libro[7]|int) < 600 %}
-                            id="h4-seccion-5"
-                        {% elif (libro[7]|int) < 700 %}
-                            id="h4-seccion-6"
-                        {% elif (libro[7]|int) < 800 %}
-                            id="h4-seccion-7"
-                        {% elif (libro[7]|int) < 900 %}
-                            id="h4-seccion-8"
-                        {% else %}
-                            id="h4-seccion-9"
-                        {% endif %} >
-                        {{libro[7]}} - {{libro[8]}} 
+                    <h5 id="h4-seccion-{{ (libro.codigo_seccion|int // 100) if (libro.codigo_seccion|int < 1000) else 9 }}">
+                        {{ libro.codigo_seccion }} - {{ libro.seccion }}
                     </h5> <!-- Codigo de seccion + seccion  -->
                 </span>
-                {% if libro[6]|int == 1 %}
-                    <span id="span-disponibilidad-libro-d"> <h4 id="h4-disponible">Disponible: {{libro[6]}} copia</h4></span>
-                {% elif libro[6]|int > 1 %}
-                    <span id="span-disponibilidad-libro-d"> <h4 id="h4-disponible">Disponible: {{libro[6]}} copias</h4></span>
+                {% if libro.numero_copias|int == 1 %}
+                    <span id="span-disponibilidad-libro-d"> <h4 id="h4-disponible">Disponible: {{libro.numero_copias}} copia</h4></span>
+                {% elif libro.numero_copias|int > 1 %}
+                    <span id="span-disponibilidad-libro-d"> <h4 id="h4-disponible">Disponible: {{libro.numero_copias}} copias</h4></span>
                 {% else %}
                     <span id="span-disponibilidad-libro-d"> <h4 id="h4-no_disponible">No disponible</h4></span>
                 {% endif %}
@@ -219,110 +128,6 @@
         </div>
         <br><br>
         </div>
-        <!--
-            <div class="contendor-catalogo">
-                {% for libro in libroz%}
-                <div class="libro">
-                <span class="span-notacion" 
-                {% if (libro[7]|int) < 100 %}
-                id="h2-seccion-0"
-                {% elif (libro[7]|int) < 200 %}
-                id="h2-seccion-1"
-                    {% elif (libro[7]|int) < 300 %}
-                    id="h2-seccion-2"
-                    {% elif (libro[7]|int) < 400 %}
-                    id="h2-seccion-3"
-                    {% elif (libro[7]|int) < 500 %}
-                    id="h2-seccion-4"
-                    {% elif (libro[7]|int) < 600 %}
-                    id="h2-seccion-5"
-                    {% elif (libro[7]|int) < 700 %}
-                    id="h2-seccion-6"
-                    {% elif (libro[7]|int) < 800 %}
-                    id="h2-seccion-7"
-                    {% elif (libro[7]|int) < 900 %}
-                    id="h2-seccion-8"
-                    {% else %}
-                    id="h2-seccion-9"
-                    {% endif %} > 
-                    <h2>{{libro[12]}}</h2> 
-                </span><!-- Notacion  --
-                
-                <span id="span-info-libros"> 
-                    <h3>{{libro[1]}}</h3> <!-- Titulo  --
-                    
-                    <h4><br>{{libro[9]}} {{libro[10]}} <!-- Nombre y apellido del autor  --
-                        {{libro[3]}} </h4> <!-- Anio de publicacion  --
-                        
-                        <h5
-                        {% if (libro[7]|int) < 100 %}
-                        id="h4-seccion-0"
-                        {% elif (libro[7]|int) < 200 %}
-                        id="h4-seccion-1"
-                        {% elif (libro[7]|int) < 300 %}
-                        id="h4-seccion-2"
-                        {% elif (libro[7]|int) < 400 %}
-                        id="h4-seccion-3"
-                        {% elif (libro[7]|int) < 500 %}
-                        id="h4-seccion-4"
-                        {% elif (libro[7]|int) < 600 %}
-                        id="h4-seccion-5"
-                        {% elif (libro[7]|int) < 700 %}
-                            id="h4-seccion-6"
-                            {% elif (libro[7]|int) < 800 %}
-                            id="h4-seccion-7"
-                            {% elif (libro[7]|int) < 900 %}
-                            id="h4-seccion-8"
-                            {% else %}
-                            id="h4-seccion-9"
-                            {% endif %} >
-                            {{libro[7]}} - {{libro[8]}} 
-                        </h5> <!-- Codigo de seccion + seccion  --
-                    </span>
-                    
-                    
-                    
-                    <!-- Verificacion de disponibilidad comparando el numero de copias -> (libro[6]) --
-                    <span id="span-disponibilidad-libros"> 
-                        {% if (libro[6]|int) > 0 %} 
-                        <h4 id="h4-disponible">Disponible: 
-                            {% if (libro[6]|int == 1)%}
-                            {{libro[6]}} copia
-                            {% else %}
-                            {{libro[6]}} copias
-                            {% endif %}
-                        </h4>
-                        
-                        {% else %}
-                        <h4 id="h4-no_disponible">No disponible</h4>
-                        {% endif %}
-                        <span id="span-acciones-libro">
-                        {% if (session["rol"] == 'Administrador' or (session["rol" == 'Bibliotecario'])) %}
-                        <form class="frm-eliminar-libro" action="/eliminar_libro" method="POST">
-                            <input type="text" value="{{libro[0]}}" name="id_libro"> 
-                            <button type="reset" class="btn-eliminacion"> Eliminar </button>
-                            <span class="motivo_eliminacion">
-                                <input type="text" placeholder="Escribe el motivo de la eliminacion del libro" name="motivo" required autocomplete="off">
-                                <button type="submit">Confirmar eliminación</button> <button type="reset" class="btn-cancelar-eliminacion">Cancelar</button>
-                            </span>
-                        </form>
-                        {% endif %}
-                    </span>
-                </span>
-                <span id="span-datos-libro2">
-                    <h4 class="h4-datos-libro2">
-                        ISBN: {{libro[4]}}<br>
-                        Tomo:  {{libro[2]}}<br>
-                        Número de páginas: {{libro[5]}}<br>
-                        Editorial: {{libro[11]}}<br>
-                        Lugar: {{libro[13]}} 
-                    </h4> <!-- Datos extras del libro  -
-                </span>
-            </div>
-            {% endfor %}
-            <br><br><br><br>
-        </div>
-    -->
         <div class="paginacion">
             {% if pagina > 1 %} <!-- Verifica que la pagina actual sea despues de la primera, para mostrar un boton de "Anterior" -->
                 <a href="{{ url_for('libros.buscar_libro', pag=pagina - 1, buscar=busqueda, categorias=Seccion, filtro_busqueda=filtro_busqueda) }}">Anterior</a> <!-- Este enlace lleva a la pagina anterior "pagina-1" -->

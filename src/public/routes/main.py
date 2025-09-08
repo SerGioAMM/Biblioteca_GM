@@ -7,7 +7,7 @@ import json
 main = Blueprint('main',__name__, template_folder="../templates")
 
 # ----------------------------------------------------- PRINCIPAL ----------------------------------------------------- #
-
+from src.public.models import public_model
 @main.route("/", methods=["GET"])
 def inicio():
     session.clear()
@@ -24,53 +24,26 @@ def inicio():
         "Tecnología - Salud - Cocina",
         "Arte - Deporte - Música",
         "Literatura",
-        "Historia - Geografía - Biografía"]
+        "Historia - Geografía - Biografía",
+        "Recién añadidos"]
 
     libros_destacados = []
-    for i in range(10):
+    for i in range(11):
         contador_aleatorios = 0
-        query.execute(f"""select l.id_libro,count(l.id_libro) as cantidad, n.notacion, l.Titulo, a.nombre_autor, a.apellido_autor, l.ano_publicacion, sd.codigo_seccion, sd.seccion, l.numero_copias
-                        from Prestamos p
-                        join libros l on p.id_libro = l.id_libro
-                        join RegistroLibros r on r.id_libro = l.id_libro
-                        join SistemaDewey sd on sd.codigo_seccion = r.codigo_seccion 
-                        join notaciones n on n.id_notacion = r.id_notacion
-                        join Autores a on a.id_autor = n.id_autor
-                        where sd.codigo_seccion LIKE "{i}%"
-                        group by p.id_libro
-                        order by cantidad desc
-                        limit 3;""")
-        destacados = query.fetchall()
+        destacados = public_model.get_destacados(i)
         resultado = {
                     "seccion": secciones_principales[i],
                     "destacados": destacados,
                     "aleatorios": [],
                     "nuevos":[]
             }
-        while ((len(destacados) + contador_aleatorios) < 6): contador_aleatorios += 1
-        query.execute(f"""SELECT l.id_libro, 0 AS cantidad, n.notacion, l.Titulo, a.nombre_autor, a.apellido_autor, l.ano_publicacion, sd.codigo_seccion, sd.seccion, l.numero_copias
-                        FROM Libros l
-                        JOIN RegistroLibros r ON r.id_libro = l.id_libro
-                        JOIN SistemaDewey sd ON sd.codigo_seccion = r.codigo_seccion
-                        JOIN Notaciones n ON n.id_notacion = r.id_notacion
-                        JOIN Autores a ON a.id_autor = n.id_autor
-                        where sd.codigo_seccion LIKE "{i}%"
-                        order by RANDOM()
-                        limit {contador_aleatorios};""")
-        aleatorios = query.fetchall()
+        while (((len(destacados) + contador_aleatorios) < 6) and (i<10)): contador_aleatorios += 1
+        aleatorios = public_model.get_aleatorios(i,contador_aleatorios)
         resultado["aleatorios"] = aleatorios    
         libros_destacados.append(resultado)
     
     #?Recien aniadidos
-    query.execute("""SELECT l.id_libro, 0 AS cantidad, n.notacion, l.Titulo, a.nombre_autor, a.apellido_autor, l.ano_publicacion, sd.codigo_seccion, sd.seccion, l.numero_copias
-                        FROM Libros l
-                        JOIN RegistroLibros r ON r.id_libro = l.id_libro
-                        JOIN SistemaDewey sd ON sd.codigo_seccion = r.codigo_seccion
-                        JOIN Notaciones n ON n.id_notacion = r.id_notacion
-                        JOIN Autores a ON a.id_autor = n.id_autor
-                        order by l.id_libro desc
-                        limit 12""")
-    nuevos = query.fetchall()
+    nuevos = public_model.get_nuevos()
     resultado["nuevos"] = nuevos
 
     #? Conteo de total de libros para la pagina principal
