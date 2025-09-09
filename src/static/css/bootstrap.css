@@ -36,6 +36,11 @@
 .text-accent { color: var(--color-secundario) !important; }
 .text-light-custom { color: var(--color-claro) !important; }
 
+.form-control:focus{
+  border-color: #fec386;
+  box-shadow: 0 0 0 .25rem rgb(253 172 13 / 25%);
+}
+
 
 /*
 :root{
