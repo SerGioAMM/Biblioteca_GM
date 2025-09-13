@@ -5,6 +5,7 @@ from src.database.db_sqlite import conexion_BD
 
 bp_prestamos = Blueprint('prestamos',__name__, template_folder="../templates")
 
+from src.prestamos.models import prestamos_model
 # ----------------------------------------------------- Verificar prestamos vencidos ----------------------------------------------------- #
 
 def verificar_vencidos():
@@ -53,7 +54,7 @@ def prestamos():
 
     #Paginacion
     pagina = request.args.get("page", 1, type=int) #Recibe el parametro de la URL llamado page
-    prestamos_por_pagina = 7
+    prestamos_por_pagina = 10
     offset = (pagina - 1) * prestamos_por_pagina
 
     # Consulta para contar todos los libros
@@ -61,29 +62,12 @@ def prestamos():
     total_prestamos = query.fetchone()[0]
     total_paginas = math.ceil(total_prestamos / prestamos_por_pagina)
 
-    # Consulta para mostrar los prestamos en tarjetas de prestamos.html
-    query.execute(f"""select strftime('%d-%m-%Y', p.fecha_prestamo), strftime('%d-%m-%Y', p.fecha_entrega_estimada), strftime('%d-%m-%Y', p.fecha_devolucion), l.Titulo, p.nombre, p.apellido, p.dpi_usuario, p.num_telefono,  p.direccion, e.estado, p.id_prestamo, l.id_libro
-                    from Prestamos p
-                    join Libros l on p.id_libro = l.id_libro
-                    join Estados e on p.id_estado = e.id_estado
-                    order by e.id_estado asc, p.fecha_prestamo desc
-                    limit ? offset ?""",(prestamos_por_pagina,offset))
-    prestamos = query.fetchall()
-    
-    query.execute("Select Count(*) from prestamos where id_estado = 1") #Prestamos vencidos
-    prestamos_vencidos = query.fetchone()[0]
-
-    query.execute("Select Count(*) from prestamos where id_estado = 2") #Prestamos activos
-    prestamos_activos = query.fetchone()[0]
-
-    query.execute("Select Count(*) from prestamos where id_estado = 3") #Prestamos devueltos
-    prestamos_devueltos = query.fetchone()[0]
+    prestamos = prestamos_model.get_prestamos(prestamos_por_pagina,offset)
 
     query.close()
     conexion.close()
 
     return render_template("prestamos.html",prestamos=prestamos,estados=estados,pagina=pagina,total_paginas=total_paginas,
-                            prestamos_activos=prestamos_activos,prestamos_devueltos=prestamos_devueltos,prestamos_vencidos=prestamos_vencidos,
                             exito = exito, devuelto = devuelto)
 
 # ----------------------------------------------------- BUSCAR Prestamo ----------------------------------------------------- #
@@ -113,7 +97,7 @@ def buscar_prestamo():
         SQL_where_estado = (f" and e.estado = '{estados}'")
 
     pagina = request.args.get("page", 1, type=int) #Recibe el parametro de la URL llamado page
-    prestamos_por_pagina = 7
+    prestamos_por_pagina = 10
     offset = (pagina - 1) * prestamos_por_pagina
 
     # Consulta para contar todos los libros conforme a la busqueda
@@ -157,6 +141,10 @@ def buscar_prestamo():
 @bp_prestamos.route("/devolver_prestamo", methods=["POST"])
 def devolver_prestamo():
     id_prestamo = request.form["id_prestamo"]
+    observaciones = request.form["observaciones_devolucion"]
+
+    print("TEST DEVOLUCION BUG")
+    print(id_prestamo)
 
     # Obtenre la fecha actual
     hoy = datetime.today().date()
@@ -166,28 +154,28 @@ def devolver_prestamo():
 
     query.execute("update prestamos set fecha_devolucion = (?) where id_prestamo = (?)",(hoy,id_prestamo,))
 
-    #Pone el prestamo en estado 3 (devuelto)
+    #Actualiza el prestamo a estado 3 (devuelto)
     query.execute("update prestamos set id_estado = 3 where id_prestamo = (?)",(id_prestamo,))
 
     query.execute("select id_libro from prestamos where id_prestamo = ?",(id_prestamo,))
     id_libro = query.fetchone()[0]
 
     query.execute("update libros set numero_copias = (numero_copias + 1) where id_libro = ?",(id_libro,))
-    conexion.commit() #Guarda la actualizacion de estado del prestamo
+    conexion.commit()
 
     query.close()
     conexion.close()
 
     devuelto = "Libro devuelto exitósamente."
 
-    return redirect(url_for("prestamos",devuelto=devuelto))
+    return redirect(url_for("prestamos.prestamos",devuelto=devuelto))
 
 # ----------------------------------------------------- Eliminar Prestamo ----------------------------------------------------- #
 
 @bp_prestamos.route("/eliminar_prestamo", methods=["GET", "POST"])
 def eliminar_prestamo():
     id_prestamo = request.form["id_prestamo"]
-    motivo = request.form["motivo"]
+    motivo = request.form["motivo_eliminacion"]
 
     # Obtenre la fecha actual
     hoy = datetime.today().date()
@@ -212,7 +200,7 @@ def eliminar_prestamo():
 
     exito = "Préstamo eliminado exitósamente."
 
-    return redirect(url_for("prestamos",exito=exito))
+    return redirect(url_for("prestamos.prestamos",exito=exito))
 
 # ----------------------------------------------------- REGISTRO PRESTAMOS ----------------------------------------------------- #
 

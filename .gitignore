@@ -3,6 +3,10 @@ Biblioteca_GM.db
 iniciarSQLiteCloud.py
 creacion_db.sql
 db_backup.py
+src/database/SQLAlchemy.py
+src/database/Biblioteca_GM.db.sql
+src/database/Biblioteca_GM.sqbpro
+src/database/Biblioteca_GM.db-journal
 
 #Ignorar variables de entorno para no exponerlas
 .env
@@ -18,3 +22,7 @@ __pycache__/
 
 #!Ignorar archivos de log MOMENTANEAMENTE
 src/utils/logs
+
+#!Ignorar partes del modulo libros en construccion ORM
+src/libros/services/
+src/public/services/

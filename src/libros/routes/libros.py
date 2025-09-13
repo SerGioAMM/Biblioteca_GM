@@ -143,67 +143,38 @@ def registro_libros():
 
 # ----------------------------------------------------- CATALOGO DE LIBROS ----------------------------------------------------- #
 
-##! Para dividir los resultados del query usar offset y limit, con variable para el numero de pagina
-##! VIDEO: https://www.youtube.com/watch?v=jUVPtMnbuv4
-
     #! Recordatorio de posible bug (04/04/2025)
     #TODO: El libro "Los 10 retos" se inserto sin autor, aunque el autor si se inserto correctamente, en la tabla notaciones se le fue asignado el autor X
     #TODO: El libro se inserto utilizando las facilidades de autorellenado del navegador Microsoft Edge
     #* Recordatorio: El commit estaba comentado en el primer intento de insert, este podria ser el origen del problema. 
     #* Observacion: El libro no tiene editorial, este tambien podria ser el origen del bug, pero en este caso lo dudo.
-
+from src.libros.models import libros_model
 @bp_libros.route("/libros", methods=["GET", "POST"])
 def libros():
-
-    #Abrir conexion con la base de datos
-    conexion = conexion_BD()
-    query = conexion.cursor()
 
     pagina = request.args.get("pag", 1, type=int)
     libros_por_pagina = 36
     offset = (pagina - 1) * libros_por_pagina
-
+    
+    #Abrir conexion con la base de datos
+    conexion = conexion_BD()
+    query = conexion.cursor()
     # Consulta para contar todos los libros
     query.execute("select count(*) from Libros")
     total_libros = query.fetchone()[0]
     total_paginas = math.ceil(total_libros / libros_por_pagina)
-
-    #? Selecciona todos los libros disponibles
-    # Consulta paginada
-    query.execute("""
-        select l.id_libro, Titulo, tomo, ano_publicacion, ISBN, numero_paginas, numero_copias,
-        sd.codigo_seccion, sd.seccion, a.nombre_autor, a.apellido_autor, e.editorial, n.notacion,lu.lugar
-        from Libros l
-        join RegistroLibros r ON r.id_libro = l.id_libro
-        join SistemaDewey sd ON sd.codigo_seccion = r.codigo_seccion 
-        join notaciones n ON n.id_notacion = r.id_notacion
-        join Autores a ON a.id_autor = n.id_autor
-        join Editoriales e ON e.id_editorial = n.id_editorial
-        join Lugares lu ON r.id_lugar = lu.id_lugar
-        order by sd.codigo_seccion asc, Titulo asc
-        LIMIT ? OFFSET ?
-    """, (libros_por_pagina, offset))
-    libros = query.fetchall()
+    
+    libros = libros_model.get_catalogo(libros_por_pagina,offset)
     
     #? Selecciona todas las secciones del sistema dewey, para ser usados en los filtros
-    query.execute("select * from SistemaDewey")
-    categorias = query.fetchall()
+    categorias = libros_model.get_categorias()
 
-    resultado = []
+    destacados = []
     for i in range(10):
-        query.execute(f"""select l.id_libro,count(l.id_libro) as cantidad
-                        from Prestamos p
-                        join libros l on p.id_libro = l.id_libro
-                        join RegistroLibros r on r.id_libro = l.id_libro
-                        join SistemaDewey sd on sd.codigo_seccion = r.codigo_seccion 
-                        where sd.codigo_seccion LIKE "{i}%"
-                        group by p.id_libro
-                        order by cantidad desc
-                        limit 3;""")
-        destacados = query.fetchall()
-        if destacados:
-            for libro in destacados:
-                resultado.append((libro[0])) 
+        resultado = libros_model.get_destacados(i)
+        if resultado:
+            for libro in resultado:
+                destacados.append((libro[0])) 
 
     query.close()
     conexion.close()
@@ -212,7 +183,7 @@ def libros():
     exito = request.args.get("exito", "")
 
     return render_template("libros.html",libros=libros,categorias=categorias,pagina=pagina,total_paginas=total_paginas,
-                            alerta=alerta, exito = exito, destacados=resultado)
+                            alerta=alerta, exito = exito, destacados=destacados)
 
 # ----------------------------------------------------- BUSCAR LIBROS ----------------------------------------------------- #
 
@@ -233,8 +204,7 @@ def buscar_libro():
     offset = (pagina - 1) * libros_por_pagina
 
     # Secciones Dewey para filtros
-    query.execute("select * from SistemaDewey")
-    categorias = query.fetchall()
+    categorias = libros_model.get_categorias()
 
     if filtro_busqueda == "Titulo":
         SQL_where_busqueda = (f"where l.titulo like '%{busqueda}%'")
@@ -249,52 +219,17 @@ def buscar_libro():
     filtro_total = SQL_where_busqueda + SQL_where_seccion
 
     # Conteo total para paginación
-    query.execute(f"""
-        select count(*) from Libros l
-        join RegistroLibros r on r.id_libro = l.id_libro
-        join SistemaDewey sd on sd.codigo_seccion = r.codigo_seccion 
-        join notaciones n on n.id_notacion = r.id_notacion
-        join Autores a on a.id_autor = n.id_autor
-        join Editoriales e on e.id_editorial = n.id_editorial
-        join Lugares lu on r.id_lugar = lu.id_lugar
-        {filtro_total}
-    """)
-    total_libros = query.fetchone()[0]
-    total_paginas = math.ceil(total_libros / libros_por_pagina) #Redondea el resultado hacia arriba, si hay (11 libros / 10 libros por pagina) = 1.1, math.ceil(1.1) = 2 paginas
+    total_paginas = math.ceil((libros_model.total_libros(filtro_total)) / libros_por_pagina) #Redondea el resultado hacia arriba, si hay (11 libros / 10 libros por pagina) = 1.1, math.ceil(1.1) = 2 paginas
 
     # Consulta paginada
-    query.execute(f"""
-        select l.id_libro, Titulo, tomo, ano_publicacion, ISBN, numero_paginas, numero_copias,
-        sd.codigo_seccion, sd.seccion, a.nombre_autor, a.apellido_autor, e.editorial, n.notacion, lu.lugar
-        from Libros l
-        join RegistroLibros r on r.id_libro = l.id_libro
-        join SistemaDewey sd on sd.codigo_seccion = r.codigo_seccion 
-        join notaciones n on n.id_notacion = r.id_notacion
-        join Autores a on a.id_autor = n.id_autor
-        join Editoriales e on e.id_editorial = n.id_editorial
-        join Lugares lu on r.id_lugar = lu.id_lugar
-        {filtro_total}
-        order by sd.codigo_seccion asc,Titulo asc
-        limit ? offset ?
-    """, (libros_por_pagina, offset))
+    libros = libros_model.get_catalogo_filtrado(libros_por_pagina,offset,filtro_total)
 
-    libros = query.fetchall()
-
-    resultado = []
+    destacados = []
     for i in range(10):
-        query.execute(f"""select l.id_libro,count(l.id_libro) as cantidad
-                        from Prestamos p
-                        join libros l on p.id_libro = l.id_libro
-                        join RegistroLibros r on r.id_libro = l.id_libro
-                        join SistemaDewey sd on sd.codigo_seccion = r.codigo_seccion 
-                        where sd.codigo_seccion LIKE "{i}%"
-                        group by p.id_libro
-                        order by cantidad desc
-                        limit 3;""")
-        destacados = query.fetchall()
-        if destacados:
-            for libro in destacados:
-                resultado.append((libro[0]))
+        resultado = libros_model.get_destacados(i)
+        if resultado:
+            for libro in resultado:
+                destacados.append((libro[0])) 
 
     query.close()
     conexion.close()
@@ -302,7 +237,7 @@ def buscar_libro():
     return render_template("libros.html", libros=libros, categorias=categorias,
                             pagina=pagina, total_paginas=total_paginas,
                             busqueda=busqueda, filtro_busqueda=filtro_busqueda, Seccion=Seccion, 
-                            alerta = alerta, exito = exito, destacados=resultado)
+                            alerta = alerta, exito = exito, destacados=destacados)
 
 # ----------------------------------------------------- ELIMINAR LIBROS ----------------------------------------------------- #
 
@@ -343,61 +278,27 @@ def eliminar_libro():
 
 # ----------------------------------------------------- DETALLE LIBROS ----------------------------------------------------- #
 
-def get_detalle_libro(id_libro):
-    import sqlite3
-
-    conexion = conexion_BD()
-    conexion.row_factory = sqlite3.Row
-    query = conexion.cursor()
-
-    query.execute("""select l.id_libro, Titulo, tomo, ano_publicacion, ISBN, numero_paginas, numero_copias,
-        sd.codigo_seccion, sd.seccion, a.nombre_autor, a.apellido_autor, e.editorial, n.notacion, lu.lugar
-        from Libros l
-        join RegistroLibros r on r.id_libro = l.id_libro
-        join SistemaDewey sd on sd.codigo_seccion = r.codigo_seccion 
-        join notaciones n on n.id_notacion = r.id_notacion
-        join Autores a on a.id_autor = n.id_autor
-        join Editoriales e on e.id_editorial = n.id_editorial
-        join Lugares lu on r.id_lugar = lu.id_lugar 
-        where l.id_libro = ?;""",(id_libro,))
-    detalle = query.fetchall()
-    query.close()
-    conexion.close()
-
-    return [dict(fila) for fila in detalle]
-
-'''
-def get_descripcion(Titulo):
-    import requests
-
-    url = f"https://openlibrary.org/search.json?title={Titulo}"
-    respuesta = requests.get(url)
-    respuesta = respuesta.json()
-
-    if respuesta["numFound"] > 0:
-        primer_libro = respuesta["docs"][0]
-        work_key = primer_libro.get("key") 
-
-        # Obtener detalles más completos
-        work_url = f"https://openlibrary.org{work_key}.json"
-        work_response = requests.get(work_url)
-        work_data = work_response.json()
-
-        return {
-            "description": (
-                work_data.get("description", "Sin descripción disponible")
-                if isinstance(work_data.get("description"), str)
-                else work_data.get("description", {}).get("value", "Sin descripción disponible")
-            )
-        }
-    else:
-        return None
-'''
-
 @bp_libros.route("/detalle_libro/<ID>/<Titulo>", methods=["GET", "POST"])
 def detalle_libro(ID,Titulo):
     
-    detalle = get_detalle_libro(ID)
-    #descripcion = get_descripcion(Titulo)
+    detalle = libros_model.get_detalle_libro(ID)
     
     return render_template("detalle_libro.html",detalle=detalle, descripcion="Nada")
+
+@bp_libros.route("/editar_libro", methods=["GET"])
+def editar_libro():
+    if(request.method=="GET"):
+        id_libro = request.args.get("id_libro")
+        new_titulo = request.args.get("titulo")
+        new_portada = request.args.get("portada")
+        new_tomo = request.args.get("tomo","")
+        new_numero_paginas = request.args.get("numero_paginas")
+        new_numero_copias = request.args.get("numero_copias")
+    
+    conexion = conexion_BD()
+    query = conexion.cursor()
+    #! EN CONSTRUCCION
+    query.execute("")
+
+        
+    return redirect(url_for('libros.detalle_libro', ID=id_libro, Titulo=new_titulo))

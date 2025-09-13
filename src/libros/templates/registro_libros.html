@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de libros</title>
     <link rel="icon" href="/static/img/books_3145874.png">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo_insertar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo_inicio.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
     
     <!--? Bootstrap CSS -->
@@ -22,13 +22,17 @@
     </header>
     <main class="main">
         {% if ((session["rol"]) == "Administrador") or ((session["rol"]) == "Bibliotecario") %}
+        <div class="seccion-principal text-middle text-center">
+            <div class="fondo-principal">
+                <h1 id="h1-titulo pt-5">Registrar nuevo libro</h1>
+                <h5 id="h5-nota">Complete el formulario para agregar un nuevo libro al catálogo de la biblioteca.</h5>
+            </div>
+        </div>
             <div class="container-fluid">
                 <div class="row flex-nowrap">
-                    <div class="col py-3 bg-light-custom text-body text-center">
-                        <h1 id="h1-titulo">Registrar nuevo libro</h1>
-                        <h5 id="h5-nota">Complete el formulario para agregar un nuevo libro al catálogo de la biblioteca.</h5>
+                    <div class="col py-3 bg-custom text-body text-center">
                         <br><br>
-                        <div class="container-fluid w-75 bg-light">
+                        <div class="container-fluid w-75 bg-light-custom">
                             <form method="POST" action="/registro_libros" class="row g-3 text-start">
                                 <div class="col-12 col-md-6 mb-3">
                                     <label for="inputEmail4" class="form-label">Titulo*</label>
@@ -83,59 +87,14 @@
                                 </div>
                                 <div class="col-12 col-md-6 mx-auto text-center mb-3">
                                     <br>
-                                    <button type="submit" class="btn btn-success w-50">Registrar libro</button>
+                                    <button type="submit" class="btn btn-secondary w-50">Registrar libro</button>
                                     <br><br>
                                 </div>
-                                </form>
-                            <!--! ======================================================================= 
-                            <form method="POST" action="/registro_libros" class="formulario-insertar">
-                                <label for="titulo">Titulo*</label>
-                                <label for="nombre_autor apellido_autor">Datos del autor</label>
-                                
-                                <input type="text" name="titulo" placeholder="" autocomplete="off" required>
-                                <span id="span-informacion-autor">
-                                    <input type="text" name="nombre_autor" class="input-autor" placeholder="Nombre" autocomplete="off">
-                                    <input type="text" name="apellido_autor" class="input-autor" placeholder="Apellido" autocomplete="off">
-                                </span>
-                                
-                                <label for="ISBN">ISBN</label>
-                                <label for="editorial">Editorial</label>
-                                
-                                <input type="text" name="ISBN" placeholder="" autocomplete="off">
-                                <input type="text" name="editorial" id="cuadro-busqueda" class="input-editorial" placeholder="" autocomplete="off">
-                                
-                                <label for="tomo">Tomo</label>
-                                <label for="num_paginas">Número de Páginas*</label>
-                                
-                                <input type="text" name="tomo" placeholder="" autocomplete="off">
-                                <input type="number" name="num_paginas" placeholder="" autocomplete="off" required>
-                                
-                                <label for="num_copias">Número de Copias*</label>
-                                <label for="sistema_dewey">Sistema Dewey</label>
-                                
-                                <input type="text" name="num_copias" placeholder="" autocomplete="off" required>
-                                <select name="sistema_dewey" id="" >
-                                    {% for ultima in ultima_seccion %}
-                                    <option value="{{ ultima[0] }}">{{ ultima[0] }} - {{ ultima[1] }}</option>
-                                    {% endfor %}
-                                    {% for seccion in secciones %}
-                                    <option value="{{ seccion[0] }}">{{ seccion[0] }} - {{ seccion[1] }}</option>
-                                    {% endfor %}
-                                </select>
-                                
-                                <label for="lugar">Lugar de Publicación</label>
-                                <label for="anio">Año de Publicación</label>
-                                
-                                <input type="text" name="lugar" id="cuadro-busqueda2" class="input-lugar" placeholder="" autocomplete="off">
-                                <input type="text" name="anio" placeholder="" autocomplete="off">
-                                
-                                <button id="btn-registrar" type="submit">Registrar libro</button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-        -->
         {% endif %}
         
         {% if (alerta) %}
