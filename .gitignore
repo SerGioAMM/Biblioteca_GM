@@ -8,6 +8,9 @@ src/database/Biblioteca_GM.db.sql
 src/database/Biblioteca_GM.sqbpro
 src/database/Biblioteca_GM.db-journal
 
+#Ignorar archivo excel de prueba
+Datos de biblioteca de prueba.xlsx
+
 #Ignorar variables de entorno para no exponerlas
 .env
 
