@@ -1,16 +1,17 @@
 {% set libros_items = [
     ('libros.libros', 'Catálogo'),
     ('libros.registro_libros', 'Registrar libros'),
+    ('data_managment.importar_libros', 'Importar libros'),
+    ('data_managment.exportar_libros', 'Exportar libros')
 ] %}
-<!--
-('libros.importar_libros', 'Importar libros'),
-('libros.exportar_libros', 'Exportar libros')-->
 
 {% set prestamos_items = [
     ('prestamos.prestamos', 'Activos'),
-    ('prestamos.devueltos', 'Devueltos'),
     ('prestamos.registro_prestamos', 'Registrar préstamo')
-] %}
+    ] %}
+    <!--
+        ('prestamos.devueltos', 'Devueltos'),
+        -->
 
 {% set usuarios_items = [
     ('usuarios.usuarios', 'Todos los usuarios'),
@@ -53,12 +54,17 @@
                         </li>
                         <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('prestamos.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Prestamos
+                            Préstamos
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item {% if request.endpoint == 'prestamos.prestamos' %} border-start border-dark border-4 {% endif %}" href="{{ url_for('prestamos.prestamos') }}">Activos</a></li>
-                            <li><a class="dropdown-item {% if request.endpoint == 'prestamos.prestamos' %} border-start border-dark border-4 {% endif %}" href="#">Devueltos</a></li>
-                            <li><a class="dropdown-item {% if request.endpoint == 'prestamos.registro_prestamos' %} border-start border-dark border-4 {% endif %}" href="{{ url_for('prestamos.registro_prestamos') }}">Registrar prestamo</a></li>
+                            {% for endpoint, label in prestamos_items %}
+                                <li>
+                                    <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
+                                        href="{{ url_for(endpoint) }}">
+                                        {{ label }}
+                                    </a>
+                                </li>
+                            {% endfor %}
                         </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -66,8 +72,14 @@
                             Usuarios
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item {% if request.endpoint == 'usuarios.usuarios' %} border-start border-dark border-4 {% endif %}" href="{{ url_for('usuarios.usuarios') }}">Todos los usuarios</a></li>
-                            <li><a class="dropdown-item {% if request.endpoint == 'usuarios.registrar_usuarios' %} border-start border-dark border-4 {% endif %}" href="{{ url_for('usuarios.registrar_usuarios') }}">Registrar usuario</a></li>
+                            {% for endpoint, label in usuarios_items %}
+                                <li>
+                                    <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
+                                        href="{{ url_for(endpoint) }}">
+                                        {{ label }}
+                                    </a>
+                                </li>
+                            {% endfor %}
                         </ul>
                         </li>
                         <li class="nav-item dropdown">
