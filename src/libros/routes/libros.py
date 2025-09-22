@@ -2,6 +2,7 @@ from flask import Blueprint, session, redirect, request,render_template,url_for
 from datetime import datetime
 import math
 from src.database.db_sqlite import conexion_BD
+from src.libros.models import libros_model
 
 bp_libros = Blueprint('libros',__name__, template_folder="../templates")
 
@@ -12,28 +13,10 @@ def registro_libros():
     if "usuario" not in session:
         return redirect("/") #Solo se puede acceder con session iniciada
 
-    #Abrir conexion con la base de datos
-    conexion = conexion_BD()
-    query = conexion.cursor()
-
-    #Esta consulta devuelve la ultima seccion ingresada en RegistroLibros para que sea mas facil ingresar libros de manera ordenada
-    #Si se ingresan por seccion no hace falta estar seleccionando nuevamente la seccion
-    query.execute("select codigo_seccion from RegistroLibros order by id_registro desc limit 1")
-    select_seccion = query.fetchone()
-
-    if not select_seccion:
-        ultima_seccion = "0"
-    else:
-        query.execute("""
-        select codigo_seccion,seccion from SistemaDewey 
-        where SistemaDewey.codigo_seccion = 
-        (?)""",(select_seccion[0],))
-        ultima_seccion = query.fetchall()
-        
+    ultima_seccion = libros_model.get_ultima_seccion()
 
     #Consulta para mostrar un listado de todas las secciones del Sistema Dewey
-    query.execute("select * from SistemaDewey")
-    secciones = query.fetchall()
+    secciones = libros_model.get_categorias()
 
     #Verifica la accion que realiza el formulario en insertar.html
     if request.method == "POST":
@@ -50,82 +33,10 @@ def registro_libros():
         AnoPublicacion = request.form["anio"]
         
         SistemaDewey = request.form.get("sistema_dewey")
-
-        #Variable para guardar la notacion interna
-        _notacion = ""
-        if editorial:
-            Notacion = editorial[0:3].upper() #string[inicio:fin:paso] // Para tomar los primeros 3 caracteres de la editorial
-        elif (ApellidoAutor) and not editorial:
-            editorial = "Otros"
-            Notacion = ApellidoAutor[0:3].upper() #string[inicio:fin:paso] // Para tomar los primeros 3 caracteres del apellido autor
-        elif (NombreAutor) and not ApellidoAutor: #Para el extranio caso de que no exista ni editorial ni apellido de autor
-            editorial = "Otros"
-            ApellidoAutor = "-"
-            Notacion = NombreAutor[0:3].upper() #string[inicio:fin:paso] // Para tomar los primeros 3 caracteres del nombre del autor
-        else: #No se agrega ni autor ni editorial notacion va a ser "OTR"
-            editorial = "Otros"
-            NombreAutor = "Otros"
-            ApellidoAutor = "-"
-            Notacion = "OTR"
-
-        if editorial or ApellidoAutor or NombreAutor:
-            for i in range (0,3): #Notacion es un arreglo, este for funciona para pasar ese arreglo a ser una variable
-                _notacion = _notacion + Notacion[i]
-                print(_notacion)
-
-        #Cuado no se ingresa un lugar de publicacion se ingresa un lugar vacio(id_lugar 1 = "-")
-        if LugarPublicacion=="":
-            LugarPublicacion = "-"
-
+        
         try:
-            #? INSERT DE LIBROS
-            query.execute(f"Insert into Libros (Titulo,ano_publicacion,numero_paginas,isbn,tomo,numero_copias) values (?,?,?,?,?,?)",(Titulo,AnoPublicacion,NumeroPaginas,ISBN,tomo,NumeroCopias))
-            query.execute("Select id_libro from libros where titulo = ?",(Titulo,))
-            id_libro = query.fetchone()[0]
-            
-            #?INSERT DE LUGARES
-            #Si no existe insertar nuevo ya que columna lugar es UNIQUE
-            query.execute("Insert or ignore into lugares (lugar) values (?)",(LugarPublicacion,))
-            query.execute("Select id_lugar from lugares where lugar = ?",(LugarPublicacion,))
-            id_lugar = query.fetchone()[0]
-
-            #?INSERT DE AUTORES
-            query.execute("insert or ignore into autores (nombre_autor,apellido_autor) values (?,?)", (NombreAutor,ApellidoAutor))
-            query.execute("select id_autor from autores where nombre_autor = (?) AND apellido_autor = (?)",(NombreAutor,ApellidoAutor))
-            id_autor = query.fetchone()[0]
-
-            #? INSERT DE EDITORIALES
-            query.execute("insert or ignore into Editoriales (editorial) values (?)",(editorial,))
-            query.execute("select id_editorial from editoriales where editorial = (?)",(editorial,))
-            id_editorial = query.fetchone()[0]
-
-            #? INSERT DE NOTACIONES
-            #Si no existe insertar nuevo ya que columna notacion es UNIQUE
-            query.execute("Insert or ignore into notaciones (notacion,id_editorial,id_autor) values (?,?,?)",(_notacion,id_editorial,id_autor))
-            query.execute("Select id_notacion from notaciones where notacion = (?) and id_autor = (?) and id_editorial = (?)",(_notacion,id_autor,id_editorial,))
-            id_notacion = query.fetchone()[0]
-
-            #? INSERT DE REGISTRO LIBROS
-            #En registro libros, id_libro deberia ser unico? ya que se guarda un solo libro con el numero de copias
-            query.execute("Insert into RegistroLibros(id_libro,id_notacion,id_lugar,codigo_seccion) values (?,?,?,?)",(id_libro,id_notacion,id_lugar,SistemaDewey))            
-
-            #? Guardar cambios
-            conexion.commit() 
-
-            #Esta consulta devuelve la ultima seccion ingresada en RegistroLibros para que sea mas facil ingresar libros de manera ordenada
-            #Si se ingresan por seccion no hace falta estar seleccionando nuevamente la seccion
-            query.execute("select codigo_seccion from RegistroLibros order by id_registro desc limit 1")
-            select_seccion = query.fetchone()
-            
-            if not select_seccion:
-                ultima_seccion = "0"
-            else:
-                query.execute("""
-                select * from SistemaDewey 
-                where SistemaDewey.codigo_seccion = 
-                (?)""",(select_seccion[0],))
-                ultima_seccion = query.fetchall()
-
+            libros_model.registrar_libro(Titulo,NumeroPaginas,ISBN,tomo,NumeroCopias,NombreAutor,ApellidoAutor,editorial,LugarPublicacion,AnoPublicacion,SistemaDewey)    
+            ultima_seccion = libros_model.get_ultima_seccion()
             
             registro_exitoso = "Libro registrado exitosamente."
             return render_template("registro_libros.html", secciones = secciones, ultima_seccion = ultima_seccion, registro_exitoso=registro_exitoso) 
@@ -134,10 +45,6 @@ def registro_libros():
             print(f"Error: {e}")
             alerta = "Error al ingresar libro."
             return render_template("registro_libros.html", secciones = secciones, ultima_seccion = ultima_seccion, alerta=alerta) 
-        finally:
-            query.close()
-            conexion.close()
-    
 
     return render_template("registro_libros.html", secciones = secciones, ultima_seccion = ultima_seccion) #Devuelve variables para poder usarlas en insert.html
 
@@ -148,7 +55,6 @@ def registro_libros():
     #TODO: El libro se inserto utilizando las facilidades de autorellenado del navegador Microsoft Edge
     #* Recordatorio: El commit estaba comentado en el primer intento de insert, este podria ser el origen del problema. 
     #* Observacion: El libro no tiene editorial, este tambien podria ser el origen del bug, pero en este caso lo dudo.
-from src.libros.models import libros_model
 @bp_libros.route("/libros", methods=["GET", "POST"])
 def libros():
 
@@ -156,12 +62,7 @@ def libros():
     libros_por_pagina = 36
     offset = (pagina - 1) * libros_por_pagina
     
-    #Abrir conexion con la base de datos
-    conexion = conexion_BD()
-    query = conexion.cursor()
-    # Consulta para contar todos los libros
-    query.execute("select count(*) from Libros")
-    total_libros = query.fetchone()[0]
+    total_libros = libros_model.total_libros(" ")
     total_paginas = math.ceil(total_libros / libros_por_pagina)
     
     libros = libros_model.get_catalogo(libros_por_pagina,offset)
@@ -175,9 +76,6 @@ def libros():
         if resultado:
             for libro in resultado:
                 destacados.append((libro[0])) 
-
-    query.close()
-    conexion.close()
     
     alerta = request.args.get("alerta", "")
     exito = request.args.get("exito", "")
@@ -189,15 +87,11 @@ def libros():
 
 @bp_libros.route("/buscar_libro", methods=["GET","POST"])
 def buscar_libro():
-    conexion = conexion_BD()
-    query = conexion.cursor()
-
     busqueda = request.args.get("buscar", "")
     filtro_busqueda = request.args.get("filtro-busqueda", "Titulo") 
     Seccion = request.args.get("categorias", "Todas") 
     alerta = request.args.get("alerta","")
     exito = request.args.get("exito","")
-
 
     pagina = request.args.get("pag", 1, type=int)
     libros_por_pagina = 36
@@ -230,10 +124,7 @@ def buscar_libro():
         if resultado:
             for libro in resultado:
                 destacados.append((libro[0])) 
-
-    query.close()
-    conexion.close()
-
+    
     return render_template("libros.html", libros=libros, categorias=categorias,
                             pagina=pagina, total_paginas=total_paginas,
                             busqueda=busqueda, filtro_busqueda=filtro_busqueda, Seccion=Seccion, 

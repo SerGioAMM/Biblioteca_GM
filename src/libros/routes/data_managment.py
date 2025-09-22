@@ -3,6 +3,7 @@ from datetime import datetime
 import math
 from src.database.db_sqlite import conexion_BD
 import pandas as panda
+from src.libros.models import libros_model
 
 bp_data_managment = Blueprint('data_managment',__name__, template_folder="../templates")
 
@@ -31,7 +32,7 @@ def importar_libros():
         if archivo.filename == "":
             return render_template("importar_libros.html", alerta="Nombre de archivo vacío")
         try:
-            datos = panda.read_excel(archivo)
+            datos = panda.read_excel(archivo).fillna("")
             total = len(datos)
             # Lanzar la importación en un hilo aparte
             hilo = threading.Thread(target=importar, args=(datos,total))
@@ -47,28 +48,61 @@ def importar_libros():
 def importar(datos,total):
     global errores
     errores = []
-    progreso["error"] = ("DATOS INCORRECTOS EN FILA: ")
+    progreso["error"] = ("Datos faltantes en fila: ")
+    progreso["duplicados"] = ("Libro duplicado en fila: ")
+
     for index,row in datos.iterrows():
-        autor = row['AUTOR']
-        titulo = row['TITULO DEL LIBRO']
-        lugar = row['LUGAR DE PUBLICACIÓN']
-        editorial = row['EDITORIAL']
-        anio = row['AÑO']
-        num_paginas = row['No. DE PAGINAS']
+        Titulo = row['TITULO DEL LIBRO']
+        NumeroPaginas = row['No. DE PAGINAS']
         ISBN = row['ISBN']
         tomo = row['TOMO']
-        seccion = row['CÓDIGO']
+        NumeroCopias = row['No. DE COPIAS']
+        Autor = row['AUTOR']
+        editorial = row['EDITORIAL']
+        LugarPublicacion = row['LUGAR DE PUBLICACIÓN']
+        AnoPublicacion = row['AÑO']
+        SistemaDewey = row['CÓDIGO']
         notacion = row['NOTACIÓN INTERNA']
-        num_copias = row['No. DE COPIAS']
+
+        if SistemaDewey == 0:
+            SistemaDewey = "000"
         
-        if(panda.isna(titulo)):
+        if not Titulo or not NumeroCopias or not NumeroPaginas or not SistemaDewey:
             progreso["error"] = progreso["error"] + (f"{index+2}, ")
             errores.append(row.to_dict())
             progreso["contador_errores"] += 1
+        else:
+            if Autor:
+                #Separar Variable autor, en nombre y apellido
+                autores = [a.strip() for a in Autor.split(",")]
+                primer_autor = autores[0]
+                partes = primer_autor.split()
+                    
+                if len(partes) > 1:
+                    NombreAutor = partes[0]
+                    ApellidoAutor = " ".join(partes[1:])
+                else:
+                    NombreAutor = primer_autor
+                    ApellidoAutor = ""
+                #Si existen varios autores, se agregan al apellido
+                if len(autores) > 1:
+                    ApellidoAutor += ", " + ", ".join(autores[1:])
+            else:
+                NombreAutor = ""
+                ApellidoAutor = ""
+            
+            alerta = libros_model.registrar_libro(Titulo,NumeroPaginas,ISBN,tomo,NumeroCopias,NombreAutor,ApellidoAutor,editorial,LugarPublicacion,AnoPublicacion,SistemaDewey)
+            
+            if alerta:
+                progreso["duplicados"] = progreso["duplicados"] + (f"{index+2}, ")
+                errores.append(row.to_dict())
+                progreso["contador_errores"] += 1
+
         progreso["total"] = total
         progreso["actual"] = index + 1
         progreso["valor"] = round((((index + 1) / total) * 100),0)
         #sleep(0.1)
+    progreso["error"] = progreso["error"].rstrip(", ") + "."
 
 @bp_data_managment.route("/progreso")
 def get_progreso():

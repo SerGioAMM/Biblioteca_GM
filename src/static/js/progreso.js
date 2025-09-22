@@ -36,7 +36,8 @@ form.addEventListener("submit", function(e) {
                     
                     if ((data.valor >= 100)) {
                         if(descargar_errores){
-                            agregarLog(("Error: "+data.error), "danger");
+                            agregarLog(("!: "+data.error), "danger");
+                            agregarLog(("!: "+data.duplicados), "danger")
                             agregarLog("Descargar errores","descargar_errores")
                         }
                         clearInterval(intervalo);
