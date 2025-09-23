@@ -8,7 +8,7 @@ def conexion_BD():
         if config('ENV', default="Local") == "Produccion":
             # Open the connection to SQLite Cloud
             import sqlitecloud
-            return sqlitecloud.connect(config('PATO'))
+            return sqlitecloud.connect(config('SQLITE_CLOUD_CONN'))
         else:
             import sqlite3
             import os
