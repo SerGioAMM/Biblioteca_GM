@@ -1,9 +1,9 @@
-from src.database.db_sqlite import conexion_BD
+from src.database.db_sqlite import conexion_BD, dict_factory
 import sqlite3
 
 def get_prestamos(prestamos_por_pagina,offset):
     conexion = conexion_BD()
-    conexion.row_factory = sqlite3.Row
+    conexion.row_factory = dict_factory
     query = conexion.cursor()
     # Consulta para mostrar los prestamos en tarjetas de prestamos.html
     query.execute(f"""select (strftime('%d', p.fecha_prestamo)||' de '||
@@ -46,4 +46,4 @@ def get_prestamos(prestamos_por_pagina,offset):
     prestamos = query.fetchall()
     query.close()
     conexion.close()
-    return [dict(fila) for fila in prestamos]
+    return prestamos

@@ -77,7 +77,7 @@ def libros():
         resultado = libros_model.get_destacados(i)
         if resultado:
             for libro in resultado:
-                destacados.append((libro[0])) 
+                destacados.append((libro["id_libro"])) 
     
     alerta = request.args.get("alerta", "")
     exito = request.args.get("exito", "")

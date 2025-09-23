@@ -1,9 +1,9 @@
-from src.database.db_sqlite import conexion_BD
+from src.database.db_sqlite import conexion_BD, dict_factory
 import sqlite3
 
 def get_destacados(seccion):
     conexion = conexion_BD()
-    conexion.row_factory = sqlite3.Row
+    conexion.row_factory = dict_factory
     query = conexion.cursor()
     query.execute(f"""select l.id_libro,count(l.id_libro) as cantidad, n.notacion, l.Titulo, a.nombre_autor, a.apellido_autor, l.ano_publicacion, sd.codigo_seccion, sd.seccion, l.numero_copias
                         from Prestamos p
@@ -19,12 +19,12 @@ def get_destacados(seccion):
     libros = query.fetchall()
     query.close()
     conexion.close()
-    return [dict(fila) for fila in libros]
+    return libros
 
 
 def get_aleatorios(seccion,cantidad):
     conexion = conexion_BD()
-    conexion.row_factory = sqlite3.Row
+    conexion.row_factory = dict_factory
     query = conexion.cursor()
     query.execute(f"""SELECT l.id_libro, 0 AS cantidad, n.notacion, l.Titulo, a.nombre_autor, a.apellido_autor, l.ano_publicacion, sd.codigo_seccion, sd.seccion, l.numero_copias
                         FROM Libros l
@@ -38,11 +38,11 @@ def get_aleatorios(seccion,cantidad):
     aleatorios = query.fetchall()
     query.close()
     conexion.close()
-    return [dict(fila) for fila in aleatorios]
+    return aleatorios
 
 def get_nuevos():
     conexion = conexion_BD()
-    conexion.row_factory = sqlite3.Row
+    conexion.row_factory = dict_factory
     query = conexion.cursor()
     query.execute("""SELECT l.id_libro, 0 AS cantidad, n.notacion, l.Titulo, a.nombre_autor, a.apellido_autor, l.ano_publicacion, sd.codigo_seccion, sd.seccion, l.numero_copias
                         FROM Libros l
@@ -55,4 +55,4 @@ def get_nuevos():
     nuevos = query.fetchall()
     query.close()
     conexion.close()
-    return [dict(fila) for fila in nuevos]
+    return nuevos
