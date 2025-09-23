@@ -4,6 +4,7 @@ import math
 from src.database.db_sqlite import conexion_BD
 import pandas as panda
 from src.libros.models import libros_model
+from src.libros.models.libros_model import to_int
 
 bp_data_managment = Blueprint('data_managment',__name__, template_folder="../templates")
 
@@ -32,7 +33,7 @@ def importar_libros():
         if archivo.filename == "":
             return render_template("importar_libros.html", alerta="Nombre de archivo vacío")
         try:
-            datos = panda.read_excel(archivo).fillna("")
+            datos = panda.read_excel(archivo, dtype={"CÓDIGO":str}).fillna("")
             total = len(datos)
             # Lanzar la importación en un hilo aparte
             hilo = threading.Thread(target=importar, args=(datos,total))
@@ -55,13 +56,13 @@ def importar(datos,total):
         Titulo = row['TITULO DEL LIBRO']
         NumeroPaginas = row['No. DE PAGINAS']
         ISBN = row['ISBN']
-        tomo = row['TOMO']
-        NumeroCopias = row['No. DE COPIAS']
+        tomo = (row['TOMO'])
+        NumeroCopias = (row['No. DE COPIAS'])
         Autor = row['AUTOR']
         editorial = row['EDITORIAL']
         LugarPublicacion = row['LUGAR DE PUBLICACIÓN']
-        AnoPublicacion = row['AÑO']
-        SistemaDewey = row['CÓDIGO']
+        AnoPublicacion = (row['AÑO'])
+        SistemaDewey = (row['CÓDIGO'])
         notacion = row['NOTACIÓN INTERNA']
 
         if SistemaDewey == 0:
@@ -90,8 +91,7 @@ def importar(datos,total):
             else:
                 NombreAutor = ""
                 ApellidoAutor = ""
-            
-            alerta = libros_model.registrar_libro(Titulo,NumeroPaginas,ISBN,tomo,NumeroCopias,NombreAutor,ApellidoAutor,editorial,LugarPublicacion,AnoPublicacion,SistemaDewey)
+            alerta = libros_model.registrar_libro(Titulo,to_int(NumeroPaginas),ISBN,to_int(tomo),to_int(NumeroCopias),NombreAutor,ApellidoAutor,editorial,LugarPublicacion,to_int(AnoPublicacion),(SistemaDewey))
             
             if alerta:
                 progreso["duplicados"] = progreso["duplicados"] + (f"{index+2}, ")

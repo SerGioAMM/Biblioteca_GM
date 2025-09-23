@@ -35,11 +35,13 @@ def registro_libros():
         SistemaDewey = request.form.get("sistema_dewey")
         
         try:
-            libros_model.registrar_libro(Titulo,NumeroPaginas,ISBN,tomo,NumeroCopias,NombreAutor,ApellidoAutor,editorial,LugarPublicacion,AnoPublicacion,SistemaDewey)    
+            alerta = libros_model.registrar_libro(Titulo,NumeroPaginas,ISBN,tomo,NumeroCopias,NombreAutor,ApellidoAutor,editorial,LugarPublicacion,AnoPublicacion,SistemaDewey)    
             ultima_seccion = libros_model.get_ultima_seccion()
             
-            registro_exitoso = "Libro registrado exitosamente."
-            return render_template("registro_libros.html", secciones = secciones, ultima_seccion = ultima_seccion, registro_exitoso=registro_exitoso) 
+            if alerta: return render_template("registro_libros.html", secciones = secciones, ultima_seccion = ultima_seccion, alerta=alerta)
+            else:
+                registro_exitoso = "Libro registrado exitosamente."
+                return render_template("registro_libros.html", secciones = secciones, ultima_seccion = ultima_seccion, registro_exitoso=registro_exitoso) 
 
         except Exception as e:
             print(f"Error: {e}")
@@ -124,7 +126,7 @@ def buscar_libro():
         if resultado:
             for libro in resultado:
                 destacados.append((libro[0])) 
-    
+
     return render_template("libros.html", libros=libros, categorias=categorias,
                             pagina=pagina, total_paginas=total_paginas,
                             busqueda=busqueda, filtro_busqueda=filtro_busqueda, Seccion=Seccion, 
