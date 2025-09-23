@@ -197,8 +197,7 @@ def registrar_libro(Titulo,NumeroPaginas,ISBN,tomo,NumeroCopias,NombreAutor,Apel
         query.execute("Insert into RegistroLibros(id_libro,id_notacion,id_lugar,codigo_seccion) values (?,?,?,?)",(id_libro,id_notacion,id_lugar,SistemaDewey))            
 
         #? Guardar cambios
-        #conexion.commit() 
-        print("---------------------COMMIT---------------------")
+        conexion.commit()
         alerta = ""
     except sqlite3.IntegrityError as e:
         alerta = "Error: libro duplicado."
@@ -208,3 +207,16 @@ def registrar_libro(Titulo,NumeroPaginas,ISBN,tomo,NumeroCopias,NombreAutor,Apel
         query.close()
         conexion.close()
     return alerta
+
+def to_int(value, default=0):
+    try:
+        return int(value)
+    except (ValueError, TypeError):
+        return default
+    
+def editar_libro():
+    pass
+
+
+
+
