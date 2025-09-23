@@ -25,7 +25,7 @@ __pycache__/
 .pytest_cache/
 
 #!Ignorar archivos de log MOMENTANEAMENTE
-src/utils/logs
+#src/utils/logs
 
 #!Ignorar partes del modulo libros en construccion ORM
 src/libros/services/
