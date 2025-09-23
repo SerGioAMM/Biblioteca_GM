@@ -5,7 +5,7 @@ import traceback
 # pip install sqlitecloud
 def conexion_BD():
     try:
-        if config('ENV', default="Local") == "Produccion":
+        if config('ENV', default="Local") == "Local":
             # Open the connection to SQLite Cloud
             import sqlitecloud
             return sqlitecloud.connect(config('SQLITE_CLOUD_CONN'))
@@ -19,3 +19,6 @@ def conexion_BD():
     except Exception as ex:
         logger.add_to_log("error", str(ex))
         logger.add_to_log("error", traceback.format_exc())
+
+def dict_factory(cursor, row):
+    return {col[0]: row[idx] for idx, col in enumerate(cursor.description)}

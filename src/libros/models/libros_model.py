@@ -1,9 +1,9 @@
-from src.database.db_sqlite import conexion_BD
+from src.database.db_sqlite import conexion_BD, dict_factory
 import sqlite3
 
 def get_catalogo(libros_por_pagina,offset):
     conexion = conexion_BD()
-    conexion.row_factory = sqlite3.Row
+    conexion.row_factory = dict_factory
     query = conexion.cursor()
 
     #? Selecciona todos los libros disponibles
@@ -24,11 +24,11 @@ def get_catalogo(libros_por_pagina,offset):
     libros = query.fetchall()
     query.close()
     conexion.close()
-    return [dict(fila) for fila in libros]
+    return libros
 
 def get_catalogo_filtrado(libros_por_pagina,offset,filtro):
     conexion = conexion_BD()
-    conexion.row_factory = sqlite3.Row
+    conexion.row_factory = dict_factory
     query = conexion.cursor()
 
     #? Selecciona todos los libros disponibles
@@ -50,7 +50,7 @@ def get_catalogo_filtrado(libros_por_pagina,offset,filtro):
     libros = query.fetchall()
     query.close()
     conexion.close()
-    return [dict(fila) for fila in libros]
+    return libros
 
 def get_categorias():
     conexion = conexion_BD()
@@ -64,7 +64,7 @@ def get_categorias():
 def get_detalle_libro(id_libro):
 
     conexion = conexion_BD()
-    conexion.row_factory = sqlite3.Row
+    conexion.row_factory = dict_factory
     query = conexion.cursor()
 
     query.execute("""select l.id_libro, Titulo, tomo, ano_publicacion, ISBN, numero_paginas, numero_copias,
@@ -81,11 +81,11 @@ def get_detalle_libro(id_libro):
     query.close()
     conexion.close()
 
-    return [dict(fila) for fila in detalle]
+    return detalle
 
 def get_destacados(seccion):
     conexion = conexion_BD()
-    conexion.row_factory = sqlite3.Row
+    conexion.row_factory = dict_factory
     query = conexion.cursor()
     query.execute(f"""select l.id_libro,count(l.id_libro) as cantidad
                         from Prestamos p
@@ -199,10 +199,11 @@ def registrar_libro(Titulo,NumeroPaginas,ISBN,tomo,NumeroCopias,NombreAutor,Apel
         #? Guardar cambios
         conexion.commit()
         alerta = ""
-    except sqlite3.IntegrityError as e:
-        alerta = "Error: libro duplicado."
     except Exception as e:
-        alerta = f"Error inesperado: {e}"
+        if "UNIQUE" in str(e) or "duplicate" in str(e).lower():
+            alerta = "Error: libro duplicado."
+        else:
+            alerta = f"Error: {e}"
     finally:
         query.close()
         conexion.close()
