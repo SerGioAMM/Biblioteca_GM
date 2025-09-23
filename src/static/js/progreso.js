@@ -19,7 +19,7 @@ form.addEventListener("submit", function(e) {
     })
     .then(response => response.text())
     .then(data => {
-        agregarLog("Importación iniciada", "info");
+        agregarLog("Importación iniciada", "secondary");
         let descargar_errores = false;
         if (intervalo) clearInterval(intervalo);
         intervalo = setInterval(() => {

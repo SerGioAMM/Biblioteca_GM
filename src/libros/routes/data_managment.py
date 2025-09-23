@@ -103,6 +103,7 @@ def importar(datos,total):
         progreso["valor"] = round((((index + 1) / total) * 100),0)
         #sleep(0.1)
     progreso["error"] = progreso["error"].rstrip(", ") + "."
+    progreso["duplicados"] = progreso["duplicados"].rstrip(", ") + "."
 
 @bp_data_managment.route("/progreso")
 def get_progreso():
