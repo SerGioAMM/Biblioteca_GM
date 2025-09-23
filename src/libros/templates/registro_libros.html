@@ -24,6 +24,7 @@
         {% if ((session["rol"]) == "Administrador") or ((session["rol"]) == "Bibliotecario") %}
         <div class="seccion-principal text-middle text-center">
             <div class="fondo-principal">
+                <br> <br>
                 <h1 id="h1-titulo pt-5">Registrar nuevo libro</h1>
                 <h5 id="h5-nota">Complete el formulario para agregar un nuevo libro al catálogo de la biblioteca.</h5>
             </div>
@@ -32,7 +33,7 @@
                 <div class="row flex-nowrap">
                     <div class="col py-3 bg-custom text-body text-center">
                         <br><br>
-                        <div class="container-fluid w-75 bg-light-custom">
+                        <div class="container-fluid w-75 bg-light-custom rounded">
                             <form method="POST" action="/registro_libros" class="row g-3 text-start">
                                 <div class="col-12 col-md-6 mb-3">
                                     <label for="inputEmail4" class="form-label">Titulo*</label>

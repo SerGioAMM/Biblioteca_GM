@@ -117,3 +117,106 @@ def total_libros(filtro):
     query.close()
     conexion.close()
     return total
+
+def get_ultima_seccion():
+    conexion = conexion_BD()
+    query = conexion.cursor()
+    #Esta consulta devuelve la ultima seccion ingresada en RegistroLibros para que sea mas facil ingresar libros de manera ordenada
+    #Si se ingresan por seccion no hace falta estar seleccionando nuevamente la seccion
+    query.execute("select codigo_seccion from RegistroLibros order by id_registro desc limit 1")
+    select_seccion = query.fetchone()
+
+    if not select_seccion:
+        ultima_seccion = "0"
+    else:
+        query.execute("""
+        select codigo_seccion,seccion from SistemaDewey 
+        where SistemaDewey.codigo_seccion = 
+        (?)""",(select_seccion[0],))
+        ultima_seccion = query.fetchall()
+    return ultima_seccion
+
+def registrar_libro(Titulo,NumeroPaginas,ISBN,tomo,NumeroCopias,NombreAutor,ApellidoAutor,editorial,LugarPublicacion,AnoPublicacion,SistemaDewey):
+    conexion = conexion_BD()
+    query = conexion.cursor()
+    #Variable para guardar la notacion interna
+    _notacion = ""
+    if editorial:
+        Notacion = editorial[0:3].upper() #string[inicio:fin:paso] // Para tomar los primeros 3 caracteres de la editorial
+    elif (ApellidoAutor) and not editorial:
+        editorial = "Otros"
+        Notacion = ApellidoAutor[0:3].upper() #string[inicio:fin:paso] // Para tomar los primeros 3 caracteres del apellido autor
+    elif (NombreAutor) and not ApellidoAutor: #Para el extranio caso de que no exista ni editorial ni apellido de autor
+        editorial = "Otros"
+        ApellidoAutor = "-"
+        Notacion = NombreAutor[0:3].upper() #string[inicio:fin:paso] // Para tomar los primeros 3 caracteres del nombre del autor
+    else: #No se agrega ni autor ni editorial notacion va a ser "OTR"
+        editorial = "Otros"
+        NombreAutor = "Otros"
+        ApellidoAutor = "-"
+        Notacion = "OTR"
+
+    if editorial or ApellidoAutor or NombreAutor:
+        for i in range (0,3): #Notacion es un arreglo, este for funciona para pasar ese arreglo a ser una variable
+            _notacion = _notacion + Notacion[i]
+
+    #Cuado no se ingresa un lugar de publicacion se ingresa un lugar vacio(id_lugar 1 = "-")
+    if LugarPublicacion=="":
+        LugarPublicacion = "-"
+
+    try:
+        #? INSERT DE LIBROS
+        query.execute(f"Insert into Libros (Titulo,ano_publicacion,numero_paginas,isbn,tomo,numero_copias) values (?,?,?,?,?,?)",(Titulo,AnoPublicacion,NumeroPaginas,ISBN,tomo,NumeroCopias))
+        query.execute("Select id_libro from libros where titulo = ?",(Titulo,))
+        id_libro = query.fetchone()[0]
+        
+        #?INSERT DE LUGARES
+        #Si no existe insertar nuevo ya que columna lugar es UNIQUE
+        query.execute("Insert or ignore into lugares (lugar) values (?)",(LugarPublicacion,))
+        query.execute("Select id_lugar from lugares where lugar = ?",(LugarPublicacion,))
+        id_lugar = query.fetchone()[0]
+
+        #?INSERT DE AUTORES
+        query.execute("insert or ignore into autores (nombre_autor,apellido_autor) values (?,?)", (NombreAutor,ApellidoAutor))
+        query.execute("select id_autor from autores where nombre_autor = (?) AND apellido_autor = (?)",(NombreAutor,ApellidoAutor))
+        id_autor = query.fetchone()[0]
+
+        #? INSERT DE EDITORIALES
+        query.execute("insert or ignore into Editoriales (editorial) values (?)",(editorial,))
+        query.execute("select id_editorial from editoriales where editorial = (?)",(editorial,))
+        id_editorial = query.fetchone()[0]
+
+        #? INSERT DE NOTACIONES
+        #Si no existe insertar nuevo ya que columna notacion es UNIQUE
+        query.execute("Insert or ignore into notaciones (notacion,id_editorial,id_autor) values (?,?,?)",(_notacion,id_editorial,id_autor))
+        query.execute("Select id_notacion from notaciones where notacion = (?) and id_autor = (?) and id_editorial = (?)",(_notacion,id_autor,id_editorial,))
+        id_notacion = query.fetchone()[0]
+
+        #? INSERT DE REGISTRO LIBROS
+        #En registro libros, id_libro deberia ser unico? ya que se guarda un solo libro con el numero de copias
+        query.execute("Insert into RegistroLibros(id_libro,id_notacion,id_lugar,codigo_seccion) values (?,?,?,?)",(id_libro,id_notacion,id_lugar,SistemaDewey))            
+
+        #? Guardar cambios
+        conexion.commit()
+        alerta = ""
+    except sqlite3.IntegrityError as e:
+        alerta = "Error: libro duplicado."
+    except Exception as e:
+        alerta = f"Error inesperado: {e}"
+    finally:
+        query.close()
+        conexion.close()
+    return alerta
+
+def to_int(value, default=0):
+    try:
+        return int(value)
+    except (ValueError, TypeError):
+        return default
+    
+def editar_libro():
+    pass
+
+
+
+

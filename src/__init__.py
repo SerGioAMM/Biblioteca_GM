@@ -4,6 +4,7 @@ from .prestamos.routes import prestamos
 from .public.routes import main, sugerencias
 from .usuarios.routes import login, usuarios
 from .libros.routes import libros
+from .libros.routes import data_managment
 from .logs.routes import logs_eliminados
 
 app = Flask(__name__, static_folder="static")
@@ -14,6 +15,7 @@ def init_app(config):
     # Blueprints
     app.register_blueprint(main.main)
     app.register_blueprint(libros.bp_libros)
+    app.register_blueprint(data_managment.bp_data_managment)
     app.register_blueprint(prestamos.bp_prestamos)
     app.register_blueprint(usuarios.bp_usuarios)
     app.register_blueprint(login.bp_login)
