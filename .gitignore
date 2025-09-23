@@ -7,6 +7,7 @@ src/database/SQLAlchemy.py
 src/database/Biblioteca_GM.db.sql
 src/database/Biblioteca_GM.sqbpro
 src/database/Biblioteca_GM.db-journal
+src/database/Biblioteca_GM - BACKUP.db
 
 #Ignorar archivo excel de prueba
 Datos de biblioteca de prueba.xlsx
