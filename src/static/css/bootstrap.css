@@ -118,14 +118,7 @@
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);  
 }
 
-#logs:empty::after {
-    content: "Los logs aparecerán aquí durante la importación.";
-    display: block;
-    text-align: center;
-    color: var(--bs-secondary-color);
-    font-style: italic;
-    padding: 2rem;
-}
+
 
 
 
