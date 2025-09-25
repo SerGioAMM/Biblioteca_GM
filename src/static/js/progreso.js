@@ -3,6 +3,7 @@ const actual = document.getElementById("actual");
 const total = document.getElementById("total");
 const form = document.getElementById("form-excel");
 const logs = document.getElementById("logs");
+const nota = document.getElementById("nota");
 let intervalo = null;
 const progressbar = document.getElementById("progressbar");
 let i = 0;
@@ -12,6 +13,7 @@ let logIndex = 0;
 form.addEventListener("submit", function(e) {
     e.preventDefault();
     progressbar.classList.remove("d-none");
+    nota.classList.add('d-none');
     logs.innerHTML = "";
     logIndex = 0;
     const formData = new FormData(form);
@@ -79,7 +81,6 @@ function agregarLog(mensaje, tipo = "info", delay = 0) {
         
         card.appendChild(body);
         
-        // Estado inicial: INVISIBLE 
         Object.assign(card.style, {
             transform: 'translateY(2px)',
             visibility: 'hidden',
@@ -99,6 +100,6 @@ function agregarLog(mensaje, tipo = "info", delay = 0) {
             card.classList.remove('log-animate');
         }, 400); 
         
-        // logIndex++;
+        logIndex++;
     }, delay);
 }
