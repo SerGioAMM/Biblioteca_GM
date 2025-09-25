@@ -55,3 +55,77 @@
 --cafe_claro: #a27b5c;
 }
 */
+
+/* Anchos por columna: Solo esto es custom (ajusta % como antes) */
+#vista_previa th:nth-child(1), #vista_previa td:nth-child(1) { width: 10%; }  /* AUTOR */
+#vista_previa th:nth-child(2), #vista_previa td:nth-child(2) { width: 15%; }  /* TITULO */
+#vista_previa th:nth-child(3), #vista_previa td:nth-child(3) { width: 12%; }  /* LUGAR */
+#vista_previa th:nth-child(4), #vista_previa td:nth-child(4) { width: 12%; }  /* EDITORIAL */
+#vista_previa th:nth-child(5), #vista_previa td:nth-child(5) { width: 5%; }   /* AÑO */
+#vista_previa th:nth-child(6), #vista_previa td:nth-child(6) { width: 8%; }   /* PAGINAS */
+#vista_previa th:nth-child(7), #vista_previa td:nth-child(7) { width: 8%; }  /* ISBN */
+#vista_previa th:nth-child(8), #vista_previa td:nth-child(8) { width: 7%; }   /* TOMO */
+#vista_previa th:nth-child(9), #vista_previa td:nth-child(9) { width: 8%; }   /* CÓDIGO */
+#vista_previa th:nth-child(10), #vista_previa td:nth-child(10) { width: 10%; } /* NOTACIÓN */
+#vista_previa th:nth-child(11), #vista_previa td:nth-child(11) { width: 8%; } /* COPIAS */
+
+
+
+/* Fuente más pequeña: Usa Bootstrap 'small' en JS, pero override si necesitas */
+#vista_previa .small {
+    font-size: 0.875em;  /* Equivale a Bootstrap 'small' */
+}
+
+/* Mantén animaciones y hover (Bootstrap ya tiene table-hover) */
+@keyframes fadeInDown {
+    from { 
+      opacity: 0; transform: translateY(-2px); visibility: visible; 
+    }
+    to { 
+      opacity: 1; transform: translateY(0); visibility: visible; 
+    }
+}
+
+.row-animate {
+    animation: fadeInDown 0.5s ease-out forwards;
+}
+
+.no-data-message {
+    text-align: center;
+    color: var(--bs-secondary-color); 
+    font-style: italic;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.log-animate {
+    animation: fadeInUp 0.4s ease-out forwards; 
+}
+
+#logs .card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;  
+}
+
+#logs .card:hover {
+    transform: translateY(-1px);  
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);  
+}
+
+#logs:empty::after {
+    content: "Los logs aparecerán aquí durante la importación.";
+    display: block;
+    text-align: center;
+    color: var(--bs-secondary-color);
+    font-style: italic;
+    padding: 2rem;
+}
+
+
+

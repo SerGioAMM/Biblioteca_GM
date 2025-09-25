@@ -7,10 +7,13 @@ let intervalo = null;
 const progressbar = document.getElementById("progressbar");
 let i = 0;
 
+let logIndex = 0;
+
 form.addEventListener("submit", function(e) {
     e.preventDefault();
     progressbar.classList.remove("d-none");
     logs.innerHTML = "";
+    logIndex = 0;
     const formData = new FormData(form);
 
     fetch(form.action, {
@@ -49,35 +52,53 @@ form.addEventListener("submit", function(e) {
     })
     .catch(error => {
         console.error("Error al enviar el formulario:", error);
+        agregarLog("Error al iniciar importación: " + error.message, "danger");
     });
 });
 
-function agregarLog(mensaje, tipo = "info") {
-    // tipo puede ser: info, success, warning, danger
+function agregarLog(mensaje, tipo = "info", delay = 0) { 
+    setTimeout(() => { 
+        const card = document.createElement("div");
+        card.className = `card my-1 text-left border-${tipo}`;
 
-    const card = document.createElement("div");
-    card.className = `card my-1 text-left border-${tipo}`;
+        const body = document.createElement("div");
+        body.className = "card-body p-2 text-start";
 
-    const body = document.createElement("div");
-    body.className = "card-body p-2 text-start";
+        body.innerHTML = `<span class="badge text-${tipo} ">
+                            <i class="bi bi-circle-fill"></i>
+                            <span class="vr mx-2" ></span>
+                            </span> ${mensaje}`;
 
-    body.innerHTML = `<span class="badge text-${tipo} ">
-                        <i class="bi bi-circle-fill"></i>
-                        <span class="vr mx-2" ></span>
-                        </span> ${mensaje}`;
-
-    if(tipo == "descargar_errores"){
-        card.className = `card my-1 text-left border-warning`;
-        body.innerHTML = `<span class="badge text-warning ">
-                        <i class="bi bi-circle-fill"></i>
-                        <span class="vr mx-2" ></span>
-                        </span><a class="btn btn-warning" href="/descargar_errores">${mensaje}</a>`;
-    }
-    
-    
-    card.appendChild(body);
-    logs.appendChild(card);
-
-    // Scroll automatico al ultimo log
-    logs.scrollTop = logs.scrollHeight;
+        if(tipo == "descargar_errores"){
+            card.className = `card my-1 text-left border-warning`;
+            body.innerHTML = `<span class="badge text-warning ">
+                                <i class="bi bi-circle-fill"></i>
+                                <span class="vr mx-2" ></span>
+                                </span><a class="btn btn-warning" href="/descargar_errores">${mensaje}</a>`;
+        }
+        
+        card.appendChild(body);
+        
+        // Estado inicial: INVISIBLE 
+        Object.assign(card.style, {
+            transform: 'translateY(2px)',
+            visibility: 'hidden',
+            transition: 'none'
+        });
+        
+        // Inserta aun invisible
+        logs.appendChild(card);
+        
+        requestAnimationFrame(() => {
+            card.style.transition = ''; 
+            card.style.visibility = 'visible';
+            card.classList.add('log-animate');
+        });
+        
+        setTimeout(() => {
+            card.classList.remove('log-animate');
+        }, 400); 
+        
+        // logIndex++;
+    }, delay);
 }
