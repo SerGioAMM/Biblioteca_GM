@@ -219,5 +219,3 @@ def editar_libro():
     pass
 
 
-
-
