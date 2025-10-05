@@ -119,13 +119,17 @@ def buscar_libro():
 
     # Consulta paginada
     libros = libros_model.get_catalogo_filtrado(libros_por_pagina,offset,filtro_total)
+    
+    if not libros:
+        alerta = "No se encontraron libros."
+        return redirect(url_for("libros.libros",alerta = alerta))
 
     destacados = []
     for i in range(10):
         resultado = libros_model.get_destacados(i)
         if resultado:
             for libro in resultado:
-                destacados.append((libro[0])) 
+                destacados.append((libro["id_libro"])) 
 
     return render_template("libros.html", libros=libros, categorias=categorias,
                             pagina=pagina, total_paginas=total_paginas,

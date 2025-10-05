@@ -37,7 +37,7 @@
 
 
 /* Seccion de libros destacados */
-.seccion-libros-destacados, .seccion-actividades, .contenedor-libros, .contenedor-datos{
+.seccion-libros-destacados, .seccion-actividades, .contenedor-libros, .contenedor-datos, .contendor-usuarios{
     text-align: center;
     width: 90%;
     margin: 1% auto;

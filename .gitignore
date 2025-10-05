@@ -30,3 +30,6 @@ __pycache__/
 #!Ignorar partes del modulo libros en construccion ORM
 src/libros/services/
 src/public/services/
+
+#Ignorar archivo bandit (Analisis de codigo)
+.bandit

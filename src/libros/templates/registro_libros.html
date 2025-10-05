@@ -36,7 +36,7 @@
                         <div class="container-fluid w-75 bg-light-custom rounded">
                             <form method="POST" action="/registro_libros" class="row g-3 text-start">
                                 <div class="col-12 col-md-6 mb-3">
-                                    <label for="inputEmail4" class="form-label">Titulo*</label>
+                                    <label for="titulom" class="form-label">Titulo*</label>
                                     <input class="form-control" type="text" name="titulo" placeholder="" autocomplete="off" required>
                                 </div>
                                 <div class="col-6 col-md-3 mb-3">
@@ -115,8 +115,10 @@
     <!--? Tom Select JS -->
     <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
     
-    <!--! Bootstrap JS -->
+    <!-- Custom Scripts -->
     <script src="{{ url_for('static', filename='js/sugerencias.js') }}"></script>
+
+    <!--! Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 </body>
 </html>
