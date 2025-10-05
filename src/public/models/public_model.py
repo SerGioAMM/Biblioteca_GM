@@ -3,7 +3,6 @@ import sqlite3
 
 def get_destacados(seccion):
     conexion = conexion_BD()
-    conexion.row_factory = dict_factory
     query = conexion.cursor()
     query.execute(f"""select l.id_libro,count(l.id_libro) as cantidad, n.notacion, l.Titulo, a.nombre_autor, a.apellido_autor, l.ano_publicacion, sd.codigo_seccion, sd.seccion, l.numero_copias
                         from Prestamos p
@@ -16,7 +15,7 @@ def get_destacados(seccion):
                         group by p.id_libro
                         order by cantidad desc
                         limit 3;""")
-    libros = query.fetchall()
+    libros = dict_factory(query)
     query.close()
     conexion.close()
     return libros
@@ -24,7 +23,6 @@ def get_destacados(seccion):
 
 def get_aleatorios(seccion,cantidad):
     conexion = conexion_BD()
-    conexion.row_factory = dict_factory
     query = conexion.cursor()
     query.execute(f"""SELECT l.id_libro, 0 AS cantidad, n.notacion, l.Titulo, a.nombre_autor, a.apellido_autor, l.ano_publicacion, sd.codigo_seccion, sd.seccion, l.numero_copias
                         FROM Libros l
@@ -35,14 +33,13 @@ def get_aleatorios(seccion,cantidad):
                         where sd.codigo_seccion LIKE "{seccion}%"
                         order by RANDOM()
                         limit {cantidad};""")
-    aleatorios = query.fetchall()
+    aleatorios = dict_factory(query)
     query.close()
     conexion.close()
     return aleatorios
 
 def get_nuevos():
     conexion = conexion_BD()
-    conexion.row_factory = dict_factory
     query = conexion.cursor()
     query.execute("""SELECT l.id_libro, 0 AS cantidad, n.notacion, l.Titulo, a.nombre_autor, a.apellido_autor, l.ano_publicacion, sd.codigo_seccion, sd.seccion, l.numero_copias
                         FROM Libros l
@@ -52,7 +49,7 @@ def get_nuevos():
                         JOIN Autores a ON a.id_autor = n.id_autor
                         order by l.id_libro desc
                         limit 12""")
-    nuevos = query.fetchall()
+    nuevos = dict_factory(query)
     query.close()
     conexion.close()
     return nuevos

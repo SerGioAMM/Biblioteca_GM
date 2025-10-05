@@ -21,5 +21,6 @@ def conexion_BD():
         logger.add_to_log("error", traceback.format_exc())
         raise RuntimeError("No se pudo conectar a la base de datos")
 
-def dict_factory(cursor, row):
-    return {col[0]: row[idx] for idx, col in enumerate(cursor.description)}
+def dict_factory(cursor):
+    columns = [col[0] for col in cursor.description]
+    return [dict(zip(columns, row)) for row in cursor.fetchall()]
