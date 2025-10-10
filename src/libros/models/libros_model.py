@@ -1,9 +1,9 @@
 from src.database.db_sqlite import conexion_BD, dict_factory
-import sqlite3
+from decouple import config
+import cloudinary, cloudinary.uploader
 
 def get_catalogo(libros_por_pagina,offset):
     conexion = conexion_BD()
-    conexion.row_factory = dict_factory
     query = conexion.cursor()
 
     #? Selecciona todos los libros disponibles
@@ -21,14 +21,13 @@ def get_catalogo(libros_por_pagina,offset):
         order by sd.codigo_seccion asc, Titulo asc
         LIMIT ? OFFSET ?
     """, (libros_por_pagina, offset))
-    libros = query.fetchall()
+    libros = dict_factory(query)
     query.close()
     conexion.close()
     return libros
 
 def get_catalogo_filtrado(libros_por_pagina,offset,filtro):
     conexion = conexion_BD()
-    conexion.row_factory = dict_factory
     query = conexion.cursor()
 
     #? Selecciona todos los libros disponibles
@@ -47,7 +46,7 @@ def get_catalogo_filtrado(libros_por_pagina,offset,filtro):
         order by sd.codigo_seccion asc,Titulo asc
         limit ? offset ?
     """, (libros_por_pagina, offset))
-    libros = query.fetchall()
+    libros = dict_factory(query)
     query.close()
     conexion.close()
     return libros
@@ -64,7 +63,6 @@ def get_categorias():
 def get_detalle_libro(id_libro):
 
     conexion = conexion_BD()
-    conexion.row_factory = dict_factory
     query = conexion.cursor()
 
     query.execute("""select l.id_libro, Titulo, tomo, ano_publicacion, ISBN, numero_paginas, numero_copias,
@@ -77,7 +75,7 @@ def get_detalle_libro(id_libro):
         join Editoriales e on e.id_editorial = n.id_editorial
         join Lugares lu on r.id_lugar = lu.id_lugar 
         where l.id_libro = ?;""",(id_libro,))
-    detalle = query.fetchall()
+    detalle = dict_factory(query)
     query.close()
     conexion.close()
 
@@ -85,7 +83,6 @@ def get_detalle_libro(id_libro):
 
 def get_destacados(seccion):
     conexion = conexion_BD()
-    conexion.row_factory = dict_factory
     query = conexion.cursor()
     query.execute(f"""select l.id_libro,count(l.id_libro) as cantidad
                         from Prestamos p
@@ -96,7 +93,7 @@ def get_destacados(seccion):
                         group by p.id_libro
                         order by cantidad desc
                         limit 3;""")
-    resultado = query.fetchall()
+    resultado = dict_factory(query)
     query.close()
     conexion.close()
     return resultado
@@ -134,9 +131,11 @@ def get_ultima_seccion():
         where SistemaDewey.codigo_seccion = 
         (?)""",(select_seccion[0],))
         ultima_seccion = query.fetchall()
+    query.close()
+    conexion.close()
     return ultima_seccion
 
-def registrar_libro(Titulo,NumeroPaginas,ISBN,tomo,NumeroCopias,NombreAutor,ApellidoAutor,editorial,LugarPublicacion,AnoPublicacion,SistemaDewey):
+def registrar_libro(Titulo,NumeroPaginas,ISBN,tomo,NumeroCopias,NombreAutor,ApellidoAutor,editorial,LugarPublicacion,AnoPublicacion,SistemaDewey,Portada_file):
     conexion = conexion_BD()
     query = conexion.cursor()
     #Variable para guardar la notacion interna
@@ -165,8 +164,20 @@ def registrar_libro(Titulo,NumeroPaginas,ISBN,tomo,NumeroCopias,NombreAutor,Apel
         LugarPublicacion = "-"
 
     try:
+        cloudinary.config( 
+            cloud_name = config('CLOUDINARY_CLOUD_NAME'),
+            api_key = config('CLOUDINARY_API_KEY'),
+            api_secret = config('CLOUDINARY_API_SECRET'),
+            secure = True
+        )
+        if Portada_file:
+            upload_result = cloudinary.uploader.upload(Portada_file, folder="bibliotecagm/portadas")
+            Portada_url = upload_result.get('secure_url')
+        else:
+            Portada_url = 'book.png'
+
         #? INSERT DE LIBROS
-        query.execute(f"Insert into Libros (Titulo,ano_publicacion,numero_paginas,isbn,tomo,numero_copias) values (?,?,?,?,?,?)",(Titulo,AnoPublicacion,NumeroPaginas,ISBN,tomo,NumeroCopias))
+        query.execute(f"Insert into Libros (Titulo,ano_publicacion,numero_paginas,isbn,tomo,numero_copias,portada) values (?,?,?,?,?,?,?)",(Titulo,AnoPublicacion,NumeroPaginas,ISBN,tomo,NumeroCopias,Portada_url))
         query.execute("Select id_libro from libros where titulo = ?",(Titulo,))
         id_libro = query.fetchone()[0]
         
@@ -215,7 +226,39 @@ def to_int(value, default=0):
     except (ValueError, TypeError):
         return default
     
-def editar_libro():
-    pass
+def editar_libro(id_libro, usuario , new_titulo, new_portada, new_tomo, new_numero_paginas, new_numero_copias,motivo):
+    conexion = conexion_BD()
+    query = conexion.cursor()
+    try:
+        libro = get_detalle_libro(id_libro)
+        old_titulo = libro[0]['Titulo']
+        old_portada = libro[0]['portada']
+        old_tomo = libro[0]['Tomo']
+        old_numero_paginas = libro[0]['numero_paginas']
+        old_numero_copias = libro[0]['numero_copias']
+        if not new_portada:
+            new_portada = old_portada
+        else:
+            cloudinary.config( 
+            cloud_name = config('CLOUDINARY_CLOUD_NAME'),
+            api_key = config('CLOUDINARY_API_KEY'),
+            api_secret = config('CLOUDINARY_API_SECRET'),
+            secure = True
+            )
+            upload_result = cloudinary.uploader.upload(new_portada, folder="bibliotecagm/portadas")
+            new_portada = upload_result.get('secure_url')
+            
+        query.execute("insert into libros_modificados(id_libro, id_administrador, titulo, tomo, num_paginas, num_copias, portada, fecha_modificacion, motivo) values (?,?,?,?,?,?,?,date('now'),?)",
+                    (id_libro, usuario , old_titulo, old_tomo, old_numero_paginas, old_numero_copias, old_portada, motivo))
 
-
+        query.execute("update libros set titulo = ?, portada = ?, tomo = ?, numero_paginas = ?, numero_copias = ? where id_libro = ?", 
+                        (new_titulo, new_portada, to_int(new_tomo), to_int(new_numero_paginas), to_int(new_numero_copias), (id_libro)))
+        alerta = "Libro editado exitósamente."
+    except Exception as e:
+        print(f"Error model: {e}")
+        alerta = "Error al editar libro."  
+    finally:
+        conexion.commit()
+        query.close()
+        conexion.close()
+    return alerta

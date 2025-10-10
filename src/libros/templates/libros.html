@@ -95,17 +95,16 @@
                 <img src="{{ libro.portada }}" class="card-img-top" alt="...">
                 {% endif %}
 
-                <div class="card-body">
+                <div class="card-body d-flex flex-column h-100">
                     <h6 class="card-title">{{libro.Titulo}}</h6><!-- Titulo  -->
-                    <small class="card-text">{{libro.nombre_autor}}&nbsp;{{libro.apellido_autor}} <!-- Nombre y apellido del autor  -->
+                    <small class="card-text mb-2">{{libro.nombre_autor}}&nbsp;{{libro.apellido_autor}} <!-- Nombre y apellido del autor  -->
                     {{libro.ano_publicacion}}</small><!-- Anio de publicacion  -->
                     
                     {% if libro.id_libro in destacados %}
-                    <span class="destacado">
+                    <span class="destacado mt-auto mb-0">
                             <h4 class="h4-destacado"> <i class="bi bi-star-fill"></i> Destacado</h4>
                     </span>
                     {% endif %}
-                    <!--!CREAR TARJETA INVISIBLE PARA-->
                     
                 </div>
                 <div class="card-footer">
@@ -116,7 +115,7 @@
                     <h5 id="h4-seccion-{{ (libro.codigo_seccion|int // 100) if (libro.codigo_seccion|int < 1000) else 9 }}">
                         {{ libro.codigo_seccion }} - {{ libro.seccion }}
                     </h5> <!-- Codigo de seccion + seccion  -->
-                </span>
+                    </span>
                 {% if libro.numero_copias|int == 1 %}
                     <span id="span-disponibilidad-libro-d"> <h4 id="h4-disponible">Disponible: {{libro.numero_copias}} copia</h4></span>
                 {% elif libro.numero_copias|int > 1 %}

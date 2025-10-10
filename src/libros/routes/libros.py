@@ -31,11 +31,11 @@ def registro_libros():
         editorial = request.form["editorial"]
         LugarPublicacion = request.form["lugar"]
         AnoPublicacion = request.form["anio"]
-        
+        Portada_file = request.files.get("portada")
         SistemaDewey = request.form.get("sistema_dewey")
         
         try:
-            alerta = libros_model.registrar_libro(Titulo,NumeroPaginas,ISBN,tomo,NumeroCopias,NombreAutor,ApellidoAutor,editorial,LugarPublicacion,AnoPublicacion,SistemaDewey)    
+            alerta = libros_model.registrar_libro(Titulo,NumeroPaginas,ISBN,tomo,NumeroCopias,NombreAutor,ApellidoAutor,editorial,LugarPublicacion,AnoPublicacion,SistemaDewey,Portada_file)    
             ultima_seccion = libros_model.get_ultima_seccion()
             
             if alerta: return render_template("registro_libros.html", secciones = secciones, ultima_seccion = ultima_seccion, alerta=alerta)
@@ -142,15 +142,12 @@ def buscar_libro():
 def eliminar_libro():
     id_libro = request.form["id_libro"]
     motivo = request.form["motivo"]
-
-    # Obtenre la fecha actual
-    hoy = datetime.today().date()
     id_administrador = session.get("id_administrador")
 
     conexion = conexion_BD()
     query = conexion.cursor()
 
-    query.execute("select id_prestamo from prestamos where id_libro = ?",(id_libro,))
+    query.execute("select id_prestamo from prestamos where id_libro = ? and (id_estado == 1 or id_estado == 2)",(id_libro,))
     libroprestado = query.fetchall()
 
     if(libroprestado):
@@ -160,9 +157,11 @@ def eliminar_libro():
     query.execute("select titulo from libros where id_libro = ?",(id_libro,))
     titulo_libro = query.fetchone()[0]
 
-    query.execute("insert into libros_eliminados(id_administrador,id_libro,fecha,titulo,motivo) values(?,?,?,?,?)",(id_administrador,id_libro,hoy,titulo_libro,motivo))
+    query.execute("insert into logs_eliminados(id_administrador,id_eliminado,tabla_afectada,fecha,titulo,motivo) values(?,?,'Libros',datetime('now'),?,?)",(id_administrador,id_libro,titulo_libro,motivo))
 
-    query.execute("delete from libros where id_libro = ?",(id_libro,))
+    query.execute("delete from Libros where id_libro = ?",(id_libro,))
+    query.execute("delete from RegistroLibros where id_libro = ?",(id_libro,))
+    
     conexion.commit()
 
     query.close()
@@ -182,20 +181,22 @@ def detalle_libro(ID,Titulo):
     
     return render_template("detalle_libro.html",detalle=detalle, descripcion="Nada")
 
-@bp_libros.route("/editar_libro", methods=["GET"])
+@bp_libros.route("/editar_libro", methods=["GET", "POST"])
 def editar_libro():
-    if(request.method=="GET"):
-        id_libro = request.args.get("id_libro")
-        new_titulo = request.args.get("titulo")
-        new_portada = request.args.get("portada")
-        new_tomo = request.args.get("tomo","")
-        new_numero_paginas = request.args.get("numero_paginas")
-        new_numero_copias = request.args.get("numero_copias")
-    
-    conexion = conexion_BD()
-    query = conexion.cursor()
-    #! EN CONSTRUCCION
-    query.execute("")
-
+    if(request.method=="POST"):
+        id_libro = request.form["id_libro"]
+        new_titulo = request.form["titulo"]
+        new_portada = request.files.get("portada")
+        new_tomo = request.form["tomo"]
+        new_numero_paginas = request.form["numero_paginas"]
+        new_numero_copias = request.form["numero_copias"]
+        motivo = request.form["motivo"]
+        usuario = session.get("id_administrador")
+        try:
+            libros_model.editar_libro(id_libro, usuario, new_titulo, new_portada, new_tomo, new_numero_paginas, new_numero_copias, motivo)
+        except Exception as e:
+            print(f"Error: {e}")
+            alerta = "Error al editar libro."
+            return redirect(url_for('libros.detalle_libro', ID=id_libro, Titulo=new_titulo, alerta=alerta))
         
     return redirect(url_for('libros.detalle_libro', ID=id_libro, Titulo=new_titulo))

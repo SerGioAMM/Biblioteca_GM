@@ -23,14 +23,20 @@ consulta = {
     "buscar_usuarioTodos": "SELECT usuario FROM administradores",
     "buscar_usuarioAdministrador": "SELECT usuario FROM administradores a JOIN Roles r ON a.id_rol = r.id_rol WHERE r.rol = 'Administrador'",
     "buscar_usuarioBibliotecario": "SELECT usuario FROM administradores a JOIN Roles r ON a.id_rol = r.id_rol WHERE r.rol = 'Bibliotecario'",
+    "buscar_usuarioTodos_categoria": "SELECT usuario FROM administradores a JOIN estados_administradores ea ON a.id_estado = ea.id_estado WHERE ea.estado = '?'",
+    "buscar_usuarioAdministrador_categoria": "SELECT usuario FROM administradores a JOIN estados_administradores ea ON a.id_estado = ea.id_estado WHERE r.rol = 'Administrador' and ea.estado = '?'",
+    "buscar_usuarioBibliotecario_categoria": "SELECT usuario FROM administradores a JOIN estados_administradores ea ON a.id_estado = ea.id_estado WHERE r.rol = 'Bibliotecario'and ea.estado = '?'",
     "buscar-libro-prestamoTitulo": "SELECT (titulo || '(' || ano_publicacion || ')') FROM libros WHERE numero_copias > 0",
     "input-editorial": "SELECT editorial FROM editoriales",
     "input-lugar": "SELECT Lugar FROM lugares",
+    "buscar_libro_eTitulo": "SELECT DISTINCT titulo FROM logs_eliminados where tabla_afectada = 'Libros'",
+    "buscar_libro_eUsuario": "SELECT DISTINCT a.usuario FROM logs_eliminados le join Administradores a on le.id_administrador = a.id_administrador where tabla_afectada = 'Libros'",
+    "buscar_prestamo_eTitulo": "SELECT DISTINCT titulo FROM logs_eliminados where tabla_afectada = 'Prestamos'",
+    "buscar_prestamo_eUsuario": "SELECT DISTINCT a.usuario FROM administradores a JOIN logs_eliminados le ON a.id_administrador = le.id_administrador where tabla_afectada = 'Prestamos'",
+    "buscar_libro_mTitulo": "SELECT DISTINCT l.titulo FROM libros_modificados lm JOIN libros l ON lm.id_libro = l.id_libro",
+    "buscar_libro_mUsuario": "SELECT DISTINCT a.usuario FROM administradores a JOIN libros_modificados lm ON a.id_administrador = lm.id_administrador",
     #! FALTA POR HACER
-    "prestamo_eliminado_admins": "SELECT DISTINCT a.usuario FROM administradores a JOIN prestamos_eliminados pe ON a.id_administrador = pe.id_administrador",
-    "prestamo_eliminado_libros": "SELECT DISTINCT titulo FROM prestamos_eliminados",
     "libro_eliminado_admins": "SELECT DISTINCT a.usuario FROM administradores a JOIN libros_eliminados le ON a.id_administrador = le.id_administrador",
-    "libro_eliminado": "SELECT DISTINCT titulo FROM libros_eliminados",
 }
 
 @bp_sugerencias.route("/sugerencias/<tipo>")

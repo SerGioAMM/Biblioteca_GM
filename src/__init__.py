@@ -6,6 +6,7 @@ from .usuarios.routes import login, usuarios
 from .libros.routes import libros
 from .libros.routes import data_managment
 from .logs.routes import logs_eliminados
+from .usuarios.routes import data
 
 app = Flask(__name__, static_folder="static")
 
@@ -21,6 +22,7 @@ def init_app(config):
     app.register_blueprint(login.bp_login)
     app.register_blueprint(sugerencias.bp_sugerencias)
     app.register_blueprint(logs_eliminados.bp_eliminados)
+    app.register_blueprint(data.bp_datos)
 
     return app
 

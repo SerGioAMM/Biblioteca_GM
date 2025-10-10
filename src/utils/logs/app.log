@@ -345,3 +345,412 @@ werkzeug.exceptions.BadRequestKeyError: 400 Bad Request: The browser (or proxy) 
 2025-09-28 16:18:03 | ERROR | Datos incorrectos - Usuario: sergio
 2025-09-28 16:18:03 | ERROR | Datos incorrectos - Usuario: sergio
 2025-09-29 19:52:04 | ERROR | Datos incorrectos - Usuario: sergio
+2025-10-06 08:25:07 | ERROR | Usuario inactivo, contacte al administrador - Usuario: azucely
+2025-10-06 08:45:12 | ERROR | Datos incorrectos - Usuario: mayda
+2025-10-06 08:45:17 | ERROR | Datos incorrectos - Usuario: mayda
+2025-10-06 08:45:21 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: mayda
+2025-10-06 08:45:26 | ERROR | '>' not supported between instances of 'str' and 'datetime.datetime'
+2025-10-06 08:45:26 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 43, in login
+    if tiempo_bloqueo and tiempo_bloqueo > ahora:
+                          ^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '>' not supported between instances of 'str' and 'datetime.datetime'
+
+2025-10-06 08:45:31 | ERROR | '>' not supported between instances of 'str' and 'datetime.datetime'
+2025-10-06 08:45:31 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 43, in login
+    if tiempo_bloqueo and tiempo_bloqueo > ahora:
+                          ^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '>' not supported between instances of 'str' and 'datetime.datetime'
+
+2025-10-06 08:47:09 | ERROR | '>' not supported between instances of 'str' and 'datetime.datetime'
+2025-10-06 08:47:09 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 43, in login
+    if tiempo_bloqueo and tiempo_bloqueo > ahora:
+                          ^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '>' not supported between instances of 'str' and 'datetime.datetime'
+
+2025-10-06 08:53:17 | ERROR | '>' not supported between instances of 'str' and 'datetime.datetime'
+2025-10-06 08:53:17 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 43, in login
+    if tiempo_bloqueo and tiempo_bloqueo > ahora:
+                          ^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '>' not supported between instances of 'str' and 'datetime.datetime'
+
+2025-10-06 08:53:22 | ERROR | '>' not supported between instances of 'str' and 'datetime.datetime'
+2025-10-06 08:53:22 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 43, in login
+    if tiempo_bloqueo and tiempo_bloqueo > ahora:
+                          ^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '>' not supported between instances of 'str' and 'datetime.datetime'
+
+2025-10-06 08:53:26 | ERROR | '>' not supported between instances of 'str' and 'datetime.datetime'
+2025-10-06 08:53:26 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 43, in login
+    if tiempo_bloqueo and tiempo_bloqueo > ahora:
+                          ^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '>' not supported between instances of 'str' and 'datetime.datetime'
+
+2025-10-06 08:53:30 | ERROR | '>' not supported between instances of 'str' and 'datetime.datetime'
+2025-10-06 08:53:30 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 43, in login
+    if tiempo_bloqueo and tiempo_bloqueo > ahora:
+                          ^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '>' not supported between instances of 'str' and 'datetime.datetime'
+
+2025-10-06 08:54:09 | ERROR | '>' not supported between instances of 'str' and 'datetime.datetime'
+2025-10-06 08:54:09 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 43, in login
+    if tiempo_bloqueo and tiempo_bloqueo > ahora:
+                          ^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '>' not supported between instances of 'str' and 'datetime.datetime'
+
+2025-10-06 08:54:12 | ERROR | '>' not supported between instances of 'str' and 'datetime.datetime'
+2025-10-06 08:54:12 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 43, in login
+    if tiempo_bloqueo and tiempo_bloqueo > ahora:
+                          ^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '>' not supported between instances of 'str' and 'datetime.datetime'
+
+2025-10-06 08:55:37 | ERROR | '>' not supported between instances of 'str' and 'datetime.datetime'
+2025-10-06 08:55:37 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 43, in login
+    if tiempo_bloqueo and tiempo_bloqueo > ahora:
+                          ^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '>' not supported between instances of 'str' and 'datetime.datetime'
+
+2025-10-06 08:55:42 | ERROR | '>' not supported between instances of 'str' and 'datetime.datetime'
+2025-10-06 08:55:42 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 43, in login
+    if tiempo_bloqueo and tiempo_bloqueo > ahora:
+                          ^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '>' not supported between instances of 'str' and 'datetime.datetime'
+
+2025-10-06 08:56:02 | ERROR | Usuario inactivo, contacte al administrador - Usuario: azucely
+2025-10-06 08:57:53 | ERROR | Usuario inactivo, contacte al administrador - Usuario: azucely
+2025-10-06 08:57:57 | ERROR | '>' not supported between instances of 'str' and 'datetime.datetime'
+2025-10-06 08:57:57 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 43, in login
+    if tiempo_bloqueo and tiempo_bloqueo > ahora:
+                          ^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '>' not supported between instances of 'str' and 'datetime.datetime'
+
+2025-10-06 08:58:53 | ERROR | '>' not supported between instances of 'str' and 'datetime.datetime'
+2025-10-06 08:58:53 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 43, in login
+    if tiempo_bloqueo and tiempo_bloqueo > ahora:
+                          ^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '>' not supported between instances of 'str' and 'datetime.datetime'
+
+2025-10-06 08:59:28 | ERROR | '>' not supported between instances of 'str' and 'datetime.datetime'
+2025-10-06 08:59:28 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 42, in login
+    if tiempo_bloqueo and tiempo_bloqueo > ahora:
+                          ^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '>' not supported between instances of 'str' and 'datetime.datetime'
+
+2025-10-06 09:00:20 | ERROR | '>' not supported between instances of 'str' and 'datetime.datetime'
+2025-10-06 09:00:20 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 42, in login
+    if tiempo_bloqueo and tiempo_bloqueo > ahora:
+                          ^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '>' not supported between instances of 'str' and 'datetime.datetime'
+
+2025-10-06 09:00:44 | ERROR | '>' not supported between instances of 'str' and 'datetime.datetime'
+2025-10-06 09:00:44 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 41, in login
+    print(tiempo_bloqueo > ahora)
+          ^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '>' not supported between instances of 'str' and 'datetime.datetime'
+
+2025-10-06 09:03:01 | ERROR | '>' not supported between instances of 'str' and 'datetime.datetime'
+2025-10-06 09:03:01 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 43, in login
+    if tiempo_bloqueo and tiempo_bloqueo > ahora:
+                          ^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '>' not supported between instances of 'str' and 'datetime.datetime'
+
+2025-10-06 09:03:23 | ERROR | 'str' object cannot be interpreted as an integer
+2025-10-06 09:03:23 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 41, in login
+    print(type(datetime(tiempo_bloqueo)))
+               ~~~~~~~~^^^^^^^^^^^^^^^^
+TypeError: 'str' object cannot be interpreted as an integer
+
+2025-10-06 09:03:38 | ERROR | 'str' object cannot be interpreted as an integer
+2025-10-06 09:03:38 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 42, in login
+    print(type(datetime(tiempo_bloqueo)))
+               ~~~~~~~~^^^^^^^^^^^^^^^^
+TypeError: 'str' object cannot be interpreted as an integer
+
+2025-10-06 09:04:13 | ERROR | unconverted data remains: .134980
+2025-10-06 09:04:13 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 42, in login
+    print(type(datetime.strptime(tiempo_bloqueo, '%Y-%m-%d %H:%M:%S')))
+               ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 573, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 355, in _strptime
+    raise ValueError("unconverted data remains: %s" %
+                      data_string[found.end():])
+ValueError: unconverted data remains: .134980
+
+2025-10-06 09:04:42 | ERROR | unconverted data remains: .134980
+2025-10-06 09:04:42 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 41, in login
+    tiempo_bloqueo = datetime.strptime(tiempo_bloqueo, '%Y-%m-%d %H:%M:%S')
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 573, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 355, in _strptime
+    raise ValueError("unconverted data remains: %s" %
+                      data_string[found.end():])
+ValueError: unconverted data remains: .134980
+
+2025-10-06 09:05:04 | ERROR | strptime() argument 1 must be str, not None
+2025-10-06 09:05:04 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 41, in login
+    tiempo_bloqueo = datetime.strptime(tiempo_bloqueo, '%Y-%m-%d %H:%M:%S')
+TypeError: strptime() argument 1 must be str, not None
+
+2025-10-06 09:05:06 | ERROR | strptime() argument 1 must be str, not None
+2025-10-06 09:05:06 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 41, in login
+    tiempo_bloqueo = datetime.strptime(tiempo_bloqueo, '%Y-%m-%d %H:%M:%S')
+TypeError: strptime() argument 1 must be str, not None
+
+2025-10-06 09:05:22 | ERROR | strptime() argument 1 must be str, not None
+2025-10-06 09:05:22 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 41, in login
+    tiempo_bloqueo = datetime.strptime(tiempo_bloqueo, '%Y-%m-%d %H:%M:%S')
+TypeError: strptime() argument 1 must be str, not None
+
+2025-10-06 09:05:23 | ERROR | strptime() argument 1 must be str, not None
+2025-10-06 09:05:23 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 41, in login
+    tiempo_bloqueo = datetime.strptime(tiempo_bloqueo, '%Y-%m-%d %H:%M:%S')
+TypeError: strptime() argument 1 must be str, not None
+
+2025-10-06 09:05:24 | ERROR | strptime() argument 1 must be str, not None
+2025-10-06 09:05:24 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 41, in login
+    tiempo_bloqueo = datetime.strptime(tiempo_bloqueo, '%Y-%m-%d %H:%M:%S')
+TypeError: strptime() argument 1 must be str, not None
+
+2025-10-06 09:05:24 | ERROR | strptime() argument 1 must be str, not None
+2025-10-06 09:05:24 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 41, in login
+    tiempo_bloqueo = datetime.strptime(tiempo_bloqueo, '%Y-%m-%d %H:%M:%S')
+TypeError: strptime() argument 1 must be str, not None
+
+2025-10-06 09:05:26 | ERROR | unconverted data remains: .134980
+2025-10-06 09:05:26 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 41, in login
+    tiempo_bloqueo = datetime.strptime(tiempo_bloqueo, '%Y-%m-%d %H:%M:%S')
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 573, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 355, in _strptime
+    raise ValueError("unconverted data remains: %s" %
+                      data_string[found.end():])
+ValueError: unconverted data remains: .134980
+
+2025-10-06 09:05:58 | ERROR | 'str' object has no attribute 'strftime'
+2025-10-06 09:05:58 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 45, in login
+    alerta = "Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en ",tiempo_bloqueo.strftime("%M:%S"),"."
+                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'strftime'
+
+2025-10-06 09:07:15 | ERROR | unconverted data remains: .134980
+2025-10-06 09:07:15 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 42, in login
+    tiempo_bloqueo = datetime.strptime(tiempo_bloqueo, '%Y-%m-%d %H:%M:%S')
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 573, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 355, in _strptime
+    raise ValueError("unconverted data remains: %s" %
+                      data_string[found.end():])
+ValueError: unconverted data remains: .134980
+
+2025-10-06 09:07:25 | ERROR | unconverted data remains: .134980
+2025-10-06 09:07:25 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 42, in login
+    tiempo_bloqueo = datetime.strptime(tiempo_bloqueo, '%Y-%m-%d %H:%M:%S')
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 573, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 355, in _strptime
+    raise ValueError("unconverted data remains: %s" %
+                      data_string[found.end():])
+ValueError: unconverted data remains: .134980
+
+2025-10-06 09:07:47 | ERROR | unconverted data remains: .134980
+2025-10-06 09:07:47 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 43, in login
+    tiempo_bloqueo = datetime.strptime(tiempo_bloqueo, '%Y-%m-%d %H:%M:%S')
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 573, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 355, in _strptime
+    raise ValueError("unconverted data remains: %s" %
+                      data_string[found.end():])
+ValueError: unconverted data remains: .134980
+
+2025-10-06 09:09:12 | ERROR | unconverted data remains: .134980
+2025-10-06 09:09:12 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 43, in login
+    tiempo_bloqueo = datetime.strptime(tiempo_bloqueo, '%Y-%m-%d %H:%M:%S')
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 573, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 355, in _strptime
+    raise ValueError("unconverted data remains: %s" %
+                      data_string[found.end():])
+ValueError: unconverted data remains: .134980
+
+2025-10-06 09:09:35 | ERROR | unconverted data remains: .134980
+2025-10-06 09:09:35 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 44, in login
+    tiempo_bloqueo = datetime.strptime(tiempo_bloqueo, '%Y-%m-%d %H:%M:%S')
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 573, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 355, in _strptime
+    raise ValueError("unconverted data remains: %s" %
+                      data_string[found.end():])
+ValueError: unconverted data remains: .134980
+
+2025-10-06 09:11:07 | ERROR | unconverted data remains: .134980
+2025-10-06 09:11:07 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 45, in login
+    tiempo_bloqueo = datetime.strptime(tiempo_bloqueo, '%Y-%m-%d %H:%M:%S')
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 573, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 355, in _strptime
+    raise ValueError("unconverted data remains: %s" %
+                      data_string[found.end():])
+ValueError: unconverted data remains: .134980
+
+2025-10-06 09:11:46 | ERROR | unconverted data remains: .134980
+2025-10-06 09:11:46 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 45, in login
+    tiempo_bloqueo = datetime.strptime(tiempo_bloqueo, '%Y-%m-%d %H:%M:%S')
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 573, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 355, in _strptime
+    raise ValueError("unconverted data remains: %s" %
+                      data_string[found.end():])
+ValueError: unconverted data remains: .134980
+
+2025-10-06 09:15:04 | ERROR | unconverted data remains: .134980
+2025-10-06 09:15:04 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 45, in login
+    tiempo_bloqueo = datetime.strptime(tiempo_bloqueo, "%Y-%m-%d %H:%M:%S")
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 573, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python313\Lib\_strptime.py", line 355, in _strptime
+    raise ValueError("unconverted data remains: %s" %
+                      data_string[found.end():])
+ValueError: unconverted data remains: .134980
+
+2025-10-06 09:19:37 | ERROR | Datos incorrectos - Usuario: mayda
+2025-10-06 09:19:41 | ERROR | Datos incorrectos - Usuario: mayda
+2025-10-06 09:19:44 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: mayda
+2025-10-06 09:19:48 | ERROR | ('Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en ', '22:44', '.') - Usuario: mayda
+2025-10-06 09:19:48 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: mayda
+2025-10-06 09:19:57 | ERROR | ('Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en ', '22:48', '.') - Usuario: mayda
+2025-10-06 09:19:57 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: mayda
+2025-10-06 09:20:05 | ERROR | Datos incorrectos - Usuario: mayda.
+2025-10-06 09:20:09 | ERROR | ('Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en ', '22:57', '.') - Usuario: mayda
+2025-10-06 09:20:09 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: mayda
+2025-10-06 09:21:57 | ERROR | ('Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en ', '23:09', '.') - Usuario: mayda
+2025-10-06 09:21:57 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: mayda
+2025-10-06 09:22:50 | ERROR | ('Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en ', '24:57', '.') - Usuario: mayda
+2025-10-06 09:22:55 | ERROR | Datos incorrectos - Usuario: mayda
+2025-10-06 09:22:59 | ERROR | Datos incorrectos - Usuario: mayda
+2025-10-06 09:23:03 | ERROR | 'NoneType' object has no attribute 'strftime'
+2025-10-06 09:23:03 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 83, in login
+    alerta = "Demasiados intentos fallidos. Su cuenta está bloqueada por ",tiempo_bloqueo.strftime("%M:%S"),"."
+                                                                           ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strftime'
+
+2025-10-06 09:23:07 | ERROR | 'NoneType' object has no attribute 'strftime'
+2025-10-06 09:23:07 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 83, in login
+    alerta = "Demasiados intentos fallidos. Su cuenta está bloqueada por ",tiempo_bloqueo.strftime("%M:%S"),"."
+                                                                           ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strftime'
+
+2025-10-06 09:23:28 | ERROR | Datos incorrectos - Usuario: mayda
+2025-10-06 09:23:32 | ERROR | Datos incorrectos - Usuario: mayda
+2025-10-06 09:23:36 | ERROR | 'NoneType' object has no attribute 'strftime'
+2025-10-06 09:23:36 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 83, in login
+    alerta = "Demasiados intentos fallidos. Su cuenta está bloqueada por ",tiempo_bloqueo.strftime("%M:%S"),"."
+                                                                           ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strftime'
+
+2025-10-06 09:23:40 | ERROR | 'NoneType' object has no attribute 'strftime'
+2025-10-06 09:23:40 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 83, in login
+    alerta = "Demasiados intentos fallidos. Su cuenta está bloqueada por ",tiempo_bloqueo.strftime("%M:%S"),"."
+                                                                           ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strftime'
+
+2025-10-06 09:24:16 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: mayda
+2025-10-06 09:24:22 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 3 minutos. - Usuario: mayda
+2025-10-06 09:24:27 | ERROR | Datos incorrectos - Usuario: mayda
+2025-10-06 09:24:30 | ERROR | Datos incorrectos - Usuario: mayda
+2025-10-06 09:24:33 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: mayda
+2025-10-06 09:24:37 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 3 minutos. - Usuario: mayda
+2025-10-06 09:24:42 | ERROR | Datos incorrectos - Usuario: mayda
+2025-10-06 09:24:47 | ERROR | Datos incorrectos - Usuario: mayda
+2025-10-06 09:24:51 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: mayda
+2025-10-06 09:24:54 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 3 minutos. - Usuario: mayda
+2025-10-06 09:24:54 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: mayda
+2025-10-06 09:24:57 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 3 minutos. - Usuario: mayda
+2025-10-06 09:26:05 | ERROR | Datos incorrectos - Usuario: mayda
+2025-10-06 09:26:08 | ERROR | Datos incorrectos - Usuario: mayda
+2025-10-06 09:26:11 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: mayda
+2025-10-06 09:26:14 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 3 minutos. - Usuario: mayda
+2025-10-06 09:26:23 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 3 minutos. - Usuario: mayda
+2025-10-06 09:26:30 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 3 minutos. - Usuario: mayda
+2025-10-06 09:26:33 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 3 minutos. - Usuario: mayda
+2025-10-06 09:28:10 | ERROR | ('Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 3 minutos.', 2) - Usuario: mayda
+2025-10-06 09:28:48 | ERROR | ('Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en ', 1, ' minutos') - Usuario: mayda
+2025-10-06 09:29:26 | ERROR | Datos incorrectos - Usuario: mayda
+2025-10-06 09:29:29 | ERROR | Datos incorrectos - Usuario: mayda
+2025-10-06 09:29:32 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: mayda
+2025-10-06 09:29:35 | ERROR | ('Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en ', 30, ' minutos.') - Usuario: mayda
+2025-10-06 09:29:42 | ERROR | ('Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en ', 30, ' minutos.') - Usuario: mayda
+2025-10-06 09:30:15 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 30 minutos. - Usuario: mayda
+2025-10-06 09:31:05 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 29 minutos. - Usuario: mayda
+2025-10-06 09:31:11 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 29 minutos. - Usuario: mayda
+2025-10-06 09:33:27 | ERROR | Datos incorrectos - Usuario: mayda
+2025-10-06 09:33:30 | ERROR | Datos incorrectos - Usuario: mayda
+2025-10-06 09:33:33 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: mayda
+2025-10-06 09:33:36 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 3 minutos. - Usuario: mayda
+2025-10-06 09:33:42 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 3 minutos. - Usuario: mayda
+2025-10-06 09:33:54 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 3 minutos. - Usuario: mayda
+2025-10-06 09:40:52 | ERROR | Datos incorrectos - Usuario: mayda
+2025-10-06 09:40:56 | ERROR | Datos incorrectos - Usuario: mayda
+2025-10-06 09:41:19 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: mayda
+2025-10-06 09:41:35 | ERROR | Datos incorrectos - Usuario: mayda
+2025-10-06 09:41:39 | ERROR | Datos incorrectos - Usuario: mayda
+2025-10-06 09:41:43 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: mayda
+2025-10-06 09:47:40 | ERROR | Usuario inactivo, contacte al administrador - Usuario: alfredo
+2025-10-08 17:52:56 | ERROR | Usuario inactivo, contacte al administrador - Usuario: sam
+2025-10-08 17:53:10 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-08 17:53:22 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-08 17:53:26 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-08 17:53:31 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: alfredo
+2025-10-08 17:53:44 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 3 minutos. - Usuario: alfredo
+2025-10-08 17:53:51 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 3 minutos. - Usuario: alfredo

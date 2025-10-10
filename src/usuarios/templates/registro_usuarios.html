@@ -41,12 +41,16 @@
                                     <label for="contrasena" class="form-label p-0">Contraseña*</label>
                                     <input type="text" name="contrasena" class="form-control" placeholder="Contraseña" autocomplete="off">
                                 </div>
-                                <div class="col-12 col-md-6 mb-3">
+                                <div class="col-12 col-md-4 mb-3">
+                                    <label for="email" class="form-label p-0"> Correo </label>
+                                    <input type="text" name="email" class="form-control" placeholder="Correo" autocomplete="off">
+                                </div>
+                                <div class="col-12 col-md-4 mb-3">
                                     <label for="telefono" class="form-label p-0"> Teléfono </label>
                                     <input type="text" name="telefono" class="form-control" placeholder="Telefono" autocomplete="off">
                                 </div>
                                 
-                                <div class="col-12 col-md-6 mb-3">
+                                <div class="col-12 col-md-4 mb-3">
                                     <label for="inputState" class="form-label">Rol</label>
                                     <select name="rol" id="" class="form-select">
                                         {% for rol in roles %}

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exportar libros</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/books_3145874.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo_inicio.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
+
+    <!--! Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <!--? Tom Select CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+    <!--? Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-custom">
+    <header>
+        {% include './navbar.html' %}
+    </header>
+    <main class="main">
+        {% if ((session["rol"]) == "Administrador") or ((session["rol"]) == "Bibliotecario") %}
+        <div class="seccion-principal text-middle text-center">
+            <div class="fondo-principal">
+                <br> <br>
+                <h1 id="h1-titulo pt-5">Graficas</h1>
+                <h5 id="h5-nota">Aqui podrás ver las graficas generales de los libros y préstamos.</h5>
+            </div>
+        </div>
+        <div class="contenedor-datos bg-light-custom p-4">
+            <div class="mx-auto col-md-6 mb-3">
+                <div class="card text-center border-primary">
+                    <div class="card-body">
+                    <h6 class="">Distribución de libros por categoría (Sistema Dewey)</h6>
+                        <h5 class="card-title text-primary">
+                            <i class="bi bi-book"></i> Total de Libros
+                        </h5>
+                        <h2 class="card-text text-primary fw-bold">{{ total_libros }}</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-3 w-75 mx-auto">
+                <br>
+                <div class="w-100">
+                    <div>
+                    <canvas class="w-100" id="grafica1" height="400"></canvas>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+        
+        <div class="contenedor-datos bg-light-custom p-4">
+            <div class="row mb-3">
+                <div class="w-50 mb-3">
+                    <div class="card text-center border-success">
+                        <div class="card-body">
+                            <h5 class="card-title text-success">
+                                <i class="bi bi-clipboard-check"></i> Total de Préstamos
+                            </h5>
+                            <h2 class="card-text text-success fw-bold">{{ total_prestamos }}</h2>
+                            <small class="text-muted">Préstamos realizados en total</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-50 mb-3">
+                    <div class="card text-center border-info">
+                        <div class="card-body">
+                            <h5 class="card-title text-info">
+                                <i class="bi bi-graph-up"></i> Análisis de Préstamos
+                            </h5>
+                            <h6 class="card-text text-info">
+                                Estado y evolución mensual
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="w-75 mb-3 mx-auto">
+                    <h6 class="text-center">Estado de los préstamos</h6>
+                    <canvas class="w-100" id="grafica2" height="300"></canvas>
+                </div>
+                <div class="w-75 mb-3 mx-auto">
+                    <h6 class="text-center">Préstamos por mes y estado</h6>
+                    <canvas class="w-100" id="grafica3" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    </main>
+
+
+    <!-- Footer -->
+    {% include 'footer.html' %}
+    
+    <!-- Custom Scripts -->
+    <script src="/static/js/exportar_libros.js" ></script>
+
+    <!--! Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+
+    <!-- Script para las gráficas -->
+    <div id="labels_categorias" data-values='{{ labels_categorias | tojson }}'></div>
+    <div id="datos_categorias" data-values='{{ datos_categorias | tojson }}'></div>
+    <div id="labels_prestamos" data-values='{{ labels_prestamos | tojson }}'></div>
+    <div id="datos_prestamos" data-values='{{ datos_prestamos | tojson }}'></div>
+    <div id="labels_prestamos_mes" data-values='{{ labels_prestamos_mes | tojson }}'></div>
+    <div id="datos_vencidos" data-values='{{ datos_vencidos | tojson }}'></div>
+    <div id="datos_activos" data-values='{{ datos_activos | tojson }}'></div>
+    <div id="datos_devueltos" data-values='{{ datos_devueltos | tojson }}'></div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx1 = document.getElementById('grafica1');
+        const labelsgrafica1 = JSON.parse(document.getElementById('labels_categorias').dataset.values);
+        const datografica1 = JSON.parse(document.getElementById('datos_categorias').dataset.values);
+        const labelsgrafica2 = JSON.parse(document.getElementById('labels_prestamos').dataset.values);
+        const datografica2 = JSON.parse(document.getElementById('datos_prestamos').dataset.values);
+        const labelsgrafica3 = JSON.parse(document.getElementById('labels_prestamos_mes').dataset.values);
+        const datosvencidos = JSON.parse(document.getElementById('datos_vencidos').dataset.values);
+        const datosactivos = JSON.parse(document.getElementById('datos_activos').dataset.values);
+        const datosdevueltos = JSON.parse(document.getElementById('datos_devueltos').dataset.values);
+        new Chart(ctx1, {
+            type: 'pie',
+            data: {
+                labels: labelsgrafica1,
+                datasets: [{
+                    label: 'Cantidad de libros',
+                    data: datografica1,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(100, 200, 100, 0.6)',
+                        'rgba(255, 159, 64, 0.6)',
+                        'rgba(255, 99, 255, 0.6)',
+                        'rgba(255, 180, 120, 0.6)',
+                        'rgba(120, 180, 255, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(100, 200, 100, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(255, 99, 255, 1)',
+                        'rgba(255, 180, 120, 1)',
+                        'rgba(120, 180, 255, 1)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((value / total) * 100).toFixed(1);
+                                return label + ': ' + value + ' libros (' + percentage + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Segundo grafico - Estado de prestamos
+        const ctx2 = document.getElementById('grafica2');
+        
+        new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: labelsgrafica2,
+                datasets: [{
+                    label: 'Cantidad de préstamos',
+                    data: datografica2,
+                    backgroundColor: [
+                        'rgba(220, 53, 69, 0.6)',
+                        'rgba(120, 180, 255, 0.6)',
+                        'rgba(25, 135, 84, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(220, 53, 69, 1)',
+                        'rgba(120, 180, 255, 1)',
+                        'rgba(25, 135, 84, 1)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((value / total) * 100).toFixed(1);
+                                return label + ': ' + value + ' préstamos (' + percentage + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Tercer gráfico - Préstamos por mes y estado 
+        const ctx3 = document.getElementById('grafica3');
+        
+        new Chart(ctx3, {
+            type: 'bar',
+            data: {
+                labels: labelsgrafica3,
+                datasets: [{
+                    label: 'Vencidos',
+                    data: datosvencidos,
+                    backgroundColor: 'rgba(220, 53, 69, 0.6)',
+                    borderColor: 'rgba(220, 53, 69, 1)',
+                    borderWidth: 2
+                }, {
+                    label: 'Activos',
+                    data: datosactivos,
+                    backgroundColor: 'rgba(120, 180, 255, 0.6)',
+                    borderColor: 'rgba(120, 180, 255, 1)',
+                    borderWidth: 2
+                }, {
+                    label: 'Devueltos',
+                    data: datosdevueltos,
+                    backgroundColor: 'rgba(25, 135, 84, 0.6)',
+                    borderColor: 'rgba(25, 135, 84, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.dataset.label || '';
+                                const value = context.parsed.y;
+                                return label + ': ' + value + ' préstamos';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45
+                        }
+                    },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    });
+    </script>
+</body>
+</html>

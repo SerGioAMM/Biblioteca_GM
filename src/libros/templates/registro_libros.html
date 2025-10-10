@@ -34,7 +34,7 @@
                     <div class="col py-3 bg-custom text-body text-center">
                         <br><br>
                         <div class="container-fluid w-75 bg-light-custom rounded">
-                            <form method="POST" action="/registro_libros" class="row g-3 text-start">
+                            <form method="POST" action="/registro_libros" class="row g-3 text-start" enctype="multipart/form-data">
                                 <div class="col-12 col-md-6 mb-3">
                                     <label for="titulom" class="form-label">Titulo*</label>
                                     <input class="form-control" type="text" name="titulo" placeholder="" autocomplete="off" required>
@@ -71,15 +71,19 @@
                                     <label for="num_copias" class="form-label">Número de Copias*</label>
                                     <input name="num_copias" type="text" class="form-control" id="" required>
                                 </div>
-                                <div class="col-12 col-md-6 mb-3">
+                                <div class="col-12 col-md-4 mb-3">
                                     <label for="lugar" class="form-label">Lugar de Publicación</label>
                                     <input name="lugar" type="text" class="input-lugar" id="cuadro-busqueda2" placeholder="">
                                 </div>
-                                <div class="col-12 col-md-6">
+                                <div class="col-12 col-md-4 mb-3">
+                                    <label for="portada" class="form-label">Portada</label> <!--! Portada -->
+                                    <input name="portada" type="file" class="form-control" placeholder="" accept="image/*">
+                                </div>
+                                <div class="col-12 col-md-4">
                                     <label for="inputState" class="form-label">Sistema Dewey</label>
                                     <select name="sistema_dewey" id="" class="form-select">
                                         {% for ultima in ultima_seccion %}
-                                            <option value="{{ ultima[0] }}">{{ ultima[0] }} - {{ ultima[1] }} (Ultima seleccion)</option>
+                                            <option value="{{ ultima[0] }}">{{ ultima[0] }} - {{ ultima[1] }} (Última selección)</option>
                                         {% endfor %}
                                         {% for seccion in secciones %}
                                             <option value="{{ seccion[0] }}">{{ seccion[0] }} - {{ seccion[1] }}</option>
