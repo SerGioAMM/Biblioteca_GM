@@ -118,7 +118,7 @@ body{
 }
 
 .card-margin {
-    margin-bottom: 1.875rem;
+    margin-bottom: .8rem;
 }
 
 .card {
@@ -167,6 +167,8 @@ body{
     justify-content: center;
     flex-direction: column;
     background-color: #edf1fc;
+    min-width: 4rem;
+    min-height: 4rem;
     width: 4rem;
     height: 4rem;
     border-radius: 50%;
@@ -399,6 +401,10 @@ body{
 
 .widget-49 .widget-49-title-wrapper .widget-49-meeting-info .widget-49-meeting-time {
     color: #B1BAC5;
+    font-size: 13px;
+}
+.widget-49 .widget-49-title-wrapper .widget-49-meeting-info .widget-49-meeting-time-danger {
+    color: #d7a3a3;
     font-size: 13px;
 }
 

@@ -17,7 +17,15 @@
     <header>
         {% include 'navbar.html'   %}
     </header>
-<!-- Profile 1 - Bootstrap Brain Component -->
+    {% if (alerta) %}
+        <span class="error-eliminacion">
+            <h4><strong>{{alerta}}</strong></h4>
+        </span>
+    {% elif (exito) %}
+        <span class="exito-ingreso">
+            <h4><strong>{{exito}}</strong></h4>
+        </span>
+    {% endif %}
     <section class="py-3 py-md-5 py-xl-8">
     <div class="container">
         <div class="row gy-4 gy-lg-0">
@@ -38,9 +46,10 @@
                     <div class="d-grid m-0">
                     {% if session %}
                         <button class="btn btn-outline-primary my-1" type="button" id="btn-editar"> <i class="bi bi-pencil-square"></i> <span>Editar</span></button>
+                        <a data-bs-toggle="collapse" href="#eliminar{{libro.id_libro}}" role="button" id="btn-eliminar" aria-controls="collapseExample" class="btn btn-outline-danger my-1"><i class="bi bi-x-square" ></i> Eliminar</a>
                         <button type="submit" class="btn btn-outline-primary my-1 d-none" id="btn-guardar" form="form-editar-libro" disabled><i class="bi bi-floppy"></i> Guardar cambios</button>
                     {% endif %}
-                    <button class="btn btn-outline-primary my-1" type="button" id="btn-resena"> <i class="bi bi-chat-right-text"></i> Escribir reseña</button>
+                    <button class="btn btn-outline-primary my-1" type="button" id="btn-resena"> <i class="bi bi-chat-right-text"></i> <span>Escribir reseña</span></button>
                     </div>
                 </div>
                 </div>
@@ -51,31 +60,40 @@
             <div class="card widget-card border-light shadow-sm">
             <div class="card-body p-4">
                 
+                <div class="collapse" id="eliminar{{libro.id_libro}}" data-bs-parent="#grupoLibro">
+                    <form class="frm-eliminar-libro mt-3 bg-body-tertiary border border-secondary-subtle rounded-2 p-3" action="/eliminar_libro" method="POST">
+                        <div class="mb-3">
+                            <input type="hidden" value="{{libro.id_libro}}" name="id_libro" readonly>
+                            <input class="form-control" type="text" placeholder="Escribe el motivo de la eliminación del libro." name="motivo" required autocomplete="off">
+                        </div>
+                        <button class="btn btn-outline-danger" type="submit">Confirmar eliminación</button> 
+                    </form>
+                </div>    
                 <div class="tab-content pt-4" id="profileTabContent">
                 <div class="tab-pane fade show active detalles-libro" id="overview-tab-pane" role="tabpanel" aria-labelledby="overview-tab" tabindex="0">
-                        <h1> {{libro.Titulo}} </h1>
-                        <h4 class="text-body-secondary"> de {{libro.nombre_autor}}&nbsp;{{libro.apellido_autor}}</h4>
-                        <p> Seccion: {{ libro.codigo_seccion }} - {{ libro.seccion }}</p>
-                        <p> Número de copias: {{libro.numero_copias}}</p>
-                        <div class="col-12 col-md-12 mb-3 align-items-stretch">
-                            <br>
-                            <h6>Detalles</h6>
+                    <h1> {{libro.Titulo}} </h1>
+                    <h4 class="text-body-secondary"> de {{libro.nombre_autor}}&nbsp;{{libro.apellido_autor}}</h4>
+                    <p> Seccion: {{ libro.codigo_seccion }} - {{ libro.seccion }}</p>
+                    <p> Número de copias: {{libro.numero_copias}}</p>
+                    <div class="col-12 col-md-12 mb-3 align-items-stretch">
+                        <br>
+                        <h6>Detalles</h6>
+                    </div>
+                    <div class="col-12 col-md-12 mb-3 row">
+                        <div class="col-3 bg-light rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
+                            <p class="p-2 m-0"> 
+                            <span class="text-body-secondary">Año de publicacion</span><br>
+                            <span>{% if libro.ano_publicacion %}{{libro.ano_publicacion}}{% else %}-{% endif %}</span></p>
                         </div>
-                        <div class="col-12 col-md-12 mb-3 row">
-                            <div class="col-3 bg-light rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
-                                <p class="p-2 m-0"> 
-                                <span class="text-body-secondary">Año de publicacion</span><br>
-                                <span>{% if libro.ano_publicacion %}{{libro.ano_publicacion}}{% else %}-{% endif %}</span></p>
-                            </div>
-                            <div class="col-3 bg-light rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
-                                <p class="m-0 p-2"> <span class="text-body-secondary">Editorial</span><br>
-                                <span>{{libro.editorial}}</span></p>
-                            </div>
-                            <div class="col-3 bg-light rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
-                                <p class="m-0 p-2"> <span class="text-body-secondary">Tomo</span><br>
-                                <span>{% if libro.tomo %}{{libro.tomo}}{% else %}-{% endif %}</span></p>
-                            </div>
+                        <div class="col-3 bg-light rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
+                            <p class="m-0 p-2"> <span class="text-body-secondary">Editorial</span><br>
+                            <span>{{libro.editorial}}</span></p>
                         </div>
+                        <div class="col-3 bg-light rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
+                            <p class="m-0 p-2"> <span class="text-body-secondary">Tomo</span><br>
+                            <span>{% if libro.Tomo %}{{libro.Tomo}}{% else %}-{% endif %}</span></p>
+                        </div>
+                    </div>
 
                         <div class="col-24 col-md-12 mb-3 row">
                             <div class="col-3 bg-light rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
@@ -96,23 +114,10 @@
                             </div>
                         </div>
                     </div>
-                    <form action="/editar_libro" method="GET" class="row gy-3 gy-xxl-4 d-none" id="form-editar-libro">
+                    <form action="/editar_libro" method="POST" class="row gy-3 gy-xxl-4 d-none" id="form-editar-libro" enctype="multipart/form-data">
                         <input type="hidden" name="id_libro" value="{{libro.id_libro}}" class="" readonly>
-                        <div class="col-12">
-                            <div class="row gy-2 border border-gray p-3 rounded w-100">
-                                <label class="col-3 form-label m-a">Imagen de portada</label>
-                                <div class="col-6">
-                                    <a href="#!" class="d-inline-block bg-primary text-light-custom lh-1 p-2 rounded link-underline link-underline-opacity-0">
-                                    Subir <i class="bi bi-arrow-up-circle"></i>
-                                    </a>
-                                    <a href="#!" class="d-inline-block bg-danger text-light-custom lh-1 p-2 rounded link-underline link-underline-opacity-0">
-                                    Eliminar <i class="bi bi-trash"></i> 
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
                         <div class="col-12 col-md-6 mb-3">
-                            <label for="inputEmail4" class="form-label">Titulo-</label>
+                            <label for="titulo" class="form-label">Titulo-</label>
                             <input class="form-control editable" type="text" name="titulo" placeholder="" autocomplete="off" value="{{ libro.Titulo }}" required>
                         </div>
                         <div class="col-6 col-md-3 mb-3">
@@ -133,7 +138,7 @@
                         </div>
                         <div class="col-12 col-md-3">
                             <label for="tomo" class="form-label">Tomo-</label>
-                            <input name="tomo" type="number" class="form-control editable" id="" placeholder="-" autocomplete="off" value="{{libro.tomo}}">
+                            <input name="tomo" type="number" class="form-control editable" id="" placeholder="-" autocomplete="off" value="{{libro.Tomo}}">
                         </div>
                         <div class="col-12 col-md-3 mb-3">
                             <label for="anio" class="form-label">Año de Publicación</label>
@@ -147,11 +152,15 @@
                             <label for="numero_copias" class="form-label">Número de Copias-</label>
                             <input name="numero_copias" type="text" class="form-control editable" id="" required autocomplete="off" value="{{libro.numero_copias}}" required>
                         </div>
-                        <div class="col-12 col-md-6 mb-3">
+                        <div class="col-12 col-md-4 mb-3">
                             <label for="lugar" class="form-label">Lugar de Publicación</label>
                             <input name="lugar" type="text" class="form-control" id="" placeholder="-" autocomplete="off" value="{{libro.lugar}}" disabled>
                         </div>
-                        <div class="col-12 col-md-6 mb-3">
+                        <div class="col-12 col-md-4 mb-3">
+                            <label for="portada" class="form-label">Portada</label> <!--! Portada -->
+                            <input id="portadainput" name="portada" type="file" class="form-control" placeholder="" accept="image/*">
+                        </div>
+                        <div class="col-12 col-md-4 mb-3">
                             <label for="sistema_dewey" class="form-label">Sistema Dewey</label>
                             <input name="sistema_dewey" type="text" class="form-control" id="" placeholder="" value="{{libro.codigo_seccion}} - {{libro.seccion}}" disabled>
                         </div>

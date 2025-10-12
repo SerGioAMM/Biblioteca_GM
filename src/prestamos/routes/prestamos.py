@@ -1,7 +1,7 @@
 from flask import Blueprint, session, redirect, request,render_template,url_for
-from datetime import datetime
+from datetime import datetime,date
 import math
-from src.database.db_sqlite import conexion_BD
+from src.database.db_sqlite import conexion_BD,dict_factory
 
 bp_prestamos = Blueprint('prestamos',__name__, template_folder="../templates")
 
@@ -80,7 +80,6 @@ def buscar_prestamo():
     query = conexion.cursor()
 
     busqueda = request.args.get("buscar_prestamo","")
-    #Obtiene los datos del formulario filtros en libros.html
     filtro_busqueda = request.args.get("filtro-busqueda","Titulo")
     estados = request.args.get("estados","Todos")
     exito = request.args.get("exito","")
@@ -103,19 +102,96 @@ def buscar_prestamo():
     # Consulta para contar todos los libros conforme a la busqueda
     query.execute(f"""select count(*) from Prestamos p
                     join Libros l on p.id_libro = l.id_libro
-                    join Estados e on p.id_estado = e.id_estado 
+                    join Estados_prestamos e on p.id_estado = e.id_estado 
                     {SQL_where_busqueda}{SQL_where_estado}""")
     
     total_prestamos = query.fetchone()[0]
     total_paginas = math.ceil(total_prestamos / prestamos_por_pagina) #Calculo para cantidad de paginas, redondeando hacia arriba (ej, 2.1 = 3)
 
-    query_busqueda = (f"""select strftime('%d-%m-%Y', p.fecha_prestamo), strftime('%d-%m-%Y', p.fecha_entrega_estimada), strftime('%d-%m-%Y', p.fecha_devolucion), l.Titulo, p.nombre, p.apellido, p.dpi_usuario, p.num_telefono,  p.direccion, e.estado, p.id_prestamo,l.id_libro
+    query_busqueda = (f"""select (strftime('%d', p.fecha_prestamo)||' de '||
+                    CASE strftime('%m', p.fecha_prestamo) 
+                    WHEN '01' THEN 'Enero'
+                    WHEN '02' THEN 'Febrero'
+                    WHEN '03' THEN 'Marzo'
+                    WHEN '04' THEN 'Abril'
+                    WHEN '05' THEN 'Mayo'
+                    WHEN '06' THEN 'Junio'
+                    WHEN '07' THEN 'Julio'
+                    WHEN '08' THEN 'Agosto'
+                    WHEN '09' THEN 'Septiembre'
+                    WHEN '10' THEN 'Octubre'
+                    WHEN '11' THEN 'Noviembre'
+                    WHEN '12' THEN 'Diciembre'
+                    END || ' de ' ||strftime('%Y', p.fecha_prestamo)) as fecha_prestamo, 
+                    strftime('%d', p.fecha_entrega_estimada) as dia_estimado,
+                    CASE strftime('%m',p.fecha_entrega_estimada)
+                    WHEN '01' THEN 'ENE'
+                    WHEN '02' THEN 'FEB'
+                    WHEN '03' THEN 'MAR'
+                    WHEN '04' THEN 'ABR'
+                    WHEN '05' THEN 'MAY'
+                    WHEN '06' THEN 'JUN'
+                    WHEN '07' THEN 'JUL'
+                    WHEN '08' THEN 'AGO'
+                    WHEN '09' THEN 'SEP'
+                    WHEN '10' THEN 'OCT'
+                    WHEN '11' THEN 'NOV'
+                    WHEN '12' THEN 'DIC'
+                    END as mes_estimado,
+                    (strftime('%d', p.fecha_entrega_estimada)||' de '||
+                    CASE strftime('%m', p.fecha_entrega_estimada) 
+                    WHEN '01' THEN 'Enero'
+                    WHEN '02' THEN 'Febrero'
+                    WHEN '03' THEN 'Marzo'
+                    WHEN '04' THEN 'Abril'
+                    WHEN '05' THEN 'Mayo'
+                    WHEN '06' THEN 'Junio'
+                    WHEN '07' THEN 'Julio'
+                    WHEN '08' THEN 'Agosto'
+                    WHEN '09' THEN 'Septiembre'
+                    WHEN '10' THEN 'Octubre'
+                    WHEN '11' THEN 'Noviembre'
+                    WHEN '12' THEN 'Diciembre'
+                    END || ' de ' ||strftime('%Y', p.fecha_entrega_estimada)) as fecha_estimada,
+                    (strftime('%d', p.fecha_devolucion)||' de '||
+                    CASE strftime('%m', p.fecha_devolucion) 
+                    WHEN '01' THEN 'Enero'
+                    WHEN '02' THEN 'Febrero'
+                    WHEN '03' THEN 'Marzo'
+                    WHEN '04' THEN 'Abril'
+                    WHEN '05' THEN 'Mayo'
+                    WHEN '06' THEN 'Junio'
+                    WHEN '07' THEN 'Julio'
+                    WHEN '08' THEN 'Agosto'
+                    WHEN '09' THEN 'Septiembre'
+                    WHEN '10' THEN 'Octubre'
+                    WHEN '11' THEN 'Noviembre'
+                    WHEN '12' THEN 'Diciembre'
+                    END || ' de ' ||strftime('%Y', p.fecha_devolucion)) as fecha_devolucion, 
+                    p.fecha_entrega_estimada as f_estimada, p.fecha_devolucion as f_devolucion,
+                    l.Titulo, p.nombre, p.apellido, p.dpi_usuario, p.num_telefono,  p.direccion, e.estado, p.id_prestamo, l.id_libro, p.observaciones_devolucion
                     from Prestamos p
                     join Libros l on p.id_libro = l.id_libro
-                    join Estados e on p.id_estado = e.id_estado 
+                    join Estados_prestamos e on p.id_estado = e.id_estado
                     {SQL_where_busqueda}{SQL_where_estado}
                     order by e.id_estado asc, p.fecha_prestamo desc
                     limit {prestamos_por_pagina} offset {offset}""")
+
+    query.execute(query_busqueda)
+    prestamos = dict_factory(query)
+
+    for p in prestamos:
+        fecha_estimada = datetime.strptime(p['f_estimada'], "%Y-%m-%d").date()
+        fecha_devolucion = None
+        if p['f_devolucion']:
+            fecha_devolucion = datetime.strptime(p['f_devolucion'], "%Y-%m-%d").date()
+
+        hoy = date.today()
+
+        if (not fecha_devolucion and hoy > fecha_estimada) or (fecha_devolucion and fecha_devolucion > fecha_estimada):
+            p['vencido'] = True
+        else:
+            p['vencido'] = False
 
     query.execute("Select Count(*) from prestamos where id_estado = 1") #Prestamos vencidos
     prestamos_vencidos = query.fetchone()[0]
@@ -126,8 +202,6 @@ def buscar_prestamo():
     query.execute("Select Count(*) from prestamos where id_estado = 3") #Prestamos devueltos
     prestamos_devueltos = query.fetchone()[0]
 
-    query.execute(query_busqueda)
-    prestamos = query.fetchall()
 
     query.close()
     conexion.close()
@@ -157,6 +231,9 @@ def devolver_prestamo():
     #Actualiza el prestamo a estado 3 (devuelto)
     query.execute("update prestamos set id_estado = 3 where id_prestamo = (?)",(id_prestamo,))
 
+    # Guarda las observaciones de la devolucion
+    query.execute("update prestamos set observaciones_devolucion = (?) where id_prestamo = (?)",(observaciones,id_prestamo,))
+
     query.execute("select id_libro from prestamos where id_prestamo = ?",(id_prestamo,))
     id_libro = query.fetchone()[0]
 
@@ -176,9 +253,6 @@ def devolver_prestamo():
 def eliminar_prestamo():
     id_prestamo = request.form["id_prestamo"]
     motivo = request.form["motivo_eliminacion"]
-
-    # Obtenre la fecha actual
-    hoy = datetime.today().date()
     id_administrador = session.get("id_administrador")
 
     conexion = conexion_BD()
@@ -190,7 +264,7 @@ def eliminar_prestamo():
     query.execute("select l.titulo from libros l join prestamos p on l.id_libro = p.id_libro where p.id_prestamo = ?",(id_prestamo,))
     libro = query.fetchone()[0]
 
-    query.execute("insert into prestamos_eliminados(id_administrador,id_prestamo,fecha,nombre_lector,titulo,motivo) values(?,?,?,?,?,?)",(id_administrador,id_prestamo,hoy,lector,libro,motivo))
+    query.execute("insert into logs_eliminados(id_administrador,id_eliminado,tabla_afectada,fecha,nombre_lector,titulo,motivo) values(?,?,'Prestamos',datetime('now'),?,?,?)",(id_administrador,id_prestamo,lector,libro,motivo))
 
     query.execute("delete from prestamos where id_prestamo = ?",(id_prestamo,))
     conexion.commit()
@@ -239,7 +313,6 @@ def registro_prestamos():
                         direccion=Direccion, num_telefono=Telefono, libro=Libro,
                         grado=GradoEstudio, fecha_prestamo=fecha_prestamo,
                         fecha_entrega_estimada=fecha_entrega_estimada)
-
 
             id_libro, numero_copias = libro_data
 

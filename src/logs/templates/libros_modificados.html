@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Préstamos eliminados</title>
+    <title>Libros modificados</title>
     <link rel="icon" href="/static/img/books_3145874.png">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/prestamos.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
@@ -33,9 +33,9 @@
 
         <div class="div-busqueda h-100">
             <div class="m-auto fondo-principal p-5">
-                <h2>Préstamos eliminados</h2>
-                <h4 class="p-3">Visualiza los préstamos eliminados, quien, cuando y porque lo eliminó.</h4>
-                <form class="frm-prestamos_e" action="/buscar_prestamo_e" method="GET" id="form-busqueda">
+                <h2>Libros modificados</h2>
+                <h4 class="p-3">Visualiza los libros modificados, sus cambios y motivo.</h4>
+                <form class="frm-libros_m" action="/buscar_libro_m" method="GET" id="form-busqueda">
                     <div class="input-group mx-auto" style="width: 45%;">
                     <select class="w-75" name="buscar" id="cuadro-busqueda" data-placeholder="Buscar..."  autocomplete="off" cursor="text"></select>
                     <button class="btn btn-success w-25" type="submit">Buscar</button>
@@ -82,7 +82,7 @@
                 </form>
             </div>
         </div>
-        <div class="container mx-a mt-3 bg-light-custom p-3 contenedor-prestamos" id="grupoPrestamo">
+        <div class="container mx-a mt-3 bg-light-custom p-3 contenedor-prestamos" id="grupoLibrosModificados">
             <br>
             {% for log in logs %}
             <div class="row">
@@ -99,10 +99,59 @@
                                     </div>
                                     <div class="widget-49-meeting-info">
                                         <h5>{{log.rol}} {{log.usuario}}</h5>
-                                        <span class="widget-49-pro-title">Eliminó un prestamo de el libro <strong>{{log.titulo}}</strong>, con el lector <strong>{{log.nombre_lector}}</strong>.</span>
+                                        <span class="widget-49-pro-title">Editó el libro <strong>{{log.titulo_actual}}</strong>.</span>
                                         <span class="widget-49-meeting-time">Actividad registrada el <strong>{{ log.fecha }}</strong></span>
                                         <span class="widget-49-meeting-time">Motivo: <strong>{{ log.motivo }}</strong></span>
                                         <br>
+                                    </div>
+                                    <div class="widget-49-meeting-action mb-2 col-4 text-end ms-auto">
+                                        <br><br><br>
+                                        <a data-bs-toggle="collapse" href="#cambios{{log.id_modificacion}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-primary mb-1">Mostrar cambios</a>
+                                        <a data-bs-toggle="collapse" href="#revertir{{log.id_modificacion}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-danger mb-1">Revertir cambios</a>
+                                    </div>
+                                </div>
+                                <div class="collapse" id="cambios{{log.id_modificacion}}" data-bs-parent="#grupoLibrosModificados">
+                                    <div class="card card-body">
+                                        <span class="info-lector">
+                                            Cambios registrados:
+                                            <ul>
+                                                {% if log.old_titulo %}
+                                                <li><strong>Nuevo título:</strong> {{ log.titulo_actual }}</li>
+                                                <li><strong>Antiguo título:</strong> {{ log.old_titulo }}</li>
+                                                {% endif %}
+                                                {% if log.old_tomo %}
+                                                <li><strong>Nuevo tomo:</strong> {{ log.tomo_actual }}</li>
+                                                <li><strong>Antiguo tomo:</strong> {{ log.old_tomo }}</li>
+                                                {% endif %}
+                                                {% if log.old_num_paginas %}
+                                                <li><strong>Nuevo número de páginas:</strong> {{ log.num_paginas_actual }}</li>
+                                                <li><strong>Antiguo número de páginas:</strong> {{ log.old_num_paginas }}</li>
+                                                {% endif %}
+                                                {% if log.old_num_copias %}
+                                                <li><strong>Nuevo número de copias:</strong> {{ log.num_copias_actual }}</li>
+                                                <li><strong>Antiguo número de copias:</strong> {{ log.old_num_copias }}</li>
+                                                {% endif %}
+                                                {% if log.old_portada is not none %}
+                                                <li><strong>Nueva portada:</strong> {{ log.portada_actual }}</li>
+                                                <li><strong>Antigua portada:</strong> {{ log.old_portada }}</li>
+                                                {% endif %}
+                                            </ul>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="collapse" id="revertir{{log.id_modificacion}}" data-bs-parent="#grupoLibrosModificados">
+                                    <div class="card card-body text-center">
+                                        <form class="frm-revertir-cambios mt-3 info-lector" action="/revertir_cambios/{{log.id_modificacion}}" method="POST">
+                                            <input type="hidden" value="{{log.id_modificacion}}" name="id_log" readonly>
+                                            <label for=""> Este libro fue editado por el siguiente motivo: <strong>{{log.motivo}}</strong>
+                                                <br> ¿Seguro que quieres revertir los cambios? </label><br>
+                                            <button class="btn btn-sm btn-outline-success mb-3 mt-1" type="submit">
+                                                Confirmar reversión
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#revertir{{log.id_modificacion}}" aria-expanded="false" aria-controls="collapseExample">
+                                                Cancelar
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -117,7 +166,7 @@
         </div>
             <div class="paginacion">
                 {% if pagina > 1 %} <!-- Verifica que la pagina actual sea despues de la primera, para mostrar un boton de "Anterior" -->
-                    <a href="{{ url_for('eliminados.buscar_prestamo_e', page=pagina - 1, buscar=busqueda, filtro_busqueda=filtro_busqueda) }}">Anterior</a> <!-- Este enlace lleva a la pagina anterior "pagina-1" -->
+                    <a href="{{ url_for('eliminados.buscar_libro_e', page=pagina - 1, buscar=busqueda, filtro_busqueda=filtro_busqueda) }}">Anterior</a> <!-- Este enlace lleva a la pagina anterior "pagina-1" -->
                 {% endif %}
                 
                 {% for p in range(pagina - 1, pagina + 2) %}
@@ -125,13 +174,13 @@
                         {% if p == pagina %} <!-- Verifica cual es la pagina actual para aplicarle otro estilo -->
                             <strong>{{ p }}</strong>
                         {% else %} <!-- Genera todos los demas enlaces o "numeros de pagina", "[1],[2],[3]" -->
-                            <a href="{{ url_for('eliminados.buscar_prestamo_e', page=p, buscar=busqueda, filtro_busqueda=filtro_busqueda) }}">{{ p }}</a>
+                            <a href="{{ url_for('eliminados.buscar_libro_e', page=p, buscar=busqueda, filtro_busqueda=filtro_busqueda) }}">{{ p }}</a>
                         {% endif %}
                     {% endif %}
                 {% endfor %}   
                 
                 {% if pagina < total_paginas %} <!-- Verifica que la pagina actual no sea la ultima, para mostrar un boton de "Siguiente" -->
-                    <a href="{{ url_for('eliminados.buscar_prestamo_e', page=pagina + 1, buscar=busqueda, filtro_busqueda=filtro_busqueda) }}">Siguiente</a> <!-- Este enlace lleva a la pagina siguiente "pagina+1" -->
+                    <a href="{{ url_for('eliminados.buscar_libro_e', page=pagina + 1, buscar=busqueda, filtro_busqueda=filtro_busqueda) }}">Siguiente</a> <!-- Este enlace lleva a la pagina siguiente "pagina+1" -->
                 {% endif %}
             </div> 
         </main>

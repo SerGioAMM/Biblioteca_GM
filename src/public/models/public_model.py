@@ -4,7 +4,7 @@ import sqlite3
 def get_destacados(seccion):
     conexion = conexion_BD()
     query = conexion.cursor()
-    query.execute(f"""select l.id_libro,count(l.id_libro) as cantidad, n.notacion, l.Titulo, a.nombre_autor, a.apellido_autor, l.ano_publicacion, sd.codigo_seccion, sd.seccion, l.numero_copias
+    query.execute(f"""select l.id_libro,count(l.id_libro) as cantidad, n.notacion, l.Titulo, a.nombre_autor, a.apellido_autor, l.ano_publicacion, sd.codigo_seccion, sd.seccion, l.numero_copias,l.portada
                         from Prestamos p
                         join libros l on p.id_libro = l.id_libro
                         join RegistroLibros r on r.id_libro = l.id_libro
@@ -24,7 +24,7 @@ def get_destacados(seccion):
 def get_aleatorios(seccion,cantidad):
     conexion = conexion_BD()
     query = conexion.cursor()
-    query.execute(f"""SELECT l.id_libro, 0 AS cantidad, n.notacion, l.Titulo, a.nombre_autor, a.apellido_autor, l.ano_publicacion, sd.codigo_seccion, sd.seccion, l.numero_copias
+    query.execute(f"""SELECT l.id_libro, 0 AS cantidad, n.notacion, l.Titulo, a.nombre_autor, a.apellido_autor, l.ano_publicacion, sd.codigo_seccion, sd.seccion, l.numero_copias,l.portada
                         FROM Libros l
                         JOIN RegistroLibros r ON r.id_libro = l.id_libro
                         JOIN SistemaDewey sd ON sd.codigo_seccion = r.codigo_seccion
@@ -41,7 +41,7 @@ def get_aleatorios(seccion,cantidad):
 def get_nuevos():
     conexion = conexion_BD()
     query = conexion.cursor()
-    query.execute("""SELECT l.id_libro, 0 AS cantidad, n.notacion, l.Titulo, a.nombre_autor, a.apellido_autor, l.ano_publicacion, sd.codigo_seccion, sd.seccion, l.numero_copias
+    query.execute("""SELECT l.id_libro, 0 AS cantidad, n.notacion, l.Titulo, a.nombre_autor, a.apellido_autor, l.ano_publicacion, sd.codigo_seccion, sd.seccion, l.numero_copias,l.portada
                         FROM Libros l
                         JOIN RegistroLibros r ON r.id_libro = l.id_libro
                         JOIN SistemaDewey sd ON sd.codigo_seccion = r.codigo_seccion

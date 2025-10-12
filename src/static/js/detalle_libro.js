@@ -4,6 +4,7 @@ const btn_texto = btn_editar.querySelector('span');
 const btn_guardar = document.getElementById('btn-guardar');
 const btn_resena = document.getElementById('btn-resena');
 const detalles_libro = document.querySelector('.detalles-libro');
+const btn_eliminar = document.getElementById('btn-eliminar');
 
 function mostrar(elemento){
     elemento.classList.remove('d-none');
@@ -19,6 +20,7 @@ btn_editar.addEventListener("click", ()=>{
         mostrar(btn_guardar);
         ocultar(detalles_libro);
         ocultar(btn_resena);
+        ocultar(btn_eliminar);
         btn_texto.textContent = 'Cancelar';
         btn_editar.querySelector('i').className = 'bi bi-x-circle';
         btn_editar.classList.remove('btn-outline-primary');
@@ -31,39 +33,61 @@ btn_editar.addEventListener("click", ()=>{
         ocultar(btn_guardar);
         mostrar(detalles_libro);
         mostrar(btn_resena);
+        mostrar(btn_eliminar);
         btn_texto.textContent = 'Editar';
         btn_editar.querySelector('i').className = "bi bi-pencil-square";
         btn_editar.classList.remove('btn-outline-danger');
         btn_editar.classList.add('btn-outline-primary');
-    }
 
+        //*Regresar valores originales cuando se cancela
+        campos.forEach((campo, i) => {
+            campo.value = original[i];
+        });
+
+        portadainput.value = '';
+        btn_guardar.setAttribute('disabled', '');
+        motivo.setAttribute('disabled', '');
+    }
 })
 
 const editables = document.querySelectorAll('.editable');
 const motivo = document.getElementById('motivo');
 let original = []
-
 let campos = []
+
 editables.forEach((input)=>{
     input.classList.add('border-warning')
     campos.push(input);    
 })
 
-for(let i=0;i<editables.length;i++){
-    original.push(campos[i].value);
-    campos[i].addEventListener("keyup",()=>{
+// Función para verificar si hay cambios
+function verificarCambios() {
+    let hayCambios = false;
+    
+    for(let i = 0; i < campos.length; i++){
         if(campos[i].value != original[i]){
-            btn_guardar.removeAttribute('disabled');
-            motivo.removeAttribute('disabled');
+            hayCambios = true;
+            break;
         }
-        else{
-            btn_guardar.setAttribute('disabled',"");
-            motivo.setAttribute('disabled',"");
-        }
-        
-    })
+    }
+    
+    if(portadainput.value != ""){
+        hayCambios = true;
+    }
+    
+    if(hayCambios){
+        btn_guardar.removeAttribute('disabled');
+        motivo.removeAttribute('disabled');
+    } else {
+        btn_guardar.setAttribute('disabled', "");
+        motivo.setAttribute('disabled', "");
+    }
 }
 
+for(let i = 0; i < editables.length; i++){
+    original.push(campos[i].value);
+    campos[i].addEventListener("keyup", verificarCambios);
+}
 
-
-
+const portadainput = document.getElementById("portadainput");
+portadainput.addEventListener("change", verificarCambios);
