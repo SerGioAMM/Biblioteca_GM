@@ -32,13 +32,10 @@
         </div>
         <div class="contenedor-datos bg-light-custom p-4">
             <div class="mx-auto col-md-6 mb-3">
-                <div class="card text-center border-primary">
-                    <div class="card-body">
-                    <h6 class="">Distribución de libros por categoría (Sistema Dewey)</h6>
-                        <h5 class="card-title text-primary">
-                            <i class="bi bi-book"></i> Total de Libros
-                        </h5>
-                        <h2 class="card-text text-primary fw-bold">{{ total_libros }}</h2>
+                <div class="card text-center border-tertiary">
+                    <div class="card-body bg-light-custom">
+                    <h5 class="">Distribución de libros por categoría (Sistema Dewey)</h5>
+                        <h6 class="card-title"> Total de Libros {{ total_libros }}</h6>
                     </div>
                 </div>
             </div>
@@ -55,41 +52,45 @@
         </div>
         
         <div class="contenedor-datos bg-light-custom p-4">
-            <div class="row mb-3">
-                <div class="w-50 mb-3">
-                    <div class="card text-center border-success">
-                        <div class="card-body">
-                            <h5 class="card-title text-success">
-                                <i class="bi bi-clipboard-check"></i> Total de Préstamos
-                            </h5>
-                            <h2 class="card-text text-success fw-bold">{{ total_prestamos }}</h2>
-                            <small class="text-muted">Préstamos realizados en total</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="w-50 mb-3">
-                    <div class="card text-center border-info">
-                        <div class="card-body">
-                            <h5 class="card-title text-info">
-                                <i class="bi bi-graph-up"></i> Análisis de Préstamos
-                            </h5>
-                            <h6 class="card-text text-info">
-                                Estado y evolución mensual
-                            </h6>
-                        </div>
+            <div class="mx-auto col-md-6 mb-3">
+                <div class="card text-center border-tertiary">
+                    <div class="card-body bg-light-custom">
+                        <h5 class="">Préstamos por mes y estado</h5>
+                        <h6 class="card-title"> Total de Préstamos {{ total_prestamos }}</h6>
                     </div>
                 </div>
             </div>
             
-            <div class="row">
-                <div class="w-75 mb-3 mx-auto">
-                    <h6 class="text-center">Estado de los préstamos</h6>
-                    <canvas class="w-100" id="grafica2" height="300"></canvas>
+            <div class="mb-3 w-75 mx-auto">
+                <br>
+                <div class="w-100">
+                    <div>
+                    <canvas class="w-100" id="grafica2" height="500"></canvas>
+                    </div>
                 </div>
-                <div class="w-75 mb-3 mx-auto">
-                    <h6 class="text-center">Préstamos por mes y estado</h6>
-                    <canvas class="w-100" id="grafica3" height="300"></canvas>
+                <br>
+            </div>
+        </div>
+
+        <!-- Nueva sección para visitantes -->
+        <div class="contenedor-datos bg-light-custom p-4">
+            <div class="mx-auto col-md-6 mb-3">
+                <div class="card text-center border-tertiary">
+                    <div class="card-body bg-light-custom">
+                    <h5 class="">Visitantes por mes y tipo</h5>
+                        <h6 class="card-title"> Total de Visitantes {{ total_visitantes }}</h6>
+                    </div>
                 </div>
+            </div>
+            
+            <div class="mb-3 w-75 mx-auto">
+                <br>
+                <div class="w-100">
+                    <div>
+                    <canvas class="w-100" id="grafica3" height="600"></canvas>
+                    </div>
+                </div>
+                <br>
             </div>
         </div>
     {% endif %}
@@ -108,23 +109,35 @@
     <!-- Script para las gráficas -->
     <div id="labels_categorias" data-values='{{ labels_categorias | tojson }}'></div>
     <div id="datos_categorias" data-values='{{ datos_categorias | tojson }}'></div>
-    <div id="labels_prestamos" data-values='{{ labels_prestamos | tojson }}'></div>
-    <div id="datos_prestamos" data-values='{{ datos_prestamos | tojson }}'></div>
     <div id="labels_prestamos_mes" data-values='{{ labels_prestamos_mes | tojson }}'></div>
     <div id="datos_vencidos" data-values='{{ datos_vencidos | tojson }}'></div>
     <div id="datos_activos" data-values='{{ datos_activos | tojson }}'></div>
     <div id="datos_devueltos" data-values='{{ datos_devueltos | tojson }}'></div>
+    <div id="labels_visitantes_mes" data-values='{{ labels_visitantes_mes | tojson }}'></div>
+    <div id="datos_universitarios" data-values='{{ datos_universitarios | tojson }}'></div>
+    <div id="datos_primaria" data-values='{{ datos_primaria | tojson }}'></div>
+    <div id="datos_nivel_medio" data-values='{{ datos_nivel_medio | tojson }}'></div>
+    <div id="datos_profesionales" data-values='{{ datos_profesionales | tojson }}'></div>
+    <div id="datos_trabajadores" data-values='{{ datos_trabajadores | tojson }}'></div>
+    <div id="datos_personal_institucion" data-values='{{ datos_personal_institucion | tojson }}'></div>
+    <div id="datos_otros_usuarios" data-values='{{ datos_otros_usuarios | tojson }}'></div>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const ctx1 = document.getElementById('grafica1');
         const labelsgrafica1 = JSON.parse(document.getElementById('labels_categorias').dataset.values);
         const datografica1 = JSON.parse(document.getElementById('datos_categorias').dataset.values);
-        const labelsgrafica2 = JSON.parse(document.getElementById('labels_prestamos').dataset.values);
-        const datografica2 = JSON.parse(document.getElementById('datos_prestamos').dataset.values);
-        const labelsgrafica3 = JSON.parse(document.getElementById('labels_prestamos_mes').dataset.values);
+        const labelsgrafica2 = JSON.parse(document.getElementById('labels_prestamos_mes').dataset.values);
         const datosvencidos = JSON.parse(document.getElementById('datos_vencidos').dataset.values);
         const datosactivos = JSON.parse(document.getElementById('datos_activos').dataset.values);
         const datosdevueltos = JSON.parse(document.getElementById('datos_devueltos').dataset.values);
+        const labelsvisitantesmes = JSON.parse(document.getElementById('labels_visitantes_mes').dataset.values);
+        const datosuniversitarios = JSON.parse(document.getElementById('datos_universitarios').dataset.values);
+        const datosprimaria = JSON.parse(document.getElementById('datos_primaria').dataset.values);
+        const datosnivelmedio = JSON.parse(document.getElementById('datos_nivel_medio').dataset.values);
+        const datosprofesionales = JSON.parse(document.getElementById('datos_profesionales').dataset.values);
+        const datostrabajadores = JSON.parse(document.getElementById('datos_trabajadores').dataset.values);
+        const datospersonalinstitucion = JSON.parse(document.getElementById('datos_personal_institucion').dataset.values);
+        const datosotrosusuarios = JSON.parse(document.getElementById('datos_otros_usuarios').dataset.values);
         new Chart(ctx1, {
             type: 'pie',
             data: {
@@ -156,11 +169,12 @@
                         'rgba(255, 180, 120, 1)',
                         'rgba(120, 180, 255, 1)'
                     ],
-                    borderWidth: 2
+                    borderWidth: 2,
+                    borderRadius: 2
                 }]
             },
             options: {
-                responsive: true,
+                responsive: false,
                 plugins: {
                     legend: {
                         position: 'bottom'
@@ -180,79 +194,38 @@
             }
         });
 
-        // Segundo grafico - Estado de prestamos
+        // Segundo gráfico - Préstamos por mes y estado 
         const ctx2 = document.getElementById('grafica2');
-        
-        new Chart(ctx2, {
-            type: 'pie',
-            data: {
-                labels: labelsgrafica2,
-                datasets: [{
-                    label: 'Cantidad de préstamos',
-                    data: datografica2,
-                    backgroundColor: [
-                        'rgba(220, 53, 69, 0.6)',
-                        'rgba(120, 180, 255, 0.6)',
-                        'rgba(25, 135, 84, 0.6)'
-                    ],
-                    borderColor: [
-                        'rgba(220, 53, 69, 1)',
-                        'rgba(120, 180, 255, 1)',
-                        'rgba(25, 135, 84, 1)'
-                    ],
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'right'
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const label = context.label || '';
-                                const value = context.parsed;
-                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                const percentage = ((value / total) * 100).toFixed(1);
-                                return label + ': ' + value + ' préstamos (' + percentage + '%)';
-                            }
-                        }
-                    }
-                }
-            }
-        });
 
-        // Tercer gráfico - Préstamos por mes y estado 
-        const ctx3 = document.getElementById('grafica3');
-        
-        new Chart(ctx3, {
+        new Chart(ctx2, {
             type: 'bar',
             data: {
-                labels: labelsgrafica3,
+                labels: labelsgrafica2,
                 datasets: [{
                     label: 'Vencidos',
                     data: datosvencidos,
                     backgroundColor: 'rgba(220, 53, 69, 0.6)',
                     borderColor: 'rgba(220, 53, 69, 1)',
-                    borderWidth: 2
+                    borderWidth: 2,
+                    borderRadius: 5
                 }, {
                     label: 'Activos',
                     data: datosactivos,
                     backgroundColor: 'rgba(120, 180, 255, 0.6)',
                     borderColor: 'rgba(120, 180, 255, 1)',
-                    borderWidth: 2
+                    borderWidth: 2,
+                    borderRadius: 5
                 }, {
                     label: 'Devueltos',
                     data: datosdevueltos,
                     backgroundColor: 'rgba(25, 135, 84, 0.6)',
                     borderColor: 'rgba(25, 135, 84, 1)',
-                    borderWidth: 2
+                    borderWidth: 2,
+                    borderRadius: 5
                 }]
             },
             options: {
-                responsive: true,
+                responsive: false,
                 plugins: {
                     legend: {
                         display: true,
@@ -264,6 +237,107 @@
                                 const label = context.dataset.label || '';
                                 const value = context.parsed.y;
                                 return label + ': ' + value + ' préstamos';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45
+                        }
+                    },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+
+        // Tercer grafico - Visitantes por mes y tipo 
+        const ctx3 = document.getElementById('grafica3');
+
+        new Chart(ctx3, {
+            type: 'bar',
+            data: {
+                labels: labelsvisitantesmes,
+                datasets: [{
+                    label: 'Estudiantes Universitarios',
+                    data: datosuniversitarios,
+                    backgroundColor: 'rgba(153, 102, 255, 0.8)', // Morado
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 2,
+                    borderRadius: 5
+                }, {
+                    label: 'Estudiantes de Primaria',
+                    data: datosprimaria,
+                    backgroundColor: 'rgba(100, 200, 100, 0.6)', // Verde
+                    borderColor: 'rgba(100, 200, 100, 1)',
+                    borderWidth: 2,
+                    borderRadius: 5
+                }, {
+                    label: 'Estudiantes Nivel Medio',
+                    data: datosnivelmedio,
+                    backgroundColor: 'rgba(75, 192, 192, 0.8)', // Acua
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    borderRadius: 5
+                }, {
+                    label: 'Profesionales',
+                    data: datosprofesionales,
+                    backgroundColor: 'rgba(255, 159, 64, 0.8)', // Naranja
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    borderWidth: 2,
+                    borderRadius: 5
+                }, {
+                    label: 'Trabajadores',
+                    data: datostrabajadores,
+                    backgroundColor: 'rgba(139, 139, 139, 0.8)', // Gris
+                    borderColor: 'rgba(139, 139, 139, 1)',
+                    borderWidth: 2,
+                    borderRadius: 5
+                }, {
+                    label: 'Personal de la Institución',
+                    data: datospersonalinstitucion,
+                    backgroundColor: 'rgba(54, 162, 235, 0.8)', // Azul
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 2,
+                    borderRadius: 5
+                }, {
+                    label: 'Otros Usuarios',
+                    data: datosotrosusuarios,
+                    backgroundColor: 'rgba(220, 53, 69, 0.8)', // Rojo
+                    borderColor: 'rgba(220, 53, 69, 1)',
+                    borderWidth: 2,
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            boxWidth: 12,
+                            padding: 8,
+                            font: {
+                                size: 10
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.dataset.label || '';
+                                const value = context.parsed.y;
+                                return label + ': ' + value + ' visitantes';
                             }
                         }
                     }

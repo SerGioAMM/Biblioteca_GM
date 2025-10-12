@@ -68,26 +68,6 @@ def graficas_generales():
     labels_categorias = [(f"{resultado['categoria']} ({resultado['cantidad']})") for resultado in resultados_categorias]
     datos_categorias = [resultado["cantidad"] for resultado in resultados_categorias]
 
-    query.execute("""
-        SELECT 
-            CASE 
-                WHEN id_estado = 1 THEN 'Vencidos'
-                WHEN id_estado = 2 THEN 'Activos'
-                WHEN id_estado = 3 THEN 'Devueltos'
-                ELSE 'Sin estado'
-            END as estado,
-            COUNT(*) as cantidad
-        FROM Prestamos 
-        GROUP BY id_estado
-        ORDER BY id_estado
-    """)
-    
-    resultados_prestamos = dict_factory(query)
-    
-    # Separar las etiquetas y datos para gráfico de préstamos
-    labels_prestamos = [f"{resultado['estado']} ({resultado['cantidad']})" for resultado in resultados_prestamos]
-    datos_prestamos = [resultado["cantidad"] for resultado in resultados_prestamos]
-
     # Consulta para obtener préstamos por mes y estado
     query.execute("""
         SELECT 
@@ -123,6 +103,53 @@ def graficas_generales():
     datos_activos = [resultado["activos"] for resultado in resultados_prestamos_mes]
     datos_devueltos = [resultado["devueltos"] for resultado in resultados_prestamos_mes]
 
+    # Consulta para obtener visitantes por mes y tipo
+    query.execute("""
+        SELECT 
+            strftime('%Y-%m', fecha) as mes,
+            CASE strftime('%m', fecha)
+                WHEN '01' THEN 'Enero'
+                WHEN '02' THEN 'Febrero'
+                WHEN '03' THEN 'Marzo'
+                WHEN '04' THEN 'Abril'
+                WHEN '05' THEN 'Mayo'
+                WHEN '06' THEN 'Junio'
+                WHEN '07' THEN 'Julio'
+                WHEN '08' THEN 'Agosto'
+                WHEN '09' THEN 'Septiembre'
+                WHEN '10' THEN 'Octubre'
+                WHEN '11' THEN 'Noviembre'
+                WHEN '12' THEN 'Diciembre'
+            END || ' ' || strftime('%Y', fecha) as mes_nombre,
+            -- Total por tipo de visitante (hombres + mujeres)
+            SUM(CASE WHEN tv.tipo_visitante = 'Estudiantes universitarios' THEN v.cantidad_hombres + v.cantidad_mujeres ELSE 0 END) as universitarios,
+            SUM(CASE WHEN tv.tipo_visitante = 'Estudiantes de primaria' THEN v.cantidad_hombres + v.cantidad_mujeres ELSE 0 END) as primaria,
+            SUM(CASE WHEN tv.tipo_visitante = 'Estudiantes de nivel medio' THEN v.cantidad_hombres + v.cantidad_mujeres ELSE 0 END) as nivel_medio,
+            SUM(CASE WHEN tv.tipo_visitante = 'Profesionales' THEN v.cantidad_hombres + v.cantidad_mujeres ELSE 0 END) as profesionales,
+            SUM(CASE WHEN tv.tipo_visitante = 'Trabajadores' THEN v.cantidad_hombres + v.cantidad_mujeres ELSE 0 END) as trabajadores,
+            SUM(CASE WHEN tv.tipo_visitante = 'Personal de la institución' THEN v.cantidad_hombres + v.cantidad_mujeres ELSE 0 END) as personal_institucion,
+            SUM(CASE WHEN tv.tipo_visitante = 'Otros usuarios' THEN v.cantidad_hombres + v.cantidad_mujeres ELSE 0 END) as otros_usuarios
+        FROM Visitantes v
+        JOIN Tipos_Visitantes tv ON v.id_tipo_visitante = tv.id_tipo_visitante
+        GROUP BY strftime('%Y-%m', fecha)
+        ORDER BY strftime('%Y-%m', fecha) DESC
+        LIMIT 12
+    """)
+    
+    resultados_visitantes_mes = dict_factory(query)
+    
+    # Separar las etiquetas y datos para gráfico de visitantes por mes
+    labels_visitantes_mes = [f"{resultado['mes_nombre']} ({resultado['universitarios'] + resultado['primaria'] + resultado['nivel_medio'] + resultado['profesionales'] + resultado['trabajadores'] + resultado['personal_institucion'] + resultado['otros_usuarios']})" for resultado in resultados_visitantes_mes]
+    
+    # Datos por tipo de visitante (total hombres + mujeres)
+    datos_universitarios = [resultado["universitarios"] for resultado in resultados_visitantes_mes]
+    datos_primaria = [resultado["primaria"] for resultado in resultados_visitantes_mes]
+    datos_nivel_medio = [resultado["nivel_medio"] for resultado in resultados_visitantes_mes]
+    datos_profesionales = [resultado["profesionales"] for resultado in resultados_visitantes_mes]
+    datos_trabajadores = [resultado["trabajadores"] for resultado in resultados_visitantes_mes]
+    datos_personal_institucion = [resultado["personal_institucion"] for resultado in resultados_visitantes_mes]
+    datos_otros_usuarios = [resultado["otros_usuarios"] for resultado in resultados_visitantes_mes]
+
     # Totales para mostrar en contenedores
     query.execute("SELECT COUNT(*) FROM Prestamos")
     total_prestamos = query.fetchone()[0]
@@ -130,17 +157,27 @@ def graficas_generales():
     query.execute("SELECT COUNT(*) FROM Libros")
     total_libros = query.fetchone()[0]
 
+    query.execute("SELECT SUM(cantidad_hombres + cantidad_mujeres) FROM Visitantes")
+    total_visitantes = query.fetchone()[0] or 0
+
     
     query.close()
     conexion.close()
     return render_template('graficas_generales.html', 
                             labels_categorias=labels_categorias, 
                             datos_categorias=datos_categorias,
-                            labels_prestamos=labels_prestamos,
-                            datos_prestamos=datos_prestamos,
                             labels_prestamos_mes=labels_prestamos_mes,
                             datos_vencidos=datos_vencidos,
                             datos_activos=datos_activos,
                             datos_devueltos=datos_devueltos,
+                            labels_visitantes_mes=labels_visitantes_mes,
+                            datos_universitarios=datos_universitarios,
+                            datos_primaria=datos_primaria,
+                            datos_nivel_medio=datos_nivel_medio,
+                            datos_profesionales=datos_profesionales,
+                            datos_trabajadores=datos_trabajadores,
+                            datos_personal_institucion=datos_personal_institucion,
+                            datos_otros_usuarios=datos_otros_usuarios,
                             total_prestamos=total_prestamos,
-                            total_libros=total_libros)
+                            total_libros=total_libros,
+                            total_visitantes=total_visitantes)

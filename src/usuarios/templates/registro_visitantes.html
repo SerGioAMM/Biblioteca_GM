@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de visitantes</title>
+    <link rel="icon" href="/static/img/books_3145874.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo_inicio.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
+    
+    <!--? Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+</head>
+<body>
+    <header>
+        {% include './navbar.html' %}
+    </header>
+    <main class="main">
+        {% if ((session["rol"]) == "Administrador") or ((session["rol"]) == "Bibliotecario") %}
+        <div class="seccion-principal text-middle text-center">
+            <div class="fondo-principal">
+                <br> <br>
+                <h1 id="h1-titulo pt-5">Registrar visitantes</h1>
+                <h5 id="h5-nota">Complete el formulario para registrar la visita de usuarios a la biblioteca.</h5>
+            </div>
+        </div>
+            <div class="container-fluid">
+                <div class="row flex-nowrap">
+                    <div class="col py-3 bg-custom text-body text-center">
+                        <br><br>
+                        <div class="container-fluid w-75 bg-light-custom rounded">
+                            <form method="POST" action="/registro_visitantes" class="row g-3 text-start">
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label for="cantidad_hombres" class="form-label">Cantidad Hombres*</label>
+                                    <input class="form-control" type="number" name="cantidad_hombres" placeholder="0" min="0" autocomplete="off" required>
+                                </div>
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label for="cantidad_mujeres" class="form-label p-0">Cantidad Mujeres*</label>
+                                    <input type="number" name="cantidad_mujeres" class="form-control" placeholder="0" min="0" autocomplete="off" required>
+                                </div>
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label for="fecha" class="form-label p-0">Fecha*</label>
+                                    <input type="date" name="fecha" class="form-control" autocomplete="off" required>
+                                </div>
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label for="tipo_visitante" class="form-label">Tipo de Visitante*</label>
+                                    <select name="tipo_visitante" id="tipo_visitante" class="form-select" required>
+                                        {% for tipo in tipos_visitantes %}
+                                        <option value="{{ tipo[0] }}">{{ tipo[1] }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-6 mx-auto text-center mb-3">
+                                    <br>
+                                    <button class="btn btn-secondary w-50" type="submit">Registrar visitantes</button>
+                                    <br><br>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        
+        {% if (alerta) %}
+        <span class="error-eliminacion">
+            <h4><strong>{{alerta}}</strong></h4>
+        </span>
+        {% elif (registro_exitoso) %}
+        <span class="exito-ingreso">
+            <h4><strong>{{registro_exitoso}}</strong></h4>
+        </span>
+        {% endif %}           
+
+    </main>
+    <!-- Footer -->
+    {% include 'footer.html' %}
+
+    <!--! Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    
+    <script>
+        // Establecer la fecha actual por defecto
+        document.addEventListener('DOMContentLoaded', function() {
+            const fechaInput = document.querySelector('input[name="fecha"]');
+            const today = new Date().toISOString().split('T')[0];
+            fechaInput.value = today;
+        });
+    </script>
+</body>
+</html>
