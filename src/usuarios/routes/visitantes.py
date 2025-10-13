@@ -58,11 +58,11 @@ def visitantes():
     query = conexion.cursor()
 
     query.execute("""SELECT v.id_registro, v.cantidad_hombres, v.cantidad_mujeres, 
-                            (v.cantidad_hombres + v.cantidad_mujeres) as total,
-                            tv.tipo_visitante, v.fecha
-                     FROM Visitantes v
-                     JOIN Tipos_Visitantes tv ON v.id_tipo_visitante = tv.id_tipo_visitante
-                     ORDER BY v.fecha DESC""")
+                        (v.cantidad_hombres + v.cantidad_mujeres) as total,
+                        tv.tipo_visitante, v.fecha
+                        FROM Visitantes v
+                        JOIN Tipos_Visitantes tv ON v.id_tipo_visitante = tv.id_tipo_visitante
+                        ORDER BY v.fecha DESC""")
     visitantes = dict_factory(query)
 
     query.close()
@@ -81,16 +81,28 @@ def eliminar_visitante():
     conexion = conexion_BD()
     query = conexion.cursor()
 
-    query.execute("DELETE FROM Visitantes WHERE id_registro = ?", (id_registro,))
-    query.execute("INSERT INTO logs_eliminados(id_administrador, id_eliminado, tabla_afectada, fecha, motivo) VALUES(?,?,'Visitantes',datetime('now'),?)", 
-                  (id_administrador, id_registro, motivo))
-
-    conexion.commit()
+    # Primero obtener los datos del visitante antes de eliminarlo
+    query.execute("SELECT cantidad_hombres, cantidad_mujeres FROM Visitantes WHERE id_registro = ?", (id_registro,))
+    visitante_data = query.fetchone()
+    
+    if visitante_data:
+        cantidad_hombres = visitante_data[0]
+        cantidad_mujeres = visitante_data[1]
+        
+        # Insertar en logs usando los campos disponibles (nombre_lector para hombres, titulo para mujeres)
+        query.execute("INSERT INTO logs_eliminados(id_administrador, id_eliminado, tabla_afectada, nombre_lector, titulo, fecha, motivo) VALUES(?,?,'Visitantes',?,?,datetime('now'),?)", 
+                        (id_administrador, id_registro, cantidad_hombres, cantidad_mujeres, motivo))
+        
+        # Eliminar el registro
+        query.execute("DELETE FROM Visitantes WHERE id_registro = ?", (id_registro,))
+        
+        conexion.commit()
+        exito = "Registro de visitantes eliminado exitosamente."
+    else:
+        exito = "Error: No se encontró el registro de visitantes."
 
     query.close()
     conexion.close()
-
-    exito = "Registro de visitante eliminado exitosamente."
 
     return redirect(url_for("visitantes.visitantes", exito=exito))
 
@@ -133,12 +145,12 @@ def buscar_visitante():
         SQL_where_fecha = f"AND v.fecha <= '{fecha_fin_completa}'"
 
     query_busqueda = f"""SELECT v.id_registro, v.cantidad_hombres, v.cantidad_mujeres, 
-                                (v.cantidad_hombres + v.cantidad_mujeres) as total,
-                                tv.tipo_visitante, v.fecha
-                         FROM Visitantes v
-                         JOIN Tipos_Visitantes tv ON v.id_tipo_visitante = tv.id_tipo_visitante
-                         WHERE 1=1 {SQL_where_fecha}
-                         ORDER BY v.fecha DESC"""
+                            (v.cantidad_hombres + v.cantidad_mujeres) as total,
+                            tv.tipo_visitante, v.fecha
+                            FROM Visitantes v
+                            JOIN Tipos_Visitantes tv ON v.id_tipo_visitante = tv.id_tipo_visitante
+                            WHERE 1=1 {SQL_where_fecha}
+                            ORDER BY v.fecha DESC"""
 
     query.execute(query_busqueda)
     visitantes = dict_factory(query)
@@ -147,4 +159,4 @@ def buscar_visitante():
     conexion.close()
 
     return render_template("visitantes.html", visitantes=visitantes, exito=exito, 
-                          fecha_inicio=fecha_inicio, fecha_fin=fecha_fin)
+                            fecha_inicio=fecha_inicio, fecha_fin=fecha_fin)

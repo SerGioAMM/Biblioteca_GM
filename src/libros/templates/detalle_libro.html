@@ -62,6 +62,7 @@
                 
                 <div class="collapse" id="eliminar{{libro.id_libro}}" data-bs-parent="#grupoLibro">
                     <form class="frm-eliminar-libro mt-3 bg-body-tertiary border border-secondary-subtle rounded-2 p-3" action="/eliminar_libro" method="POST">
+                        <h6><strong>¿Está seguro de que desea eliminar este libro?</strong></h6>
                         <div class="mb-3">
                             <input type="hidden" value="{{libro.id_libro}}" name="id_libro" readonly>
                             <input class="form-control" type="text" placeholder="Escribe el motivo de la eliminación del libro." name="motivo" required autocomplete="off">

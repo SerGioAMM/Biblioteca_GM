@@ -90,7 +90,7 @@ def importar(datos,total):
             else:
                 NombreAutor = ""
                 ApellidoAutor = ""
-            alerta = libros_model.registrar_libro(Titulo,to_int(NumeroPaginas),ISBN,to_int(tomo),to_int(NumeroCopias),NombreAutor,ApellidoAutor,editorial,LugarPublicacion,to_int(AnoPublicacion),(SistemaDewey))
+            alerta = libros_model.registrar_libro(Titulo,to_int(NumeroPaginas),ISBN,to_int(tomo),to_int(NumeroCopias),NombreAutor,ApellidoAutor,editorial,LugarPublicacion,to_int(AnoPublicacion),(SistemaDewey),"book.png")
             
             if alerta:
                 progreso["duplicados"] = progreso["duplicados"] + (f"{index+2}, ")

@@ -44,6 +44,12 @@
     border-radius: 20px;
     /*height: 80vh;*/
 }
+.contenedor-historia{
+    width: 90%;
+    margin: 1% auto;
+    border-radius: 20px;
+    text-align: justify;
+}
 /*
 .div-contenedor-libros-destacados{
     display: flex;

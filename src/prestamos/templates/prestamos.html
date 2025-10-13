@@ -149,7 +149,8 @@
                                     </div>
                                 </div>
                                 <div class="collapse" id="devolver{{prestamo.id_prestamo}}" data-bs-parent="#grupoPrestamo">
-                                    <form class="frm-devolver-prestamo mt-3 text-center" action="/devolver_prestamo" method="POST">
+                                    <form class="frm-devolver-prestamo mt-3 text-center card card-body" action="/devolver_prestamo" method="POST">
+                                        <h6><strong>¿Está seguro de que desea devolver este préstamo?</strong></h6>
                                         <div class="mb-3"> 
                                             <input type="hidden" value="{{prestamo.id_prestamo}}" name="id_prestamo" readonly>
                                             <input class="form-control" type="text" placeholder="[OPCIONAL] - Escribe obervaciones en la devolución." name="observaciones_devolucion" autocomplete="off">
@@ -158,8 +159,9 @@
                                     </form>
                                 </div>
                                 <div class="collapse" id="eliminar{{prestamo.id_prestamo}}" data-bs-parent="#grupoPrestamo">
-                                    <form class="frm-eliminar-prestamo mt-3 text-center" action="/eliminar_prestamo" method="POST">
+                                    <form class="frm-eliminar-prestamo mt-3 text-center card card-body" action="/eliminar_prestamo" method="POST">
                                         <div class="mb-3">
+                                            <h6><strong>¿Está seguro de que desea eliminar este préstamo?</strong></h6>
                                             <input type="hidden" value="{{prestamo.id_prestamo}}" name="id_prestamo" readonly>
                                             <input class="form-control" type="text" placeholder="Escribe el motivo de la eliminación del préstamo." name="motivo_eliminacion" required autocomplete="off">
                                         </div>
