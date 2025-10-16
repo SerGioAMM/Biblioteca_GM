@@ -196,6 +196,26 @@
             <br><br>
             </div>        
         </div>
+        
+        <div class="paginacion">
+            {% if pagina > 1 %}
+                <a href="{{ url_for('usuarios.buscar_usuario', page=pagina - 1, buscar=busqueda if busqueda else '', **request.args) }}">Anterior</a>
+            {% endif %}
+            
+            {% for p in range(pagina - 1, pagina + 2) %}
+                {% if 1 <= p <= total_paginas %}
+                    {% if p == pagina %}
+                        <strong>{{ p }}</strong>
+                    {% else %}
+                        <a href="{{ url_for('usuarios.buscar_usuario', page=p, buscar=busqueda if busqueda else '', **request.args) }}">{{ p }}</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}   
+            
+            {% if pagina < total_paginas %}
+                <a href="{{ url_for('usuarios.buscar_usuario', page=pagina + 1, buscar=busqueda if busqueda else '', **request.args) }}">Siguiente</a>
+            {% endif %}
+        </div>
     </main>
 
     <!-- Footer -->

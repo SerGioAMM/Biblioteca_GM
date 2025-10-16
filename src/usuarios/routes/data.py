@@ -6,15 +6,15 @@ from datetime import datetime, timedelta
 
 bp_datos = Blueprint('datos',__name__, template_folder="../templates")
 
-#!Generar reporte semestral
-# ----------------------------------------------------- Generar reporte semestral ----------------------------------------------------- #
+#!Generar reporte INE
+# ----------------------------------------------------- Generar reporte INE ----------------------------------------------------- #
 
-@bp_datos.route('/reporte_semestral', methods=['GET', 'POST'])
-def reporte_semestral():
+@bp_datos.route('/reporte_INE', methods=['GET', 'POST'])
+def reporte_INE():
     if request.method == 'POST':
-        # Lógica para generar el reporte semestral
+        # Lógica para generar el reporte INE
         pass
-    return render_template('reporte_semestral.html')
+    return render_template('reporte_INE.html')
 
 
 #!Generar graficas generales (Libros, prestamos)

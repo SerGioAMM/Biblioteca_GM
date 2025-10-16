@@ -384,15 +384,18 @@ def libros_modificados():
     query.execute("select count(*) from libros_modificados")
     total_libros = query.fetchone()[0]
     total_paginas = math.ceil(total_libros / libros_por_pagina)
-    
-    query_busqueda = (f"""select a.usuario,r.rol,strftime('%d-%m-%Y', lm.fecha_modificacion) as fecha,lm.motivo,
+
+    query.execute("select count(*) from libros as l join prestamos p on l.id_libro = p.id_libro join Estados_prestamos ep on p.id_estado = ep.id_estado where l.id_libro = 222 and p.id_estado != 3")
+    copias_prestadas = query.fetchone()[0]
+
+    query_busqueda = (f"""select a.usuario,r.rol,strftime('%d-%m-%Y', lm.fecha_modificacion) as fecha,lm.motivo, lm.id_modificacion,
                             -- Solo mostrar campos que realmente cambiaron
                             CASE WHEN lm.titulo != l.Titulo THEN lm.titulo ELSE NULL END as old_titulo,
                             CASE WHEN lm.tomo != l.Tomo THEN lm.tomo ELSE NULL END as old_tomo,
                             CASE WHEN lm.num_paginas != l.numero_paginas THEN lm.num_paginas ELSE NULL END as old_num_paginas,
-                            CASE WHEN lm.num_copias != l.numero_copias THEN lm.num_copias ELSE NULL END as old_num_copias,
+                            CASE WHEN lm.num_copias != (l.numero_copias+{copias_prestadas}) THEN lm.num_copias ELSE NULL END as old_num_copias,
                             CASE WHEN lm.portada != l.portada THEN lm.portada ELSE NULL END as old_portada,
-                            lm.id_modificacion, l.Titulo as titulo_actual, l.Tomo as tomo_actual, l.numero_paginas as num_paginas_actual, l.numero_copias as num_copias_actual, l.portada as portada_actual, lm.id_libro,
+                            lm.id_modificacion, l.Titulo as titulo_actual, l.Tomo as tomo_actual, l.numero_paginas as num_paginas_actual, (l.numero_copias+{copias_prestadas}) as num_copias_actual, l.portada as portada_actual, lm.id_libro,
                             strftime('%d', lm.fecha_modificacion) as dia,
                             CASE strftime('%m',lm.fecha_modificacion)
                             WHEN '01' THEN 'ENE'
@@ -412,7 +415,7 @@ def libros_modificados():
                             join Administradores a on lm.id_administrador = a.id_administrador
                             join roles r on a.id_rol = r.id_rol
                             join libros l on lm.id_libro = l.id_libro
-                            order by lm.fecha_modificacion desc
+                            order by lm.fecha_modificacion desc, lm.id_modificacion desc
                             limit {libros_por_pagina} offset {offset}""")
 
     query.execute(query_busqueda)

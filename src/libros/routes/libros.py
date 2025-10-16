@@ -40,6 +40,10 @@ def registro_libros():
             
             if alerta: return render_template("registro_libros.html", secciones = secciones, ultima_seccion = ultima_seccion, alerta=alerta)
             else:
+                # Crear notificación
+                from src.usuarios.routes.usuarios import crear_notificacion
+                crear_notificacion(f"{session['rol']} {session['usuario']} ha agregado el libro: {Titulo}.")
+                
                 registro_exitoso = "Libro registrado exitosamente."
                 return render_template("registro_libros.html", secciones = secciones, ultima_seccion = ultima_seccion, registro_exitoso=registro_exitoso) 
 
@@ -164,6 +168,10 @@ def eliminar_libro():
     
     conexion.commit()
 
+    # Crear notificación
+    from src.usuarios.routes.usuarios import crear_notificacion
+    crear_notificacion(f"{session['rol']} {session['usuario']} ha eliminado el libro: {titulo_libro}.")
+
     query.close()
     conexion.close()
 
@@ -194,6 +202,11 @@ def editar_libro():
         usuario = session.get("id_administrador")
         try:
             libros_model.editar_libro(id_libro, usuario, new_titulo, new_portada, new_tomo, new_numero_paginas, new_numero_copias, motivo)
+            
+            # Crear notificación
+            from src.usuarios.routes.usuarios import crear_notificacion
+            crear_notificacion(f"{session['rol']} {session['usuario']} ha modificado el libro: {new_titulo}.")
+            
         except Exception as e:
             print(f"Error: {e}")
             alerta = "Error al editar libro."

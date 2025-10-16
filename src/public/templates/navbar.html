@@ -34,7 +34,7 @@
 -->
 {% set perfil_items = [
     ('usuarios.ver_perfil', 'Ver perfil'),
-    ('datos.reporte_semestral', 'Generar reporte (INE)'),
+    ('datos.reporte_INE', 'Generar reporte (INE)'),
     ('datos.graficas_generales', 'Gráficas generales'),
     ('login.logout', 'Cerrar sesión')
 ] %}
@@ -55,7 +55,7 @@
                     <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('libros.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Libros
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu dropdown-menu-end">
                         {% for endpoint, label in libros_items %}
                             <li>
                                 <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
@@ -70,7 +70,7 @@
                     <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('prestamos.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Préstamos
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu dropdown-menu-end">
                         {% for endpoint, label in prestamos_items %}
                             <li>
                                 <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
@@ -85,7 +85,7 @@
                     <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('usuarios.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Usuarios
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu dropdown-menu-end">
                         {% for endpoint, label in usuarios_items %}
                             <li>
                                 <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
@@ -100,7 +100,7 @@
                     <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('visitantes.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Visitantes
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu dropdown-menu-end">
                         {% for endpoint, label in visitantes_items %}
                             <li>
                                 <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
@@ -115,7 +115,7 @@
                     <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('eliminados.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Logs
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu dropdown-menu-end">
                         {% for endpoint, label in logs_items %}
                             <li>
                                 <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
@@ -126,14 +126,40 @@
                         {% endfor %}    
                     </ul>
                     </li>
+                    <!-- Notificaciones -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" id="notificaciones-dropdown">
+                            <i class="bi bi-bell"></i>
+                            <span class="position-absolute top-25 start-50 translate-middle badge rounded-pill bg-danger d-none" id="badge-notificaciones" style="width: 8px; height: 8px; font-size: 0; padding: 0; transform: translate(-50%, -50%) !important;">
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" style="width: 350px; max-height: 400px; overflow-y: auto;" id="dropdown-notificaciones">
+                            <li><h6 class="dropdown-header">Notificaciones</h6></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <div id="notificaciones-container">
+                                <li><span class="dropdown-item-text text-muted">Cargando notificaciones...</span></li>
+                            </div>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <button class="dropdown-item text-center d-none" id="btn-marcar-leidas-navbar">
+                                    <i class="bi bi-check-all"></i> Marcar todas como leídas
+                                </button>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-center" href="{{ url_for('usuarios.ver_perfil') }}#notificaciones">
+                                    <i class="bi bi-eye"></i> Ver todas las notificaciones
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" target="_blank" href="https://www.canva.com/design/DAGnUI0PU7M/cDvkG9fCgPKL4FTZee_YLQ/edit">Ayuda</a>
                     </li>
-                    <li class="nav-item dropdown ms-lg-5 mb-lg-0">
+                    <li class="nav-item dropdown ms-lg-3 mb-lg-0">
                     <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('eliminados.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         {{ session["usuario"] }}
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu dropdown-menu-end">
                         {% for endpoint, label in perfil_items %}
                             <li>
                                 <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
@@ -143,13 +169,13 @@
                             </li>
                         {% endfor %}    
                     </ul>
-                    </li>
-                    <li class="ms-lg-4 me-lg-4"></li>
                 </ul>
                 
             </div>
         </div>
     </nav>
+    <!-- Script para notificaciones en navbar -->
+    <script src="{{ url_for('static', filename='js/notificaciones.js') }}"></script>
 {% else %} <!-- Si no es admin o bibliotecario, mostrar navbar normal -->
     <nav class="navbar navbar-expand-lg bg-custom">
         <div class="container-fluid">

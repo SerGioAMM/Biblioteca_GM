@@ -64,33 +64,46 @@ def importar(datos,total):
         SistemaDewey = (row['CÓDIGO'])
         notacion = row['NOTACIÓN INTERNA']
 
-        if SistemaDewey == 0:
+        if SistemaDewey == 0 or SistemaDewey == "ooo" or SistemaDewey == "o" or SistemaDewey == "":
             SistemaDewey = "000"
-        
-        if not Titulo or not NumeroCopias or not NumeroPaginas or not SistemaDewey:
+        if not NumeroPaginas or NumeroPaginas == " ":
+            NumeroPaginas = 1
+        if not NumeroCopias or NumeroCopias == " ":
+            NumeroCopias = 0
+        if tomo is str:
+            from src.libros.models.libros_model import romano_a_natural
+            tomo = romano_a_natural(str(tomo))
+        elif not tomo:
+            tomo = 0
+        if not NumeroCopias or NumeroCopias == " ":
+            NumeroCopias = 0
+        if not Titulo or not SistemaDewey:
             progreso["error"] = progreso["error"] + (f"{index+2}, ")
             errores.append(row.to_dict())
             progreso["contador_errores"] += 1
         else:
             if Autor:
-                #Separar Variable autor, en nombre y apellido
+                # Separar Variable autor, en nombre y apellido
                 autores = [a.strip() for a in Autor.split(",")]
                 primer_autor = autores[0]
-                partes = primer_autor.split()
-                    
-                if len(partes) > 1:
+                
+                # Verificar si el primer autor contiene un espacio (tiene apellido)
+                if " " in primer_autor:
+                    partes = primer_autor.split()
                     NombreAutor = partes[0]
                     ApellidoAutor = " ".join(partes[1:])
                 else:
+                    # Si no hay espacio, todo es el nombre y apellido queda vacío
                     NombreAutor = primer_autor
                     ApellidoAutor = ""
-                #Si existen varios autores, se agregan al apellido
+                
+                # Si existen varios autores, se agregan al apellido
                 if len(autores) > 1:
                     ApellidoAutor += ", " + ", ".join(autores[1:])
             else:
                 NombreAutor = ""
                 ApellidoAutor = ""
-            alerta = libros_model.registrar_libro(Titulo,to_int(NumeroPaginas),ISBN,to_int(tomo),to_int(NumeroCopias),NombreAutor,ApellidoAutor,editorial,LugarPublicacion,to_int(AnoPublicacion),(SistemaDewey),"book.png")
+            alerta = libros_model.registrar_libro(Titulo,to_int(NumeroPaginas),ISBN,to_int(tomo),to_int(NumeroCopias),NombreAutor,ApellidoAutor,editorial,LugarPublicacion,to_int(AnoPublicacion),(SistemaDewey),None)
             
             if alerta:
                 progreso["duplicados"] = progreso["duplicados"] + (f"{index+2}, ")
@@ -100,6 +113,15 @@ def importar(datos,total):
         progreso["total"] = total
         progreso["actual"] = index + 1
         progreso["valor"] = round((((index + 1) / total) * 100),0)
+    
+    # Al finalizar la importación, crear notificación
+    libros_importados = total - progreso["contador_errores"]
+    if libros_importados > 0:
+        from src.usuarios.routes.usuarios import crear_notificacion
+        from flask import session
+        if session:
+            crear_notificacion(f"{session.get('rol', 'Usuario')} {session.get('usuario', 'Desconocido')} ha importado {libros_importados} libros.")
+    
     progreso["error"] = progreso["error"].rstrip(", ") + "."
     progreso["duplicados"] = progreso["duplicados"].rstrip(", ") + "."
 

@@ -1,5 +1,6 @@
 from flask import Blueprint, session, redirect, request, render_template, url_for
 from datetime import datetime
+import math
 from src.database.db_sqlite import conexion_BD, dict_factory
 
 bp_visitantes = Blueprint('visitantes', __name__, template_folder="../templates")
@@ -33,6 +34,11 @@ def registro_visitantes():
             # Guardar cambios
             conexion.commit()
             
+            # Crear notificación
+            from src.usuarios.routes.usuarios import crear_notificacion
+            total_visitantes = int(cantidad_hombres) + int(cantidad_mujeres)
+            crear_notificacion(f"{session['rol']} {session['usuario']} ha registrado {total_visitantes} visitantes.")
+            
             registro_exitoso = "El registro de visitantes se completó exitosamente."
             return render_template("registro_visitantes.html", tipos_visitantes=tipos_visitantes, registro_exitoso=registro_exitoso)
 
@@ -57,18 +63,29 @@ def visitantes():
     conexion = conexion_BD()
     query = conexion.cursor()
 
+    #Paginacion
+    pagina = request.args.get("page", 1, type=int)
+    visitantes_por_pagina = 30
+    offset = (pagina - 1) * visitantes_por_pagina
+
+    # Consulta para contar todos los visitantes
+    query.execute("SELECT COUNT(*) FROM Visitantes")
+    total_visitantes = query.fetchone()[0]
+    total_paginas = math.ceil(total_visitantes / visitantes_por_pagina)
+
     query.execute("""SELECT v.id_registro, v.cantidad_hombres, v.cantidad_mujeres, 
                         (v.cantidad_hombres + v.cantidad_mujeres) as total,
                         tv.tipo_visitante, v.fecha
                         FROM Visitantes v
                         JOIN Tipos_Visitantes tv ON v.id_tipo_visitante = tv.id_tipo_visitante
-                        ORDER BY v.fecha DESC""")
+                        ORDER BY v.fecha DESC
+                        LIMIT ? OFFSET ?""", (visitantes_por_pagina, offset))
     visitantes = dict_factory(query)
 
     query.close()
     conexion.close()
 
-    return render_template("visitantes.html", visitantes=visitantes, exito=exito)
+    return render_template("visitantes.html", visitantes=visitantes, exito=exito, pagina=pagina, total_paginas=total_paginas, fecha_inicio="", fecha_fin="")
 
 # ----------------------------------------------------- ELIMINAR VISITANTE ----------------------------------------------------- #
 
@@ -97,6 +114,12 @@ def eliminar_visitante():
         query.execute("DELETE FROM Visitantes WHERE id_registro = ?", (id_registro,))
         
         conexion.commit()
+        
+        # Crear notificación
+        from src.usuarios.routes.usuarios import crear_notificacion
+        total_eliminados = cantidad_hombres + cantidad_mujeres
+        crear_notificacion(f"{session['rol']} {session['usuario']} ha eliminado un registro de {cantidad_hombres} hombres y {cantidad_mujeres} mujeres (Total: {total_eliminados}).")
+        
         exito = "Registro de visitantes eliminado exitosamente."
     else:
         exito = "Error: No se encontró el registro de visitantes."
@@ -121,6 +144,11 @@ def buscar_visitante():
     fecha_inicio = request.args.get("fecha_inicio", "")
     fecha_fin = request.args.get("fecha_fin", "")
     
+    #Paginacion
+    pagina = request.args.get("page", 1, type=int)
+    visitantes_por_pagina = 30
+    offset = (pagina - 1) * visitantes_por_pagina
+    
     SQL_where_fecha = ""
     if fecha_inicio and fecha_fin:
         # Validar que fecha_inicio no sea mayor que fecha_fin
@@ -144,13 +172,22 @@ def buscar_visitante():
         fecha_fin_completa = f"{fecha_fin}-{ultimo_dia:02d}"
         SQL_where_fecha = f"AND v.fecha <= '{fecha_fin_completa}'"
 
+    # Consulta para contar visitantes con filtros
+    query_count = f"""SELECT COUNT(*) FROM Visitantes v
+                        JOIN Tipos_Visitantes tv ON v.id_tipo_visitante = tv.id_tipo_visitante
+                        WHERE 1=1 {SQL_where_fecha}"""
+    query.execute(query_count)
+    total_visitantes = query.fetchone()[0]
+    total_paginas = math.ceil(total_visitantes / visitantes_por_pagina)
+
     query_busqueda = f"""SELECT v.id_registro, v.cantidad_hombres, v.cantidad_mujeres, 
                             (v.cantidad_hombres + v.cantidad_mujeres) as total,
                             tv.tipo_visitante, v.fecha
                             FROM Visitantes v
                             JOIN Tipos_Visitantes tv ON v.id_tipo_visitante = tv.id_tipo_visitante
                             WHERE 1=1 {SQL_where_fecha}
-                            ORDER BY v.fecha DESC"""
+                            ORDER BY v.fecha DESC
+                            LIMIT {visitantes_por_pagina} OFFSET {offset}"""
 
     query.execute(query_busqueda)
     visitantes = dict_factory(query)
@@ -159,4 +196,5 @@ def buscar_visitante():
     conexion.close()
 
     return render_template("visitantes.html", visitantes=visitantes, exito=exito, 
-                            fecha_inicio=fecha_inicio, fecha_fin=fecha_fin)
+                            fecha_inicio=fecha_inicio, fecha_fin=fecha_fin,
+                            pagina=pagina, total_paginas=total_paginas)

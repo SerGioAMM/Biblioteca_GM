@@ -2,6 +2,29 @@ from src.database.db_sqlite import conexion_BD, dict_factory
 from decouple import config
 import cloudinary, cloudinary.uploader
 
+def validar_notacion(texto):
+    """
+    Valida y completa un texto para crear una notación de 3 caracteres.
+    Si el texto tiene menos de 3 caracteres, lo completa con espacios.
+    
+    Args:
+        texto (str): El texto a validar (editorial, apellido, nombre)
+    
+    Returns:
+        str: Texto de exactamente 3 caracteres en mayúsculas
+    """
+    if not texto or texto.strip() == "":
+        return "   "  # 3 espacios si está vacío
+    
+    texto_limpio = texto.strip().upper()
+    
+    if len(texto_limpio) < 3:
+        # Completar con espacios hasta llegar a 3 caracteres
+        return texto_limpio.ljust(3)
+    else:
+        # Tomar solo los primeros 3 caracteres
+        return texto_limpio[:3]
+
 def get_catalogo(libros_por_pagina,offset):
     conexion = conexion_BD()
     query = conexion.cursor()
@@ -138,29 +161,29 @@ def get_ultima_seccion():
 def registrar_libro(Titulo,NumeroPaginas,ISBN,tomo,NumeroCopias,NombreAutor,ApellidoAutor,editorial,LugarPublicacion,AnoPublicacion,SistemaDewey,Portada_file):
     conexion = conexion_BD()
     query = conexion.cursor()
-    #Variable para guardar la notacion interna
-    _notacion = ""
-    if editorial:
-        Notacion = editorial[0:3].upper() #string[inicio:fin:paso] // Para tomar los primeros 3 caracteres de la editorial
-    elif (ApellidoAutor) and not editorial:
-        editorial = "Otros"
-        Notacion = ApellidoAutor[0:3].upper() #string[inicio:fin:paso] // Para tomar los primeros 3 caracteres del apellido autor
-    elif (NombreAutor) and not ApellidoAutor: #Para el extranio caso de que no exista ni editorial ni apellido de autor
-        editorial = "Otros"
-        ApellidoAutor = "-"
-        Notacion = NombreAutor[0:3].upper() #string[inicio:fin:paso] // Para tomar los primeros 3 caracteres del nombre del autor
-    else: #No se agrega ni autor ni editorial notacion va a ser "OTR"
+    
+    # Determinar la notación basada en la prioridad: editorial > apellido > nombre > "OTR"
+    if editorial and editorial.strip():
+        Notacion = validar_notacion(editorial)
+    elif ApellidoAutor and ApellidoAutor.strip() and ApellidoAutor != "-":
+        if not editorial or not editorial.strip():
+            editorial = "Otros"
+        Notacion = validar_notacion(ApellidoAutor)
+    elif NombreAutor and NombreAutor.strip():
+        if not editorial or not editorial.strip():
+            editorial = "Otros"
+        if not ApellidoAutor or not ApellidoAutor.strip():
+            ApellidoAutor = "-"
+        Notacion = validar_notacion(NombreAutor)
+    else:
+        # No hay información suficiente, usar valores por defecto
         editorial = "Otros"
         NombreAutor = "Otros"
         ApellidoAutor = "-"
         Notacion = "OTR"
 
-    if editorial or ApellidoAutor or NombreAutor:
-        for i in range (0,3): #Notacion es un arreglo, este for funciona para pasar ese arreglo a ser una variable
-            _notacion = _notacion + Notacion[i]
-
-    #Cuado no se ingresa un lugar de publicacion se ingresa un lugar vacio(id_lugar 1 = "-")
-    if LugarPublicacion=="":
+    # Cuando no se ingresa un lugar de publicación se ingresa un lugar vacío (id_lugar 1 = "-")
+    if not LugarPublicacion or LugarPublicacion.strip() == "":
         LugarPublicacion = "-"
 
     try:
@@ -199,8 +222,8 @@ def registrar_libro(Titulo,NumeroPaginas,ISBN,tomo,NumeroCopias,NombreAutor,Apel
 
         #? INSERT DE NOTACIONES
         #Si no existe insertar nuevo ya que columna notacion es UNIQUE
-        query.execute("Insert or ignore into notaciones (notacion,id_editorial,id_autor) values (?,?,?)",(_notacion,id_editorial,id_autor))
-        query.execute("Select id_notacion from notaciones where notacion = (?) and id_autor = (?) and id_editorial = (?)",(_notacion,id_autor,id_editorial,))
+        query.execute("Insert or ignore into notaciones (notacion,id_editorial,id_autor) values (?,?,?)",(Notacion,id_editorial,id_autor))
+        query.execute("Select id_notacion from notaciones where notacion = (?) and id_autor = (?) and id_editorial = (?)",(Notacion,id_autor,id_editorial,))
         id_notacion = query.fetchone()[0]
 
         #? INSERT DE REGISTRO LIBROS
@@ -262,3 +285,20 @@ def editar_libro(id_libro, usuario , new_titulo, new_portada, new_tomo, new_nume
         query.close()
         conexion.close()
     return alerta
+
+def romano_a_natural(romano):
+    """
+    Convierte una cadena de número romano a su equivalente natural.
+    """
+    valores_romanos = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}
+    resultado = 0
+    i = 0
+    while i < len(romano):
+        valor_actual = valores_romanos[romano[i]]
+
+        if i + 1 < len(romano) and valores_romanos[romano[i+1]] > valor_actual:
+            resultado -= valor_actual
+        else:
+            resultado += valor_actual
+        i += 1
+    return resultado
