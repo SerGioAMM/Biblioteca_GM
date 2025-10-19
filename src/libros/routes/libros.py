@@ -186,8 +186,9 @@ def eliminar_libro():
 def detalle_libro(ID,Titulo):
     
     detalle = libros_model.get_detalle_libro(ID)
+    secciones = libros_model.get_categorias()
     
-    return render_template("detalle_libro.html",detalle=detalle, descripcion="Nada")
+    return render_template("detalle_libro.html",detalle=detalle, secciones=secciones, descripcion="Nada")
 
 @bp_libros.route("/editar_libro", methods=["GET", "POST"])
 def editar_libro():
@@ -198,10 +199,19 @@ def editar_libro():
         new_tomo = request.form["tomo"]
         new_numero_paginas = request.form["numero_paginas"]
         new_numero_copias = request.form["numero_copias"]
+        new_isbn = request.form["ISBN"]
+        new_anio = request.form["anio"]
+        new_nombre_autor = request.form["nombre_autor"]
+        new_apellido_autor = request.form["apellido_autor"]
+        new_editorial = request.form["editorial"]
+        new_lugar = request.form["lugar"]
+        new_seccion = request.form["sistema_dewey"]
         motivo = request.form["motivo"]
         usuario = session.get("id_administrador")
         try:
-            libros_model.editar_libro(id_libro, usuario, new_titulo, new_portada, new_tomo, new_numero_paginas, new_numero_copias, motivo)
+            libros_model.editar_libro(id_libro, usuario, new_titulo, new_portada, new_tomo, new_numero_paginas, 
+                                     new_numero_copias, new_isbn, new_anio, new_nombre_autor, new_apellido_autor, 
+                                     new_editorial, new_lugar, new_seccion, motivo)
             
             # Crear notificación
             from src.usuarios.routes.usuarios import crear_notificacion

@@ -496,7 +496,7 @@ def marcar_notificaciones_leidas():
         print(f"Error: {e}")
         return jsonify({"success": False})
 
-# ----------------------------------------------------- Función auxiliar para crear notificaciones ----------------------------------------------------- #
+# ----------------------------------------------------- Función para crear notificaciones ----------------------------------------------------- #
 def crear_notificacion(detalle, id_receptor=None):
     """
     Crea una notificación en la base de datos

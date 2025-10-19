@@ -57,8 +57,8 @@ document.addEventListener('DOMContentLoaded', function() {
         let html = '';
         notificaciones.forEach(notificacion => {
             const iconoVisto = notificacion.visto ? 
-                '<i class="bi bi-circle text-muted me-2" style="font-size: 0.5rem;"></i>' : 
-                '<i class="bi bi-circle-fill text-primary me-2" style="font-size: 0.5rem;"></i>';
+                '<i class="bi bi-circle text-muted my-auto me-2" style="font-size: 0.5rem;"></i>' : 
+                '<i class="bi bi-circle-fill text-primary my-auto me-2" style="font-size: 0.5rem;"></i>';
             
             const claseVisto = notificacion.visto ? '' : 'fw-bold';
             

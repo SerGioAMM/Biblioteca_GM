@@ -1,6 +1,7 @@
 {% set libros_items = [
     ('libros.libros', 'Catálogo'),
     ('libros.registro_libros', 'Registrar libros'),
+    ('opiniones.opiniones_pendientes', 'Reseñas pendientes'),
     ('data_managment.importar_libros', 'Importar libros'),
     ('data_managment.exportar_libros', 'Exportar libros')
 ] %}
@@ -27,7 +28,8 @@
     ('eliminados.libros_modificados', 'Libros modificados'),
     ('eliminados.libros_e', 'Libros eliminados'),
     ('eliminados.prestamos_e', 'Préstamos eliminados'),
-    ('eliminados.visitantes_e', 'Visitantes eliminados')
+    ('eliminados.visitantes_e', 'Visitantes eliminados'),
+    ('opiniones.opiniones_rechazadas', 'Reseñas rechazadas')
 ] %}
 <!--
     ('usuarios.cambiar_contraseña', 'Cambiar contraseña'),
@@ -52,7 +54,7 @@
             <div class="collapse navbar-collapse me-5 flex-grow-0 ms-auto" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('libros.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle position-relative {% if (request.endpoint.startswith('libros.')) or (request.endpoint.startswith('opiniones.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Libros
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
@@ -72,21 +74,6 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         {% for endpoint, label in prestamos_items %}
-                            <li>
-                                <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
-                                    href="{{ url_for(endpoint) }}">
-                                    {{ label }}
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('usuarios.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Usuarios
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        {% for endpoint, label in usuarios_items %}
                             <li>
                                 <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
                                     href="{{ url_for(endpoint) }}">
@@ -124,6 +111,21 @@
                                 </a>
                             </li>
                         {% endfor %}    
+                    </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('usuarios.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Usuarios
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        {% for endpoint, label in usuarios_items %}
+                            <li>
+                                <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
+                                    href="{{ url_for(endpoint) }}">
+                                    {{ label }}
+                                </a>
+                            </li>
+                        {% endfor %}
                     </ul>
                     </li>
                     <!-- Notificaciones -->
@@ -176,6 +178,9 @@
     </nav>
     <!-- Script para notificaciones en navbar -->
     <script src="{{ url_for('static', filename='js/notificaciones.js') }}"></script>
+    <!-- Script para badge de opiniones pendientes 
+    <script src="{{ url_for('static', filename='js/opiniones_badge.js') }}"></script>
+    -->
 {% else %} <!-- Si no es admin o bibliotecario, mostrar navbar normal -->
     <nav class="navbar navbar-expand-lg bg-custom">
         <div class="container-fluid">

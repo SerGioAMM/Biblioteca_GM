@@ -149,7 +149,7 @@
                                     </div>
                                 </div>
                                 <div class="collapse" id="devolver{{prestamo.id_prestamo}}" data-bs-parent="#grupoPrestamo">
-                                    <form class="frm-devolver-prestamo mt-3 text-center card card-body" action="/devolver_prestamo" method="POST">
+                                    <form class="frm-devolver-prestamo mt-3 text-center p-3 border border-secondary-subtle rounded border-opacity-50" action="/devolver_prestamo" method="POST">
                                         <h6><strong>¿Está seguro de que desea devolver este préstamo?</strong></h6>
                                         <div class="mb-3"> 
                                             <input type="hidden" value="{{prestamo.id_prestamo}}" name="id_prestamo" readonly>
@@ -159,7 +159,7 @@
                                     </form>
                                 </div>
                                 <div class="collapse" id="eliminar{{prestamo.id_prestamo}}" data-bs-parent="#grupoPrestamo">
-                                    <form class="frm-eliminar-prestamo mt-3 text-center card card-body" action="/eliminar_prestamo" method="POST">
+                                    <form class="frm-eliminar-prestamo mt-3 text-center p-3 border border-secondary-subtle rounded border-opacity-50" action="/eliminar_prestamo" method="POST">
                                         <div class="mb-3">
                                             <h6><strong>¿Está seguro de que desea eliminar este préstamo?</strong></h6>
                                             <input type="hidden" value="{{prestamo.id_prestamo}}" name="id_prestamo" readonly>

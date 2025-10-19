@@ -64,7 +64,7 @@ def importar(datos,total):
         SistemaDewey = (row['CÓDIGO'])
         notacion = row['NOTACIÓN INTERNA']
 
-        if SistemaDewey == 0 or SistemaDewey == "ooo" or SistemaDewey == "o" or SistemaDewey == "":
+        if SistemaDewey == 0 or SistemaDewey == "ooo" or SistemaDewey == "o" or SistemaDewey == "" or SistemaDewey == '0':
             SistemaDewey = "000"
         if not NumeroPaginas or NumeroPaginas == " ":
             NumeroPaginas = 1

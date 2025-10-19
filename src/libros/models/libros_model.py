@@ -2,6 +2,25 @@ from src.database.db_sqlite import conexion_BD, dict_factory
 from decouple import config
 import cloudinary, cloudinary.uploader
 
+def normalizar_titulo(titulo):
+    """
+    Normaliza un título al formato de oración (primera letra mayúscula, resto minúsculas).
+    Esto ayuda a evitar duplicados por diferencias de mayúsculas/minúsculas.
+    
+    Args:
+        titulo (str): El título a normalizar
+    
+    Returns:
+        str: Título normalizado en formato oración
+    """
+    if not titulo or titulo.strip() == "":
+        return ""
+    
+    # Eliminar espacios extra y convertir a formato oración
+    titulo_limpio = titulo.strip()
+    # Primera letra en mayúscula, el resto en minúsculas
+    return titulo_limpio.capitalize()
+
 def validar_notacion(texto):
     """
     Valida y completa un texto para crear una notación de 3 caracteres.
@@ -162,6 +181,9 @@ def registrar_libro(Titulo,NumeroPaginas,ISBN,tomo,NumeroCopias,NombreAutor,Apel
     conexion = conexion_BD()
     query = conexion.cursor()
     
+    # Normalizar el título para evitar duplicados y mantener formato consistente
+    Titulo = normalizar_titulo(Titulo)
+    
     # Determinar la notación basada en la prioridad: editorial > apellido > nombre > "OTR"
     if editorial and editorial.strip():
         Notacion = validar_notacion(editorial)
@@ -198,6 +220,16 @@ def registrar_libro(Titulo,NumeroPaginas,ISBN,tomo,NumeroCopias,NombreAutor,Apel
             Portada_url = upload_result.get('secure_url')
         else:
             Portada_url = 'book.png'
+
+        # Verificar si ya existe un libro con el mismo título (normalizado)
+        query.execute("Select id_libro from libros where LOWER(titulo) = LOWER(?)",(Titulo,))
+        libro_existente = query.fetchone()
+        
+        if libro_existente:
+            alerta = f"Error: Ya existe un libro con el título '{Titulo}'."
+            query.close()
+            conexion.close()
+            return alerta
 
         #? INSERT DE LIBROS
         query.execute(f"Insert into Libros (Titulo,ano_publicacion,numero_paginas,isbn,tomo,numero_copias,portada) values (?,?,?,?,?,?,?)",(Titulo,AnoPublicacion,NumeroPaginas,ISBN,tomo,NumeroCopias,Portada_url))
@@ -249,33 +281,81 @@ def to_int(value, default=0):
     except (ValueError, TypeError):
         return default
     
-def editar_libro(id_libro, usuario , new_titulo, new_portada, new_tomo, new_numero_paginas, new_numero_copias,motivo):
+def editar_libro(id_libro, usuario, new_titulo, new_portada, new_tomo, new_numero_paginas, new_numero_copias, 
+                 new_isbn, new_anio, new_nombre_autor, new_apellido_autor, new_editorial, new_lugar, new_seccion, motivo):
     conexion = conexion_BD()
     query = conexion.cursor()
     try:
+        # Normalizar el nuevo título
+        new_titulo = normalizar_titulo(new_titulo)
+        
+        # Obtener datos actuales del libro
         libro = get_detalle_libro(id_libro)
         old_titulo = libro[0]['Titulo']
         old_portada = libro[0]['portada']
         old_tomo = libro[0]['Tomo']
         old_numero_paginas = libro[0]['numero_paginas']
         old_numero_copias = libro[0]['numero_copias']
+        
+        # Manejar portada
         if not new_portada:
             new_portada = old_portada
         else:
             cloudinary.config( 
-            cloud_name = config('CLOUDINARY_CLOUD_NAME'),
-            api_key = config('CLOUDINARY_API_KEY'),
-            api_secret = config('CLOUDINARY_API_SECRET'),
-            secure = True
+                cloud_name = config('CLOUDINARY_CLOUD_NAME'),
+                api_key = config('CLOUDINARY_API_KEY'),
+                api_secret = config('CLOUDINARY_API_SECRET'),
+                secure = True
             )
             upload_result = cloudinary.uploader.upload(new_portada, folder="bibliotecagm/portadas")
             new_portada = upload_result.get('secure_url')
-            
+        
+        # Registrar modificación en log
         query.execute("insert into libros_modificados(id_libro, id_administrador, titulo, tomo, num_paginas, num_copias, portada, fecha_modificacion, motivo) values (?,?,?,?,?,?,?,date('now'),?)",
-                    (id_libro, usuario , old_titulo, old_tomo, old_numero_paginas, old_numero_copias, old_portada, motivo))
+                    (id_libro, usuario, old_titulo, old_tomo, old_numero_paginas, old_numero_copias, old_portada, motivo))
 
-        query.execute("update libros set titulo = ?, portada = ?, tomo = ?, numero_paginas = ?, numero_copias = ? where id_libro = ?", 
-                        (new_titulo, new_portada, to_int(new_tomo), to_int(new_numero_paginas), to_int(new_numero_copias), (id_libro)))
+        # Actualizar información básica del libro
+        query.execute("update libros set titulo = ?, portada = ?, tomo = ?, numero_paginas = ?, numero_copias = ?, isbn = ?, ano_publicacion = ? where id_libro = ?", 
+                        (new_titulo, new_portada, to_int(new_tomo), to_int(new_numero_paginas), to_int(new_numero_copias), new_isbn, new_anio, id_libro))
+        
+        # Actualizar o insertar lugar
+        if not new_lugar or new_lugar.strip() == "":
+            new_lugar = "-"
+        query.execute("insert or ignore into lugares (lugar) values (?)", (new_lugar,))
+        query.execute("select id_lugar from lugares where lugar = ?", (new_lugar,))
+        id_lugar = query.fetchone()[0]
+        
+        # Actualizar o insertar autor
+        query.execute("insert or ignore into autores (nombre_autor, apellido_autor) values (?, ?)", (new_nombre_autor, new_apellido_autor))
+        query.execute("select id_autor from autores where nombre_autor = ? and apellido_autor = ?", (new_nombre_autor, new_apellido_autor))
+        id_autor = query.fetchone()[0]
+        
+        # Actualizar o insertar editorial
+        if not new_editorial or new_editorial.strip() == "":
+            new_editorial = "Otros"
+        query.execute("insert or ignore into editoriales (editorial) values (?)", (new_editorial,))
+        query.execute("select id_editorial from editoriales where editorial = ?", (new_editorial,))
+        id_editorial = query.fetchone()[0]
+        
+        # Determinar nueva notación
+        if new_editorial and new_editorial.strip() and new_editorial != "Otros":
+            Notacion = validar_notacion(new_editorial)
+        elif new_apellido_autor and new_apellido_autor.strip() and new_apellido_autor != "-":
+            Notacion = validar_notacion(new_apellido_autor)
+        elif new_nombre_autor and new_nombre_autor.strip():
+            Notacion = validar_notacion(new_nombre_autor)
+        else:
+            Notacion = "OTR"
+        
+        # Actualizar o insertar notación
+        query.execute("insert or ignore into notaciones (notacion, id_editorial, id_autor) values (?, ?, ?)", (Notacion, id_editorial, id_autor))
+        query.execute("select id_notacion from notaciones where notacion = ? and id_autor = ? and id_editorial = ?", (Notacion, id_autor, id_editorial))
+        id_notacion = query.fetchone()[0]
+        
+        # Actualizar RegistroLibros
+        query.execute("update RegistroLibros set id_notacion = ?, id_lugar = ?, codigo_seccion = ? where id_libro = ?",
+                     (id_notacion, id_lugar, new_seccion, id_libro))
+        
         alerta = "Libro editado exitósamente."
     except Exception as e:
         print(f"Error model: {e}")
