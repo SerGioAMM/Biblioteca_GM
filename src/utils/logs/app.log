@@ -754,3 +754,219 @@ AttributeError: 'NoneType' object has no attribute 'strftime'
 2025-10-08 17:53:31 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: alfredo
 2025-10-08 17:53:44 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 3 minutos. - Usuario: alfredo
 2025-10-08 17:53:51 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 3 minutos. - Usuario: alfredo
+2025-10-13 15:41:48 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-15 21:37:29 | ERROR | no such table: estados_administradores
+2025-10-15 21:37:29 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 31, in login
+    query.execute("""SELECT a.id_administrador, a.usuario, r.rol, e.estado, a.login_fail,
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    a.tiempo_bloqueo, a.contrasena
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+                    WHERE a.usuario = ?
+                    ^^^^^^^^^^^^^^^^^^^
+                """, (usuario,))
+                ^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: estados_administradores
+
+2025-10-15 21:37:31 | ERROR | no such table: estados_administradores
+2025-10-15 21:37:31 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 31, in login
+    query.execute("""SELECT a.id_administrador, a.usuario, r.rol, e.estado, a.login_fail,
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    a.tiempo_bloqueo, a.contrasena
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+                    WHERE a.usuario = ?
+                    ^^^^^^^^^^^^^^^^^^^
+                """, (usuario,))
+                ^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: estados_administradores
+
+2025-10-15 21:37:32 | ERROR | no such table: estados_administradores
+2025-10-15 21:37:32 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 31, in login
+    query.execute("""SELECT a.id_administrador, a.usuario, r.rol, e.estado, a.login_fail,
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    a.tiempo_bloqueo, a.contrasena
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+                    WHERE a.usuario = ?
+                    ^^^^^^^^^^^^^^^^^^^
+                """, (usuario,))
+                ^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: estados_administradores
+
+2025-10-15 21:37:33 | ERROR | no such table: estados_administradores
+2025-10-15 21:37:33 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 31, in login
+    query.execute("""SELECT a.id_administrador, a.usuario, r.rol, e.estado, a.login_fail,
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    a.tiempo_bloqueo, a.contrasena
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+                    WHERE a.usuario = ?
+                    ^^^^^^^^^^^^^^^^^^^
+                """, (usuario,))
+                ^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: estados_administradores
+
+2025-10-15 21:37:33 | ERROR | no such table: estados_administradores
+2025-10-15 21:37:33 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 31, in login
+    query.execute("""SELECT a.id_administrador, a.usuario, r.rol, e.estado, a.login_fail,
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    a.tiempo_bloqueo, a.contrasena
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+                    WHERE a.usuario = ?
+                    ^^^^^^^^^^^^^^^^^^^
+                """, (usuario,))
+                ^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: estados_administradores
+
+2025-10-15 21:37:34 | ERROR | no such table: estados_administradores
+2025-10-15 21:37:34 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 31, in login
+    query.execute("""SELECT a.id_administrador, a.usuario, r.rol, e.estado, a.login_fail,
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    a.tiempo_bloqueo, a.contrasena
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+                    WHERE a.usuario = ?
+                    ^^^^^^^^^^^^^^^^^^^
+                """, (usuario,))
+                ^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: estados_administradores
+
+2025-10-15 21:37:34 | ERROR | no such table: estados_administradores
+2025-10-15 21:37:34 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 31, in login
+    query.execute("""SELECT a.id_administrador, a.usuario, r.rol, e.estado, a.login_fail,
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    a.tiempo_bloqueo, a.contrasena
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+                    WHERE a.usuario = ?
+                    ^^^^^^^^^^^^^^^^^^^
+                """, (usuario,))
+                ^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: estados_administradores
+
+2025-10-15 21:37:34 | ERROR | no such table: estados_administradores
+2025-10-15 21:37:34 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 31, in login
+    query.execute("""SELECT a.id_administrador, a.usuario, r.rol, e.estado, a.login_fail,
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    a.tiempo_bloqueo, a.contrasena
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+                    WHERE a.usuario = ?
+                    ^^^^^^^^^^^^^^^^^^^
+                """, (usuario,))
+                ^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: estados_administradores
+
+2025-10-15 21:37:35 | ERROR | no such table: estados_administradores
+2025-10-15 21:37:35 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 31, in login
+    query.execute("""SELECT a.id_administrador, a.usuario, r.rol, e.estado, a.login_fail,
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    a.tiempo_bloqueo, a.contrasena
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+                    WHERE a.usuario = ?
+                    ^^^^^^^^^^^^^^^^^^^
+                """, (usuario,))
+                ^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: estados_administradores
+
+2025-10-15 21:37:35 | ERROR | no such table: estados_administradores
+2025-10-15 21:37:35 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 31, in login
+    query.execute("""SELECT a.id_administrador, a.usuario, r.rol, e.estado, a.login_fail,
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    a.tiempo_bloqueo, a.contrasena
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+                    WHERE a.usuario = ?
+                    ^^^^^^^^^^^^^^^^^^^
+                """, (usuario,))
+                ^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: estados_administradores
+
+2025-10-15 21:37:35 | ERROR | no such table: estados_administradores
+2025-10-15 21:37:35 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 31, in login
+    query.execute("""SELECT a.id_administrador, a.usuario, r.rol, e.estado, a.login_fail,
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    a.tiempo_bloqueo, a.contrasena
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+                    WHERE a.usuario = ?
+                    ^^^^^^^^^^^^^^^^^^^
+                """, (usuario,))
+                ^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: estados_administradores
+
+2025-10-15 21:37:35 | ERROR | no such table: estados_administradores
+2025-10-15 21:37:35 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 31, in login
+    query.execute("""SELECT a.id_administrador, a.usuario, r.rol, e.estado, a.login_fail,
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    a.tiempo_bloqueo, a.contrasena
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+                    WHERE a.usuario = ?
+                    ^^^^^^^^^^^^^^^^^^^
+                """, (usuario,))
+                ^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: estados_administradores
+
+2025-10-15 21:37:36 | ERROR | no such table: estados_administradores
+2025-10-15 21:37:36 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 31, in login
+    query.execute("""SELECT a.id_administrador, a.usuario, r.rol, e.estado, a.login_fail,
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    a.tiempo_bloqueo, a.contrasena
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+                    WHERE a.usuario = ?
+                    ^^^^^^^^^^^^^^^^^^^
+                """, (usuario,))
+                ^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: estados_administradores
+
+2025-10-15 21:37:36 | ERROR | no such table: estados_administradores
+2025-10-15 21:37:36 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 31, in login
+    query.execute("""SELECT a.id_administrador, a.usuario, r.rol, e.estado, a.login_fail,
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    a.tiempo_bloqueo, a.contrasena
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+                    WHERE a.usuario = ?
+                    ^^^^^^^^^^^^^^^^^^^
+                """, (usuario,))
+                ^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: estados_administradores
+
+2025-10-15 21:37:50 | ERROR | no such table: estados_administradores
+2025-10-15 21:37:50 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 31, in login
+    query.execute("""SELECT a.id_administrador, a.usuario, r.rol, e.estado, a.login_fail,
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    a.tiempo_bloqueo, a.contrasena
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+                    WHERE a.usuario = ?
+                    ^^^^^^^^^^^^^^^^^^^
+                """, (usuario,))
+                ^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: estados_administradores
+
+2025-10-16 09:53:51 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-16 09:53:56 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-16 09:54:06 | ERROR | Datos incorrectos - Usuario: adolfo
+2025-10-19 13:22:19 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: alfredo
+2025-10-19 13:22:40 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 3 minutos. - Usuario: alfredo

@@ -62,4 +62,4 @@ def inicio():
 @main.route("/acercade")
 def acercade():
 
-    return render_template('nosotros.html')
+    return render_template('acercade.html')

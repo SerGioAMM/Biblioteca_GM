@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Municipal</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/books_3145874.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo_inicio.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/colores.css') }}">
+    <link rel="stylesheet" href="/static/css/estilo_acercade.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/barra_lateral.css') }}">
+
+    <!--! Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <!--? Tom Select CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+</head>
+<body class="bg-custom">
+    <header>
+        {% include './navbar.html' %}
+    </header>
+
+    <main class="main">
+        
+        <!-- Sección Hero -->
+        <div class="seccion-principal text-middle text-center">
+            <div class="fondo-principal">
+                <br><br>
+                <h1 id="h1-titulo pt-5">Biblioteca Comunitaria Gabriela Mistral</h1>
+                <h5 id="h5-nota">Un espacio de conocimiento, cultura y comunidad al servicio de todos los ciudadanos.</h5>
+            </div>
+        </div>
+
+        <!-- Sección Objetivos -->
+        <div class="contenedor-datos bg-light-custom p-lg-5 p-2">
+            <div class="mx-auto col-md-8 mb-3">
+                <div class="card text-center border-tertiary text-body-secondary">
+                    <div class="card-body bg-light-custom">
+                        <h2 class="card-title">Nuestros Objetivos</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-3 w-100 w-lg-75 mx-auto">
+                <div class="row g-3">
+                    <div class="col-lg-8 col-12">
+                        <div class="card border-tertiary h-100">
+                            <div class="card-body bg-light-custom text-body-secondary">
+                                <p class="mb-3">
+                                    <strong>Objetivo General:</strong> 
+                                    Fomentar el acceso equitativo a la información, la lectura, educación, y la cultura fortaleciendo el desarrollo individual y colectivo de la comunidad promoviendo la integración de diversos grupos sociales.
+                                </p>
+                                <p class="mb-0">
+                                    <strong>Objetivo Específico:</strong>
+                                    Proveer un espacio seguro y acogedor que sirva como punto de encuentro, reflexión y aprendizaje para todos los miembros de la comunidad.
+                                    Promocionar el hábito de la lectura y los valores en niños, jóvenes, y adultos para facilitar la participación activa como un motor de transformación social. 
+                                    Apoyar a los centros educativos, instituciones y la comunidad en general en brindar espacios para cualquier actividad.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-12 d-flex align-items-center">
+                        <div class="text-center w-100">
+                            <img src="/static/img/biblioteca.jpg" alt="Historia de la biblioteca" class="img-fluid rounded shadow">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección Misión y Visión -->
+        <div class="contenedor-datos bg-light-custom p-lg-5 p-2">
+            <div class="mx-auto col-md-8 mb-3">
+                <div class="card text-center border-tertiary text-body-secondary">
+                    <div class="card-body bg-light-custom">
+                        <h2 class="card-title">Misión y Visión</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-3 w-100 w-lg-75 mx-auto">
+                <div class="row g-3">
+                    <!-- Misión -->
+                    <div class="col-lg-6 col-12">
+                        <div class="card border-dark h-100">
+                            <div class="card-header bg-dark text-white">
+                                <h3 class="mb-0">Nuestra Misión</h3>
+                            </div>
+                            <div class="card-body bg-light-custom text-body-secondary">
+                                <p class="mb-2">Promover la democracia y la prosperidad en las comunidades a través de diferentes actividades que despierten un espíritu de descubrimiento y la participación social.</p>
+                                <p class="mb-0">Contribuyendo al desarrollo con espacios comunitarios, participativos y abiertos a la diversidad, a fin de extender el acceso a la lectura, la información, el conocimiento y la recreación.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visión -->
+                    <div class="col-lg-6 col-12">
+                        <div class="card border-dark h-100">
+                            <div class="card-header bg-dark text-white">
+                                <h3 class="mb-0">Nuestra Visión</h3>
+                            </div>
+                            <div class="card-body bg-light-custom text-body-secondary">
+                                <p class="mb-0">
+                                    Ser una institución referente en el ámbito de la cultura y educación, a partir de su rol en el acceso a la lectura en la comunidad, reconocer el carácter comunitario,
+                                    participativo, brindando el acceso libre e ilimitado al conocimiento, el pensamiento y la cultura; permitiendo el acceso a la información, generando oportunidades de
+                                    cambio social y ser agente de desarrollo humano comunitario.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección Historia -->
+        <div class="contenedor-historia bg-light-custom p-lg-5 p-2">
+            <div class="mx-auto col-md-8 mb-3">
+                <div class="card border-tertiary text-body-secondary">
+                    <div class="card-body bg-light-custom text-center">
+                        <h2 class="card-title">Nuestra Historia</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-3 w-100 w-lg-75 mx-auto">
+                <div class="card border-tertiary">
+                    <div class="card-body bg-light-custom text-body-secondary">
+                        <p class="text-justify">
+                            Ubicada en el corazón de San Juan Chamelco, Alta Verapaz, la Biblioteca Comunitaria Gabriela Mistral fue inaugurada el 
+                            15 de enero de 2003 como un espacio vital para el acceso al conocimiento, la educación y la cultura en la región. 
+                            Durante dos décadas, funcionó en el área central del municipio, sirviendo a miles de usuarios estudiantes, docentes y 
+                            público en general como un refugio para la lectura, el aprendizaje autónomo y el crecimiento comunitario.
+                        </p>
+                        <p class="text-justify">
+                            En julio de 2023, con el propósito de ampliar su alcance y optimizar sus servicios, la biblioteca fue trasladada al 
+                            Caserío Municipal Sesibche, Nuevo Horizonte, donde continúa su labor con renovado impulso. 
+                            Desde sus inicios, este proyecto ha sido sostenido por un modelo de gestión colaborativo y tripartito, en el que convergen 
+                            los esfuerzos de la Fundación Riecken, la Municipalidad de San Juan Chamelco y la comunidad local, representada por una 
+                            junta directiva y un grupo de voluntarios comprometidos.
+                        </p>
+                        <p class="text-justify">
+                            Cada uno de estos actores desempeña un rol esencial en el funcionamiento de la biblioteca: la Fundación Riecken ha proporcionado apoyo técnico, financiero y logístico, impulsando 
+                            iniciativas educativas y de emprendimiento; la municipalidad, por su parte, ha garantizado los servicios básicos y el personal 
+                            operativo; mientras que la junta directiva y los voluntarios son el alma dinámica de la institución, encargados de ejecutar 
+                            proyectos, supervisar actividades y promover nuevas propuestas innovadoras para usuarios de todas las edades.
+                        </p>
+                        <p class="text-justify">
+                            A lo largo de sus 22 años de existencia, la Biblioteca Gabriela Mistral ha implementado una amplia gama de programas y 
+                            talleres diseñados para fomentar el aprendizaje continuo y la cohesión social. Entre sus iniciativas destacan los programas 
+                            de lectura para niños, jóvenes y adultos, talleres de estimulación temprana y lectoescritura, así como sesiones de 
+                            cuentacuentos, tanto en sus instalaciones como en centros educativos locales.
+                        </p>
+                        <p class="text-justify">
+                            Además, ha ofrecido cursos de computación, oratoria, danza y salud mental, junto con talleres prácticos de cocina y emprendimiento dirigidos especialmente a mujeres, 
+                            en los que se han enseñado técnicas para la elaboración de jabones y shampoos artesanales, confección de canastas con acículas 
+                            de pino y tejeduría tradicional, contribuyendo así a la preservación de las costumbres locales y al empoderamiento económico.
+                        </p>
+                        <p class="text-justify mb-0">
+                            Más allá de su impacto local, la Biblioteca Gabriela Mistral ha trascendido fronteras, participando en eventos de relevancia 
+                            nacional como la Feria Internacional del Libro en Guatemala (FILGUA), así como en debates y conversatorios organizados por la 
+                            Fundación Riecken y la Organización Internacional para las Migraciones (OIM). Esta proyección no solo ha posicionado a la 
+                            biblioteca como un referente cultural, sino que también ha permitido intercambiar experiencias y fortalecer su misión: ser un 
+                            faro de conocimiento, innovación y tradición para las presentes y futuras generaciones.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección Servicios -->
+        <div class="contenedor-datos bg-light-custom p-lg-5 p-2">
+            <div class="mx-auto col-md-8 mb-3">
+                <div class="card text-center border-tertiary">
+                    <div class="card-body bg-light-custom">
+                        <h2 class="card-title">Nuestros Servicios</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-3 w-100 w-lg-75 mx-auto">
+                <div class="row g-3">
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <div class="card border-tertiary h-100 text-center">
+                            <div class="card-body bg-light-custom">
+                                <div class="mb-3">
+                                    <img src="/static/img/libro.png" alt="Préstamo de libros" class="img-fluid" style="max-width: 80px;">
+                                </div>
+                                <h5 class="card-title">Préstamo de Libros</h5>
+                                <p class="card-text">Accede a una amplia variedad de libros para llevar a casa.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <div class="card border-tertiary h-100 text-center">
+                            <div class="card-body bg-light-custom">
+                                <div class="mb-3">
+                                    <img src="/static/img/computadora.png" alt="Equipo de cómputo" class="img-fluid" style="max-width: 80px;">
+                                </div>
+                                <h5 class="card-title">Equipo de Cómputo</h5>
+                                <p class="card-text">Zona con computadoras para estudio o investigación.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12 col-12">
+                        <div class="card border-tertiary h-100 text-center">
+                            <div class="card-body bg-light-custom">
+                                <div class="mb-3">
+                                    <img src="/static/img/Secretariales.png" alt="Servicios secretariales" class="img-fluid" style="max-width: 80px;">
+                                </div>
+                                <h5 class="card-title">Servicios Secretariales</h5>
+                                <p class="card-text">Accede a servicios de impresión, búsqueda de información y apoyo en tareas administrativas.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sección Contacto -->
+        <div class="contenedor-datos bg-light-custom text-body-secondary p-lg-5 p-2">
+            <div class="mx-auto col-md-8 mb-3">
+                <div class="card text-center border-secondary">
+                    <div class="card-body bg-light-custom">
+                        <h2 class="card-title">Visítanos</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-3 w-100 w-lg-75 mx-auto">
+                <div class="row g-3">
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <div class="card bg-light-custom border-secondary h-100 text-center">
+                            <div class="card-body text-body-secondary">
+                                <div class="mb-3">
+                                    <i class="bi bi-geo-alt-fill text-dark-custom" style="font-size: 2rem;"></i>
+                                </div>
+                                <h5 class="card-title">Dirección</h5>
+                                <p class="card-text">
+                                    <a href="https://maps.app.goo.gl/REikBZCtGn19zBQB6" class="text-dark-custom text-decoration-none">San Juan Chamelco, Guatemala</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <div class="card bg-light-custom border-secondary h-100 text-center">
+                            <div class="card-body text-body-secondary">
+                                <div class="mb-3">
+                                    <i class="bi bi-clock-fill text-dark-custom" style="font-size: 2rem;"></i>
+                                </div>
+                                <h5 class="card-title">Horario</h5>
+                                <p class="card-text mb-1">Lunes a Viernes: 8:00 - 16:00</p>
+                                <p class="card-text mb-1">Sábados: Cerrado</p>
+                                <p class="card-text mb-0">Domingos: Cerrado</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12 col-12">
+                        <div class="card bg-light-custom border-secondary h-100 text-center">
+                            <div class="card-body text-body-secondary">
+                                <div class="mb-3">
+                                    <i class="bi bi-facebook text-dark-custom" style="font-size: 2rem;"></i>
+                                </div>
+                                <h5 class="card-title">Contacto</h5>
+                                <p class="card-text">
+                                    <a target="_blank" href="https://www.facebook.com/p/Biblioteca-Gabriela-Mistral-San-Juan-Chamelco-AV-100063685880585/?locale=es_LA" class="text-dark-custom text-decoration-none">Facebook</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    {% include 'footer.html' %}
+
+    <!--! Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+
+    <!--? Tom Select JS -->
+    <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+</body>
+</html>

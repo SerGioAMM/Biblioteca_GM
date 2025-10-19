@@ -87,7 +87,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="table-responsive rounded-4">
-                        <table class="table user-list bg-light-custom">
+                        <table class="table user-list bg-light-custom mb-0">
                             <thead>
                                 <tr>
                                     <th><span>Usuario</span></th>
@@ -156,7 +156,8 @@
                                             <div class="collapse" id="desactivar{{usuario.id_administrador}}" data-bs-parent="#grupousuario">
                                                 <div class="bg-light">
                                                     <form class="frm-desactivar-usuario w-75 mx-auto" action="/desactivar_usuario" method="POST">
-                                                        <br><input type="hidden" value="{{usuario.id_administrador}}" name="id_usuario" readonly>
+                                                        <br><h6><strong>¿Está seguro de que desea desactivar este usuario?</strong></h6>
+                                                        <input type="hidden" value="{{usuario.id_administrador}}" name="id_usuario" readonly>
                                                         <div class="mb-1">
                                                             <input class="form-control" type="text" placeholder="Escribe el motivo de la desactivación del usuario." name="motivo" required autocomplete="off">
                                                         </div>
@@ -194,6 +195,26 @@
                 </div>
             <br><br>
             </div>        
+        </div>
+        
+        <div class="paginacion">
+            {% if pagina > 1 %}
+                <a href="{{ url_for('usuarios.buscar_usuario', page=pagina - 1, buscar=busqueda if busqueda else '', **request.args) }}">Anterior</a>
+            {% endif %}
+            
+            {% for p in range(pagina - 1, pagina + 2) %}
+                {% if 1 <= p <= total_paginas %}
+                    {% if p == pagina %}
+                        <strong>{{ p }}</strong>
+                    {% else %}
+                        <a href="{{ url_for('usuarios.buscar_usuario', page=p, buscar=busqueda if busqueda else '', **request.args) }}">{{ p }}</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}   
+            
+            {% if pagina < total_paginas %}
+                <a href="{{ url_for('usuarios.buscar_usuario', page=pagina + 1, buscar=busqueda if busqueda else '', **request.args) }}">Siguiente</a>
+            {% endif %}
         </div>
     </main>
 

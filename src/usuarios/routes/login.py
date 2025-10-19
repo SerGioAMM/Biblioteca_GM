@@ -3,6 +3,7 @@ from src.database.db_sqlite import conexion_BD
 from src.utils.logger import logger
 import traceback
 from datetime import datetime, timedelta
+from werkzeug.security import check_password_hash
 
 bp_login = Blueprint('login',__name__, template_folder="../templates")
 
@@ -54,7 +55,7 @@ def login():
                         """, (id_admin,))
                         login_fail = 0
                         tiempo_bloqueo = None
-                    if estado == "Activo" and password == stored_password:
+                    if estado == "Activo" and check_password_hash(stored_password, password):
                         session["id_administrador"] = id_admin
                         session["usuario"] = usuario_db
                         session["rol"] = rol

@@ -44,6 +44,12 @@
     border-radius: 20px;
     /*height: 80vh;*/
 }
+.contenedor-historia{
+    width: 90%;
+    margin: 1% auto;
+    border-radius: 20px;
+    text-align: justify;
+}
 /*
 .div-contenedor-libros-destacados{
     display: flex;
@@ -191,7 +197,7 @@
 
 #h4-seccion-4 {
     background-color: #fffde7;
-    color: #f9a825;
+    color: #b6740a;
     border: solid 1px #fff176;
 }
 
@@ -248,7 +254,7 @@
 
 #h2-seccion-4 {
     background-color: #fff9c4;
-    color: #bba200;
+    color: #b6740a;
 }
 
 #h2-seccion-5 {

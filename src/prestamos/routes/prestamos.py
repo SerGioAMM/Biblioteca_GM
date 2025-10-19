@@ -240,6 +240,12 @@ def devolver_prestamo():
     query.execute("update libros set numero_copias = (numero_copias + 1) where id_libro = ?",(id_libro,))
     conexion.commit()
 
+    # Crear notificación
+    from src.usuarios.routes.usuarios import crear_notificacion
+    query.execute("SELECT (nombre || ' ' || apellido) FROM prestamos WHERE id_prestamo = ?", (id_prestamo,))
+    nombre_lector = query.fetchone()[0]
+    crear_notificacion(f"{session['rol']} {session['usuario']} ha registrado la devolución del préstamo de {nombre_lector}.")
+
     query.close()
     conexion.close()
 
@@ -268,6 +274,10 @@ def eliminar_prestamo():
 
     query.execute("delete from prestamos where id_prestamo = ?",(id_prestamo,))
     conexion.commit()
+
+    # Crear notificación
+    from src.usuarios.routes.usuarios import crear_notificacion
+    crear_notificacion(f"{session['rol']} {session['usuario']} ha eliminado el préstamo de {lector} para el libro: {libro}.")
 
     query.close()
     conexion.close()
@@ -335,6 +345,10 @@ def registro_prestamos():
 
             #? Guardar cambios
             conexion.commit()  
+
+            # Crear notificación
+            from src.usuarios.routes.usuarios import crear_notificacion
+            crear_notificacion(f"{session['rol']} {session['usuario']} ha creado un nuevo préstamo para {NombreLector} {ApellidoLector}.")
 
             registro_exitoso = "Préstamo registrado exitósamente."
 

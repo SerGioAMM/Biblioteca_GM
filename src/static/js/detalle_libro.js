@@ -86,7 +86,13 @@ function verificarCambios() {
 
 for(let i = 0; i < editables.length; i++){
     original.push(campos[i].value);
-    campos[i].addEventListener("keyup", verificarCambios);
+    // Agregar listeners para inputs de texto, número y select
+    if(campos[i].tagName === 'SELECT'){
+        campos[i].addEventListener("change", verificarCambios);
+    } else {
+        campos[i].addEventListener("keyup", verificarCambios);
+        campos[i].addEventListener("change", verificarCambios);
+    }
 }
 
 const portadainput = document.getElementById("portadainput");

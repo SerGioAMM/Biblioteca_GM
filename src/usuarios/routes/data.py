@@ -6,15 +6,15 @@ from datetime import datetime, timedelta
 
 bp_datos = Blueprint('datos',__name__, template_folder="../templates")
 
-#!Generar reporte semestral
-# ----------------------------------------------------- Generar reporte semestral ----------------------------------------------------- #
+#!Generar reporte INE
+# ----------------------------------------------------- Generar reporte INE ----------------------------------------------------- #
 
-@bp_datos.route('/reporte_semestral', methods=['GET', 'POST'])
-def reporte_semestral():
+@bp_datos.route('/reporte_INE', methods=['GET', 'POST'])
+def reporte_INE():
     if request.method == 'POST':
-        # Lógica para generar el reporte semestral
+        # Lógica para generar el reporte INE
         pass
-    return render_template('reporte_semestral.html')
+    return render_template('reporte_INE.html')
 
 
 #!Generar graficas generales (Libros, prestamos)
@@ -36,8 +36,8 @@ def graficas_generales():
                 WHEN r.codigo_seccion LIKE '2%' THEN 'Religión'
                 WHEN r.codigo_seccion LIKE '3%' THEN 'Ciencias sociales'
                 WHEN r.codigo_seccion LIKE '4%' THEN 'Lenguas'
-                WHEN r.codigo_seccion LIKE '5%' THEN 'Ciencias naturales y matemáticas'
-                WHEN r.codigo_seccion LIKE '6%' THEN 'Tecnología y ciencias aplicadas'
+                WHEN r.codigo_seccion LIKE '5%' THEN 'Ciencias naturales'
+                WHEN r.codigo_seccion LIKE '6%' THEN 'Tecnología y ciencias'
                 WHEN r.codigo_seccion LIKE '7%' THEN 'Arte, música y deportes'
                 WHEN r.codigo_seccion LIKE '8%' THEN 'Literatura'
                 WHEN r.codigo_seccion LIKE '9%' THEN 'Historia y geografía'
@@ -92,7 +92,7 @@ def graficas_generales():
         FROM Prestamos 
         GROUP BY strftime('%Y-%m', fecha_prestamo)
         ORDER BY strftime('%Y-%m', fecha_prestamo) DESC
-        LIMIT 12
+        LIMIT 8
     """)
     
     resultados_prestamos_mes = dict_factory(query)
@@ -133,7 +133,7 @@ def graficas_generales():
         JOIN Tipos_Visitantes tv ON v.id_tipo_visitante = tv.id_tipo_visitante
         GROUP BY strftime('%Y-%m', fecha)
         ORDER BY strftime('%Y-%m', fecha) DESC
-        LIMIT 12
+        LIMIT 8
     """)
     
     resultados_visitantes_mes = dict_factory(query)
