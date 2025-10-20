@@ -54,19 +54,28 @@ def contar_opiniones_pendientes():
     conexion.close()
     return total
 
-def get_opiniones_aceptadas_libro(id_libro):
+def get_opiniones_aceptadas_libro(id_libro, limit=None):
     """
-    Obtiene todas las opiniones aceptadas para un libro específico
+    Obtiene opiniones aceptadas para un libro específico
+    Args:
+        id_libro: ID del libro
+        limit: Número máximo de opiniones a retornar (None para todas)
     """
     conexion = conexion_BD()
     query = conexion.cursor()
-    query.execute("""
+    
+    sql = """
         SELECT o.id_opinion, o.nombre_creador, o.apellido_creador, 
                o.opinion, o.fecha_opinion, o.valoracion
         FROM Opiniones o
         WHERE o.id_libro = ? AND o.id_estado = 2
-        ORDER BY o.fecha_opinion DESC
-    """, (id_libro,))
+        ORDER BY o.valoracion DESC
+    """
+    
+    if limit:
+        sql += f" LIMIT {limit}"
+    
+    query.execute(sql, (id_libro,))
     opiniones = dict_factory(query)
     query.close()
     conexion.close()
@@ -117,7 +126,7 @@ def rechazar_opinion(id_opinion, id_administrador, motivo):
             query.execute("""
                 INSERT INTO logs_eliminados (id_administrador, id_eliminado, tabla_afectada, 
                                             fecha, titulo, motivo)
-                VALUES (?, ?, 'Opiniones', datetime('now'), ?, ?)
+                VALUES (?, ?, 'Opiniones', datetime('now','localtime'), ?, ?)
             """, (id_administrador, id_opinion, 
                 f"{nombre_creador} {apellido_creador} para '{titulo_libro}'", motivo))
             

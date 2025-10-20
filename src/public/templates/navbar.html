@@ -98,6 +98,7 @@
                         {% endfor %}
                     </ul>
                     </li>
+                    {% if session["rol"] == 'Administrador' %}
                     <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('eliminados.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Logs
@@ -128,6 +129,7 @@
                         {% endfor %}
                     </ul>
                     </li>
+                    {% endif %}
                     <!-- Notificaciones -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" id="notificaciones-dropdown">

@@ -6,11 +6,16 @@ const btn_resena = document.getElementById('btn-resena');
 const detalles_libro = document.querySelector('.detalles-libro');
 const btn_eliminar = document.getElementById('btn-eliminar');
 
+// Obtener secciones de ratings, reseñas y recomendaciones
+const seccion_ratings = document.getElementById('seccion-ratings');
+const seccion_resenas = document.getElementById('seccion-resenas');
+const seccion_recomendaciones = document.getElementById('seccion-recomendaciones');
+
 function mostrar(elemento){
-    elemento.classList.remove('d-none');
+    if(elemento) elemento.classList.remove('d-none');
 }
 function ocultar(elemento){
-    elemento.classList.add('d-none')
+    if(elemento) elemento.classList.add('d-none');
 }
 
 btn_editar.addEventListener("click", ()=>{
@@ -21,6 +26,12 @@ btn_editar.addEventListener("click", ()=>{
         ocultar(detalles_libro);
         ocultar(btn_resena);
         ocultar(btn_eliminar);
+        
+        // Ocultar secciones de ratings, reseñas y recomendaciones
+        ocultar(seccion_ratings);
+        ocultar(seccion_resenas);
+        ocultar(seccion_recomendaciones);
+        
         btn_texto.textContent = 'Cancelar';
         btn_editar.querySelector('i').className = 'bi bi-x-circle';
         btn_editar.classList.remove('btn-outline-primary');
@@ -34,6 +45,12 @@ btn_editar.addEventListener("click", ()=>{
         mostrar(detalles_libro);
         mostrar(btn_resena);
         mostrar(btn_eliminar);
+        
+        // Mostrar secciones de ratings, reseñas y recomendaciones
+        mostrar(seccion_ratings);
+        mostrar(seccion_resenas);
+        mostrar(seccion_recomendaciones);
+        
         btn_texto.textContent = 'Editar';
         btn_editar.querySelector('i').className = "bi bi-pencil-square";
         btn_editar.classList.remove('btn-outline-danger');

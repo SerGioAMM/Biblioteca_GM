@@ -270,7 +270,7 @@ def eliminar_prestamo():
     query.execute("select l.titulo from libros l join prestamos p on l.id_libro = p.id_libro where p.id_prestamo = ?",(id_prestamo,))
     libro = query.fetchone()[0]
 
-    query.execute("insert into logs_eliminados(id_administrador,id_eliminado,tabla_afectada,fecha,nombre_lector,titulo,motivo) values(?,?,'Prestamos',datetime('now'),?,?,?)",(id_administrador,id_prestamo,lector,libro,motivo))
+    query.execute("insert into logs_eliminados(id_administrador,id_eliminado,tabla_afectada,fecha,nombre_lector,titulo,motivo) values(?,?,'Prestamos',datetime('now','localtime'),?,?,?)",(id_administrador,id_prestamo,lector,libro,motivo))
 
     query.execute("delete from prestamos where id_prestamo = ?",(id_prestamo,))
     conexion.commit()

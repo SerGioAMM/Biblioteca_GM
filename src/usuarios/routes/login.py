@@ -4,6 +4,8 @@ from src.utils.logger import logger
 import traceback
 from datetime import datetime, timedelta
 from werkzeug.security import check_password_hash
+from src.usuarios.routes.usuarios import crear_notificacion
+
 
 bp_login = Blueprint('login',__name__, template_folder="../templates")
 
@@ -79,7 +81,9 @@ def login():
                                     SET login_fail = ?, tiempo_bloqueo = ? 
                                     WHERE id_administrador = ?
                                 """, (new_fails, lock_until, id_admin))
+                                conexion.commit()
                                 alerta = "Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos."
+                                crear_notificacion(f"El usuario {usuario} ha sido bloqueado temporalmente por intentos fallidos de inicio de sesión.")
                             else:
                                 query.execute("""
                                     UPDATE administradores 
@@ -94,11 +98,14 @@ def login():
                 session["rol"] = "false"
                 logger.add_to_log("error", f"{alerta} - Usuario: {usuario}")
 
-        conexion.commit() 
+        # Commit solo si no se hizo antes (en el caso de bloqueo por intentos fallidos)
+        if conexion.in_transaction:
+            conexion.commit() 
     except Exception as ex:
         logger.add_to_log("error", str(ex))
         logger.add_to_log("error", traceback.format_exc())
-        conexion.rollback()  # Rollback en caso de error
+        if conexion.in_transaction:
+            conexion.rollback()  # Rollback en caso de error
     finally:
         query.close()
         conexion.close()

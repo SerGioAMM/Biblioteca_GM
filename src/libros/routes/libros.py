@@ -161,10 +161,11 @@ def eliminar_libro():
     query.execute("select titulo from libros where id_libro = ?",(id_libro,))
     titulo_libro = query.fetchone()[0]
 
-    query.execute("insert into logs_eliminados(id_administrador,id_eliminado,tabla_afectada,fecha,titulo,motivo) values(?,?,'Libros',datetime('now'),?,?)",(id_administrador,id_libro,titulo_libro,motivo))
+    query.execute("insert into logs_eliminados(id_administrador,id_eliminado,tabla_afectada,fecha,titulo,motivo) values(?,?,'Libros',datetime('now','localtime'),?,?)",(id_administrador,id_libro,titulo_libro,motivo))
 
     query.execute("delete from Libros where id_libro = ?",(id_libro,))
     query.execute("delete from RegistroLibros where id_libro = ?",(id_libro,))
+    query.execute("delete from libros_modificados where id_libro = ?",(id_libro,))
     
     conexion.commit()
 
@@ -182,13 +183,61 @@ def eliminar_libro():
 
 # ----------------------------------------------------- DETALLE LIBROS ----------------------------------------------------- #
 
-@bp_libros.route("/detalle_libro/<ID>/<Titulo>", methods=["GET", "POST"])
-def detalle_libro(ID,Titulo):
+@bp_libros.route("/detalle_libro/<ID>", methods=["GET", "POST"])
+def detalle_libro(ID):
+    from src.opiniones.models import opiniones_model
     
     detalle = libros_model.get_detalle_libro(ID)
     secciones = libros_model.get_categorias()
     
-    return render_template("detalle_libro.html",detalle=detalle, secciones=secciones, descripcion="Nada")
+    # Obtener reseñas aceptadas (3 iniciales)
+    opiniones = opiniones_model.get_opiniones_aceptadas_libro(ID, limit=3)
+    total_opiniones = len(opiniones_model.get_opiniones_aceptadas_libro(ID))
+    
+    # Calcular promedio de valoración
+    promedio_info = opiniones_model.get_promedio_valoracion_libro(ID)
+    
+    # Obtener recomendaciones
+    if detalle:
+        libro = detalle[0]
+        id_autor = libros_model.get_id_autor_libro(ID)
+        codigo_seccion = libro['codigo_seccion']
+        
+        # Obtener libros del mismo autor
+        libros_autor = libros_model.get_libros_recomendados_autor(id_autor, ID, limit=2)
+        
+        # Calcular cuántos libros de categoría necesitamos
+        # Si el autor tiene menos de 3 libros, rellenamos con más de categoría
+        libros_categoria_limit = 4 - len(libros_autor)
+        libros_categoria = libros_model.get_libros_recomendados_categoria(codigo_seccion, ID, limit=libros_categoria_limit)
+        
+        # Combinar recomendaciones
+        recomendaciones = libros_autor + libros_categoria
+    else:
+        recomendaciones = []
+    
+    return render_template("detalle_libro.html", detalle=detalle, secciones=secciones, 
+                         opiniones=opiniones, total_opiniones=total_opiniones,
+                         promedio_valoracion=promedio_info['promedio'],
+                         total_valoraciones=promedio_info['total'],
+                         recomendaciones=recomendaciones)
+
+@bp_libros.route("/todas_resenas/<ID>/<Titulo>", methods=["GET"])
+def todas_resenas(ID, Titulo):
+    from src.opiniones.models import opiniones_model
+    
+    detalle = libros_model.get_detalle_libro(ID)
+    
+    # Obtener todas las reseñas aceptadas
+    opiniones = opiniones_model.get_opiniones_aceptadas_libro(ID)
+    
+    # Calcular promedio de valoración
+    promedio_info = opiniones_model.get_promedio_valoracion_libro(ID)
+    
+    return render_template("todas_resenas.html", detalle=detalle, 
+                         opiniones=opiniones,
+                         promedio_valoracion=promedio_info['promedio'],
+                         total_valoraciones=promedio_info['total'])
 
 @bp_libros.route("/editar_libro", methods=["GET", "POST"])
 def editar_libro():

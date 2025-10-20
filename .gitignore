@@ -33,3 +33,6 @@ src/public/services/
 
 #Ignorar archivo bandit (Analisis de codigo)
 .bandit
+
+#Ignorar markdowns
+markdown/

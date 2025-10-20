@@ -107,7 +107,7 @@ def eliminar_visitante():
         cantidad_mujeres = visitante_data[1]
         
         # Insertar en logs usando los campos disponibles (nombre_lector para hombres, titulo para mujeres)
-        query.execute("INSERT INTO logs_eliminados(id_administrador, id_eliminado, tabla_afectada, nombre_lector, titulo, fecha, motivo) VALUES(?,?,'Visitantes',?,?,datetime('now'),?)", 
+        query.execute("INSERT INTO logs_eliminados(id_administrador, id_eliminado, tabla_afectada, nombre_lector, titulo, fecha, motivo) VALUES(?,?,'Visitantes',?,?,datetime('now','localtime'),?)", 
                         (id_administrador, id_registro, cantidad_hombres, cantidad_mujeres, motivo))
         
         # Eliminar el registro
