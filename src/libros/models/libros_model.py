@@ -382,3 +382,76 @@ def romano_a_natural(romano):
             resultado += valor_actual
         i += 1
     return resultado
+
+def get_libros_recomendados_autor(id_autor, id_libro_actual, limit=3):
+    """
+    Obtiene libros del mismo autor (excluyendo el libro actual)
+    Args:
+        id_autor: ID del autor
+        id_libro_actual: ID del libro que se está visualizando (para excluirlo)
+        limit: Número máximo de libros a retornar
+    """
+    conexion = conexion_BD()
+    query = conexion.cursor()
+    query.execute("""
+        SELECT l.id_libro, l.titulo, l.portada, l.ano_publicacion,
+        a.nombre_autor, a.apellido_autor, sd.codigo_seccion, sd.seccion, n.notacion
+        FROM Libros l
+        JOIN RegistroLibros r ON r.id_libro = l.id_libro
+        JOIN notaciones n ON n.id_notacion = r.id_notacion
+        JOIN Autores a ON a.id_autor = n.id_autor
+        JOIN SistemaDewey sd ON sd.codigo_seccion = r.codigo_seccion
+        WHERE a.id_autor = ? AND l.id_libro != ?
+        ORDER BY RANDOM()
+        LIMIT ?
+    """, (id_autor, id_libro_actual, limit))
+    libros = dict_factory(query)
+    query.close()
+    conexion.close()
+    return libros
+
+def get_libros_recomendados_categoria(codigo_seccion, id_libro_actual, limit=3):
+    """
+    Obtiene libros de la misma categoría (excluyendo el libro actual)
+    Args:
+        codigo_seccion: Código de la sección Dewey
+        id_libro_actual: ID del libro que se está visualizando (para excluirlo)
+        limit: Número máximo de libros a retornar
+    """
+    conexion = conexion_BD()
+    query = conexion.cursor()
+    query.execute("""
+        SELECT l.id_libro, l.titulo, l.portada, l.ano_publicacion,
+        a.nombre_autor, a.apellido_autor, sd.codigo_seccion, sd.seccion, n.notacion
+        FROM Libros l
+        JOIN RegistroLibros r ON r.id_libro = l.id_libro
+        JOIN notaciones n ON n.id_notacion = r.id_notacion
+        JOIN Autores a ON a.id_autor = n.id_autor
+        JOIN SistemaDewey sd ON sd.codigo_seccion = r.codigo_seccion
+        WHERE sd.codigo_seccion = ? AND l.id_libro != ?
+        ORDER BY RANDOM()
+        LIMIT ?
+    """, (codigo_seccion, id_libro_actual, limit))
+    libros = dict_factory(query)
+    query.close()
+    conexion.close()
+    return libros
+
+def get_id_autor_libro(id_libro):
+    """
+    Obtiene el ID del autor de un libro
+    """
+    conexion = conexion_BD()
+    query = conexion.cursor()
+    query.execute("""
+        SELECT a.id_autor
+        FROM Libros l
+        JOIN RegistroLibros r ON r.id_libro = l.id_libro
+        JOIN notaciones n ON n.id_notacion = r.id_notacion
+        JOIN Autores a ON a.id_autor = n.id_autor
+        WHERE l.id_libro = ?
+    """, (id_libro,))
+    resultado = query.fetchone()
+    query.close()
+    conexion.close()
+    return resultado[0] if resultado else None

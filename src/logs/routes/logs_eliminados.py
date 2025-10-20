@@ -10,7 +10,10 @@ bp_eliminados = Blueprint('eliminados',__name__, template_folder="../templates")
 @bp_eliminados.route("/libros_e",methods = ["POST","GET"])
 def libros_e():
     if "usuario" not in session:
-        return redirect("/") #Solo se puede acceder con session iniciada
+        return redirect("/")
+    
+    if session.get("rol") != "Administrador":
+        return redirect("/prestamos") #Solo administradores pueden acceder a logs
     
     conexion = conexion_BD()
     query = conexion.cursor()
@@ -62,7 +65,11 @@ def libros_e():
 @bp_eliminados.route("/buscar_libro_e", methods = ["GET"])
 def buscar_libro_e():
     if "usuario" not in session:
-        return redirect("/") #Solo se puede acceder con session iniciada
+        return redirect("/")
+    
+    if session.get("rol") != "Administrador":
+        return redirect("/prestamos") #Solo administradores pueden acceder a logs
+    
     conexion = conexion_BD()
     query = conexion.cursor()
 
@@ -130,7 +137,10 @@ def buscar_libro_e():
 @bp_eliminados.route("/prestamos_e",methods = ["POST","GET"])
 def prestamos_e():
     if "usuario" not in session:
-        return redirect("/") #Solo se puede acceder con session iniciada
+        return redirect("/")
+    
+    if session.get("rol") != "Administrador":
+        return redirect("/prestamos") #Solo administradores pueden acceder a logs
     
     conexion = conexion_BD()
     query = conexion.cursor()
@@ -183,7 +193,11 @@ def prestamos_e():
 @bp_eliminados.route("/buscar_prestamo_e", methods = ["GET"])
 def buscar_prestamo_e():
     if "usuario" not in session:
-        return redirect("/") #Solo se puede acceder con session iniciada
+        return redirect("/")
+    
+    if session.get("rol") != "Administrador":
+        return redirect("/prestamos") #Solo administradores pueden acceder a logs
+    
     conexion = conexion_BD()
     query = conexion.cursor()
 
@@ -250,7 +264,10 @@ def buscar_prestamo_e():
 @bp_eliminados.route("/visitantes_e",methods = ["POST","GET"])
 def visitantes_e():
     if "usuario" not in session:
-        return redirect("/") #Solo se puede acceder con session iniciada
+        return redirect("/")
+    
+    if session.get("rol") != "Administrador":
+        return redirect("/prestamos") #Solo administradores pueden acceder a logs
     
     conexion = conexion_BD()
     query = conexion.cursor()
@@ -302,7 +319,11 @@ def visitantes_e():
 @bp_eliminados.route("/buscar_visitante_e", methods = ["GET"])
 def buscar_visitante_e():
     if "usuario" not in session:
-        return redirect("/") #Solo se puede acceder con session iniciada
+        return redirect("/")
+    
+    if session.get("rol") != "Administrador":
+        return redirect("/prestamos") #Solo administradores pueden acceder a logs
+    
     conexion = conexion_BD()
     query = conexion.cursor()
 
@@ -370,7 +391,10 @@ def buscar_visitante_e():
 @bp_eliminados.route("/libros_modificados",methods = ["POST","GET"])
 def libros_modificados():
     if "usuario" not in session:
-        return redirect("/") #Solo se puede acceder con session iniciada
+        return redirect("/")
+    
+    if session.get("rol") != "Administrador":
+        return redirect("/prestamos") #Solo administradores pueden acceder a logs
     
     conexion = conexion_BD()
     query = conexion.cursor()
@@ -431,7 +455,11 @@ def libros_modificados():
 @bp_eliminados.route("/buscar_libro_m", methods = ["GET"])
 def buscar_libro_m():
     if "usuario" not in session:
-        return redirect("/") #Solo se puede acceder con session iniciada
+        return redirect("/")
+    
+    if session.get("rol") != "Administrador":
+        return redirect("/prestamos") #Solo administradores pueden acceder a logs
+    
     conexion = conexion_BD()
     query = conexion.cursor()
 
@@ -503,7 +531,11 @@ def buscar_libro_m():
 @bp_eliminados.route("/revertir_cambios/<int:id_modificacion>", methods=["POST"])
 def revertir_cambios(id_modificacion):
     if "usuario" not in session:
-        return redirect("/") #Solo se puede acceder con session iniciada
+        return redirect("/")
+    
+    if session.get("rol") != "Administrador":
+        return redirect("/prestamos") #Solo administradores pueden acceder a logs
+    
     conexion = conexion_BD()
     query = conexion.cursor()
 

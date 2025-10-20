@@ -127,6 +127,9 @@ def opiniones_rechazadas():
     if "usuario" not in session:
         return redirect("/")
     
+    if session.get("rol") != "Administrador":
+        return redirect("/prestamos") #Solo administradores pueden acceder a logs
+    
     logs = opiniones_model.get_opiniones_rechazadas()
     
     return render_template("opiniones_rechazadas.html", logs=logs)
@@ -137,6 +140,9 @@ def opiniones_rechazadas():
 def detalle_opinion_rechazada(id_opinion):
     if "usuario" not in session:
         return redirect("/")
+    
+    if session.get("rol") != "Administrador":
+        return redirect("/prestamos") #Solo administradores pueden acceder a logs
     
     opinion = opiniones_model.get_opinion_detalle(id_opinion)
     

@@ -104,7 +104,7 @@ def desactivar_usuario():
     query = conexion.cursor()
 
     query.execute("update administradores set id_estado = 2 where id_administrador = ?",(id_usuario,))
-    query.execute("insert into logs_eliminados(id_administrador,id_eliminado,tabla_afectada,fecha, motivo) values(?,?,'Usuarios',datetime('now'),?)",(id_administrador,id_usuario,motivo))
+    query.execute("insert into logs_eliminados(id_administrador,id_eliminado,tabla_afectada,fecha, motivo) values(?,?,'Usuarios',datetime('now','localtime'),?)",(id_administrador,id_usuario,motivo))
 
     conexion.commit()
 
@@ -235,6 +235,7 @@ def ver_perfil():
                             WHEN tabla_afectada = 'Prestamos' THEN 'Eliminaste el préstamo de "' || nombre_lector || '"'
                             WHEN tabla_afectada = 'Usuarios' THEN 'Desactivaste el usuario "' || nombre_lector || '"'
                             WHEN tabla_afectada = 'Visitantes' THEN 'Eliminaste un registro de visitantes (' || nombre_lector || ' hombres, ' || titulo || ' mujeres)'
+                            WHEN tabla_afectada = 'Opiniones' THEN 'Rechazaste la reseña de ' || titulo || ''
                             ELSE 'Acción en ' || tabla_afectada
                         END as descripcion,
                         motivo,
@@ -507,7 +508,7 @@ def crear_notificacion(detalle, id_receptor=None):
     
     try:
         # Insertar la notificación en la tabla principal
-        query.execute("INSERT INTO Notificaciones (detalle, fecha) VALUES (?, datetime('now'))",
+        query.execute("INSERT INTO Notificaciones (detalle, fecha) VALUES (?, datetime('now','localtime'))",
                      (detalle,))
         
         # Obtener el ID de la notificación recién creada

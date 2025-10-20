@@ -970,3 +970,67 @@ sqlite3.OperationalError: no such table: estados_administradores
 2025-10-16 09:54:06 | ERROR | Datos incorrectos - Usuario: adolfo
 2025-10-19 13:22:19 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: alfredo
 2025-10-19 13:22:40 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 3 minutos. - Usuario: alfredo
+2025-10-19 14:39:07 | ERROR | Datos incorrectos - Usuario: anala
+2025-10-19 21:10:55 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-19 21:10:59 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-19 21:11:03 | ERROR | No module named 'usuarios'
+2025-10-19 21:11:03 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 82, in login
+    from usuarios.routes.usuarios import crear_notificacion
+ModuleNotFoundError: No module named 'usuarios'
+
+2025-10-19 21:11:08 | ERROR | No module named 'usuarios'
+2025-10-19 21:11:08 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 82, in login
+    from usuarios.routes.usuarios import crear_notificacion
+ModuleNotFoundError: No module named 'usuarios'
+
+2025-10-19 21:11:52 | ERROR | No module named 'usuarios'
+2025-10-19 21:11:52 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 82, in login
+    from usuarios.routes.usuarios import crear_notificacion
+ModuleNotFoundError: No module named 'usuarios'
+
+2025-10-19 21:12:00 | ERROR | No module named 'usuarios'
+2025-10-19 21:12:00 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 82, in login
+    from usuarios.routes.usuarios import crear_notificacion
+ModuleNotFoundError: No module named 'usuarios'
+
+2025-10-19 21:12:20 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: alfredo
+2025-10-19 21:13:54 | ERROR | Datos incorrectos - Usuario: test
+2025-10-19 21:13:57 | ERROR | Datos incorrectos - Usuario: test
+2025-10-19 21:14:01 | ERROR | No module named 'usuarios'
+2025-10-19 21:14:01 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 85, in login
+    from usuarios.routes.usuarios import crear_notificacion
+ModuleNotFoundError: No module named 'usuarios'
+
+2025-10-19 21:15:32 | ERROR | No module named 'usuarios'
+2025-10-19 21:15:32 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 84, in login
+    from usuarios.routes.usuarios import crear_notificacion
+ModuleNotFoundError: No module named 'usuarios'
+
+2025-10-19 21:15:42 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 09:26:29 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 09:26:33 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 09:26:44 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: alfredo
+2025-10-20 09:26:53 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 3 minutos. - Usuario: alfredo
+2025-10-20 09:29:06 | ERROR | Datos incorrectos - Usuario: alana
+2025-10-20 09:29:14 | ERROR | Datos incorrectos - Usuario: alana
+2025-10-20 09:29:30 | ERROR | Datos incorrectos - Usuario: alana
+2025-10-20 09:29:42 | ERROR | Datos incorrectos - Usuario: alana
+2025-10-20 09:29:46 | ERROR | Datos incorrectos - Usuario: alana
+2025-10-20 09:29:55 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: alana
+2025-10-20 09:30:01 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: alana
+2025-10-20 09:34:02 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 09:34:07 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 09:34:17 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: alfredo
+2025-10-20 09:38:05 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 09:38:13 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 09:38:21 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: alfredo
+2025-10-20 09:42:19 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 09:42:23 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 09:42:26 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: alfredo
+2025-10-20 09:43:32 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 2 minutos. - Usuario: alfredo

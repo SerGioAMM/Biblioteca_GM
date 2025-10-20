@@ -77,7 +77,7 @@
                 <div class="tab-pane fade show active detalles-libro" id="overview-tab-pane" role="tabpanel" aria-labelledby="overview-tab" tabindex="0">
                     <h1> {{libro.Titulo}} </h1>
                     <h4 class="text-body-secondary"> de {{libro.nombre_autor}}&nbsp;{{libro.apellido_autor}}</h4>
-                    <p> Seccion: {{ libro.codigo_seccion }} - {{ libro.seccion }}</p>
+                    <p> Seccion: <span class="fw-semibold" id="h4-seccion-{{ (libro.codigo_seccion|int // 100) if (libro.codigo_seccion|int < 1000) else 9 }}" style="border-radius: 10px; padding: 5px; font-size: 90%;">{{ libro.codigo_seccion }} - {{ libro.seccion }}</span></p>
                     <p> Número de copias: {{libro.numero_copias}}</p>
                     <div class="col-12 col-md-12 mb-3 align-items-stretch">
                         <br>
@@ -113,9 +113,123 @@
                                 <p class="m-0 p-2"> <span class="text-body-secondary">ISBN</span><br>
                                 <span> {% if libro.ISBN %}{{ libro.ISBN }}{% else %}-{% endif %} </span></p>
                             </div>
-                            <div class="col-12 col-md-12 mb-3">
-                                <p>RATINGS</p>
+                        </div>
+                        
+                        <!-- Promedio de valoración -->
+                        <div class="col-12 col-md-12 mb-4 mt-4" id="seccion-ratings">
+                            <hr>
+                            <h5><i class="bi bi-star-fill text-warning"></i> Valoración Promedio</h5>
+                            {% if total_valoraciones > 0 %}
+                                <div class="d-flex align-items-center">
+                                    <h2 class="me-3 mb-0">{{ promedio_valoracion }}</h2>
+                                    <div>
+                                        {% set promedio_int = promedio_valoracion|int %}
+                                        {% set tiene_media = (promedio_valoracion - promedio_int) >= 0.5 %}
+                                        
+                                        {% for i in range(promedio_int) %}
+                                            <i class="bi bi-star-fill text-warning fs-5"></i>
+                                        {% endfor %}
+                                        
+                                        {% if tiene_media %}
+                                            <i class="bi bi-star-half text-warning fs-5"></i>
+                                        {% endif %}
+                                        
+                                        {% for i in range(5 - promedio_int - (1 if tiene_media else 0)) %}
+                                            <i class="bi bi-star text-warning fs-5"></i>
+                                        {% endfor %}
+                                        
+                                        <p class="text-muted mb-0">Basado en {{ total_valoraciones }} reseña{% if total_valoraciones != 1 %}s{% endif %}</p>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <p class="text-muted">Este libro aún no tiene valoraciones.</p>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Reseñas -->
+                        {% if opiniones %}
+                        <div class="col-12 col-md-12 mb-4" id="seccion-resenas">
+                            <hr>
+                            <h5><i class="bi bi-chat-right-text"></i> Reseñas</h5>
+                            
+                            {% for opinion in opiniones %}
+                            <div class="card mb-3 border-light shadow-sm">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h6 class="mb-0">{{ opinion.nombre_creador }} {{ opinion.apellido_creador }}</h6>
+                                        <small class="text-muted">{{ opinion.fecha_opinion }}</small>
+                                    </div>
+                                    <div class="mb-2">
+                                        {% for i in range(opinion.valoracion) %}
+                                            <i class="bi bi-star-fill text-warning"></i>
+                                        {% endfor %}
+                                        {% for i in range(5 - opinion.valoracion) %}
+                                            <i class="bi bi-star"></i>
+                                        {% endfor %}
+                                        <span class="text-muted">({{ opinion.valoracion }}/5)</span>
+                                    </div>
+                                    <p class="mb-0">{{ opinion.opinion }}</p>
+                                </div>
                             </div>
+                            {% endfor %}
+                            
+                            {% if total_opiniones > 3 %}
+                            <div class="text-center">
+                                <a href="{{ url_for('libros.todas_resenas', ID=libro.id_libro, Titulo=libro.Titulo) }}" class="btn btn-outline-primary">
+                                    Ver todas las reseñas ({{ total_opiniones }})
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Libros Recomendados -->
+                        <div class="col-12 col-md-12 mb-4" id="seccion-recomendaciones">
+                            <hr>
+                            <h5><i class="bi bi-bookmark-fill"></i> Libros Recomendados</h5>
+                            {% if recomendaciones and recomendaciones|length > 0 %}
+                            <div class="row row-cols-1 row-cols-md-4 g-4">
+                                {% for rec in recomendaciones %}
+                                <div class="col">
+                                    <div class="card h-100 text-center">
+                                        <div class="card-header bg-transparent border-secondary p-0">
+                                            <span class="span-notacion"
+                                                id="h2-seccion-{{ (rec.codigo_seccion|int // 100) if (rec.codigo_seccion|int < 1000) else 9 }}">
+                                                <h2>{{ rec.notacion }}</h2>
+                                            </span>
+                                        </div>
+                                        
+                                        {% if rec.portada == "book.png" %}
+                                        <img src="{{ url_for('static', filename='img/book.png') }}" class="card-img-top" alt="...">
+                                        {% else %}
+                                        <img src="{{ rec.portada }}" class="card-img-top" alt="...">
+                                        {% endif %}
+                                        
+                                        <div class="card-body d-flex flex-column h-100">
+                                            <h6 class="card-title">{{ rec.Titulo }}</h6>
+                                            <small class="card-text mb-2">{{ rec.nombre_autor }}&nbsp;{{ rec.apellido_autor }}
+                                            {% if rec.ano_publicacion %}{{ rec.ano_publicacion }}{% endif %}</small>
+                                        </div>
+                                        
+                                        <div class="card-footer">
+                                            <a href="{{ url_for('libros.detalle_libro', ID=rec.id_libro )}}">
+                                                <button class="btn btn-outline-primary btn-sm m-2 rounded-3"> <small>Ver detalles</small> </button>
+                                            </a>
+                                            <span id="span-info-libro-d"> 
+                                                <h5 id="h4-seccion-{{ (rec.codigo_seccion|int // 100) if (rec.codigo_seccion|int < 1000) else 9 }}">
+                                                    <small class="fw-semibold">{{ rec.codigo_seccion }} - {{ rec.seccion }}</small> 
+                                                </h5>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <div class="alert alert-info text-center">
+                                <i class="bi bi-info-circle"></i> No hay libros recomendados disponibles para esta obra.
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                     <form action="/editar_libro" method="POST" class="row gy-3 gy-xxl-4 d-none" id="form-editar-libro" enctype="multipart/form-data">
