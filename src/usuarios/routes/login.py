@@ -98,14 +98,9 @@ def login():
                 session["rol"] = "false"
                 logger.add_to_log("error", f"{alerta} - Usuario: {usuario}")
 
-        # Commit solo si no se hizo antes (en el caso de bloqueo por intentos fallidos)
-        if conexion.in_transaction:
-            conexion.commit() 
     except Exception as ex:
         logger.add_to_log("error", str(ex))
         logger.add_to_log("error", traceback.format_exc())
-        if conexion.in_transaction:
-            conexion.rollback()  # Rollback en caso de error
     finally:
         query.close()
         conexion.close()
