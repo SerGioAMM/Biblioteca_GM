@@ -1,5 +1,4 @@
 #Ignorar conexion a base de datos local y base de datos local
-Biblioteca_GM.db
 iniciarSQLiteCloud.py
 creacion_db.sql
 db_backup.py
