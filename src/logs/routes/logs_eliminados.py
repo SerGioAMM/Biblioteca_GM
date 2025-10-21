@@ -409,17 +409,36 @@ def libros_modificados():
     total_libros = query.fetchone()[0]
     total_paginas = math.ceil(total_libros / libros_por_pagina)
 
-    query.execute("select count(*) from libros as l join prestamos p on l.id_libro = p.id_libro join Estados_prestamos ep on p.id_estado = ep.id_estado where l.id_libro = 222 and p.id_estado != 3")
-    copias_prestadas = query.fetchone()[0]
-
-    query_busqueda = (f"""select a.usuario,r.rol,strftime('%d-%m-%Y', lm.fecha_modificacion) as fecha,lm.motivo, lm.id_modificacion,
-                            -- Solo mostrar campos que realmente cambiaron
-                            CASE WHEN lm.titulo != l.Titulo THEN lm.titulo ELSE NULL END as old_titulo,
-                            CASE WHEN lm.tomo != l.Tomo THEN lm.tomo ELSE NULL END as old_tomo,
-                            CASE WHEN lm.num_paginas != l.numero_paginas THEN lm.num_paginas ELSE NULL END as old_num_paginas,
-                            CASE WHEN lm.num_copias != (l.numero_copias+{copias_prestadas}) THEN lm.num_copias ELSE NULL END as old_num_copias,
-                            CASE WHEN lm.portada != l.portada THEN lm.portada ELSE NULL END as old_portada,
-                            lm.id_modificacion, l.Titulo as titulo_actual, l.Tomo as tomo_actual, l.numero_paginas as num_paginas_actual, (l.numero_copias+{copias_prestadas}) as num_copias_actual, l.portada as portada_actual, lm.id_libro,
+    query_busqueda = (f"""select a.usuario, r.rol, strftime('%d-%m-%Y', lm.fecha_modificacion) as fecha, lm.motivo, lm.id_modificacion,
+                            -- Datos antiguos (guardados en libros_modificados)
+                            lm.titulo as old_titulo,
+                            lm.tomo as old_tomo,
+                            lm.num_paginas as old_num_paginas,
+                            lm.num_copias as old_num_copias,
+                            lm.portada as old_portada,
+                            lm.ISBN_antiguo as old_isbn,
+                            lm.ano_publicacion_antiguo as old_anio,
+                            -- Datos actuales (de la tabla libros)
+                            l.Titulo as titulo_actual, 
+                            l.Tomo as tomo_actual, 
+                            l.numero_paginas as num_paginas_actual, 
+                            l.numero_copias as num_copias_actual, 
+                            l.portada as portada_actual,
+                            l.ISBN as isbn_actual,
+                            l.ano_publicacion as anio_actual,
+                            lm.id_libro,
+                            -- Referencias antiguas de RegistroLibros
+                            ed_old.editorial as old_editorial,
+                            aut_old.nombre_autor || ' ' || aut_old.apellido_autor as old_autor,
+                            not_old.notacion as old_notacion,
+                            lug_old.lugar as old_lugar,
+                            lm.codigo_seccion_antiguo || ' - ' || sd_old.seccion as old_seccion,
+                            -- Referencias actuales de RegistroLibros
+                            ed_new.editorial as editorial_actual,
+                            aut_new.nombre_autor || ' ' || aut_new.apellido_autor as autor_actual,
+                            not_new.notacion as notacion_actual,
+                            lug_new.lugar as lugar_actual,
+                            rl.codigo_seccion || ' - ' || sd_new.seccion as seccion_actual,
                             strftime('%d', lm.fecha_modificacion) as dia,
                             CASE strftime('%m',lm.fecha_modificacion)
                             WHEN '01' THEN 'ENE'
@@ -439,6 +458,19 @@ def libros_modificados():
                             join Administradores a on lm.id_administrador = a.id_administrador
                             join roles r on a.id_rol = r.id_rol
                             join libros l on lm.id_libro = l.id_libro
+                            -- Referencias actuales
+                            join RegistroLibros rl on rl.id_libro = l.id_libro
+                            join Notaciones not_new on not_new.id_notacion = rl.id_notacion
+                            join Editoriales ed_new on ed_new.id_editorial = not_new.id_editorial
+                            join Autores aut_new on aut_new.id_autor = not_new.id_autor
+                            join Lugares lug_new on lug_new.id_lugar = rl.id_lugar
+                            join SistemaDewey sd_new on sd_new.codigo_seccion = rl.codigo_seccion
+                            -- Referencias antiguas (pueden ser NULL si no se almacenaron)
+                            left join Notaciones not_old on not_old.id_notacion = lm.id_notacion_antigua
+                            left join Editoriales ed_old on ed_old.id_editorial = lm.id_editorial_antigua
+                            left join Autores aut_old on aut_old.id_autor = lm.id_autor_antiguo
+                            left join Lugares lug_old on lug_old.id_lugar = lm.id_lugar_antiguo
+                            left join SistemaDewey sd_old on sd_old.codigo_seccion = lm.codigo_seccion_antiguo
                             order by lm.fecha_modificacion desc, lm.id_modificacion desc
                             limit {libros_por_pagina} offset {offset}""")
 
@@ -491,14 +523,37 @@ def buscar_libro_m():
     total_libros = query.fetchone()[0]
     total_paginas = math.ceil(total_libros / libros_por_pagina)
 
-    query.execute(f"""select a.usuario,r.rol,strftime('%d-%m-%Y', lm.fecha_modificacion) as fecha,lm.motivo,
-                            -- Solo mostrar campos que realmente cambiaron
-                            CASE WHEN lm.titulo != l.Titulo THEN lm.titulo ELSE NULL END as old_titulo,
-                            CASE WHEN lm.tomo != l.Tomo THEN lm.tomo ELSE NULL END as old_tomo,
-                            CASE WHEN lm.num_paginas != l.numero_paginas THEN lm.num_paginas ELSE NULL END as old_num_paginas,
-                            CASE WHEN lm.num_copias != l.numero_copias THEN lm.num_copias ELSE NULL END as old_num_copias,
-                            CASE WHEN lm.portada != l.portada THEN lm.portada ELSE NULL END as old_portada,
-                            lm.id_modificacion, l.Titulo as titulo_actual, l.Tomo as tomo_actual, l.numero_paginas as num_paginas_actual, l.numero_copias as num_copias_actual, l.portada as portada_actual, lm.id_libro,
+    query.execute(f"""select a.usuario, r.rol, strftime('%d-%m-%Y', lm.fecha_modificacion) as fecha, lm.motivo,
+                            -- Datos antiguos (guardados en libros_modificados)
+                            lm.titulo as old_titulo,
+                            lm.tomo as old_tomo,
+                            lm.num_paginas as old_num_paginas,
+                            lm.num_copias as old_num_copias,
+                            lm.portada as old_portada,
+                            lm.ISBN_antiguo as old_isbn,
+                            lm.ano_publicacion_antiguo as old_anio,
+                            lm.id_modificacion, 
+                            -- Datos actuales (de la tabla libros)
+                            l.Titulo as titulo_actual, 
+                            l.Tomo as tomo_actual, 
+                            l.numero_paginas as num_paginas_actual, 
+                            l.numero_copias as num_copias_actual, 
+                            l.portada as portada_actual,
+                            l.ISBN as isbn_actual,
+                            l.ano_publicacion as anio_actual,
+                            lm.id_libro,
+                            -- Referencias antiguas de RegistroLibros
+                            ed_old.editorial as old_editorial,
+                            aut_old.nombre_autor || ' ' || aut_old.apellido_autor as old_autor,
+                            not_old.notacion as old_notacion,
+                            lug_old.lugar as old_lugar,
+                            lm.codigo_seccion_antiguo || ' - ' || sd_old.seccion as old_seccion,
+                            -- Referencias actuales de RegistroLibros
+                            ed_new.editorial as editorial_actual,
+                            aut_new.nombre_autor || ' ' || aut_new.apellido_autor as autor_actual,
+                            not_new.notacion as notacion_actual,
+                            lug_new.lugar as lugar_actual,
+                            rl.codigo_seccion || ' - ' || sd_new.seccion as seccion_actual,
                             strftime('%d', lm.fecha_modificacion) as dia,
                             CASE strftime('%m',lm.fecha_modificacion)
                             WHEN '01' THEN 'ENE'
@@ -518,6 +573,19 @@ def buscar_libro_m():
                             join Administradores a on lm.id_administrador = a.id_administrador
                             join roles r on a.id_rol = r.id_rol
                             join libros l on lm.id_libro = l.id_libro
+                            -- Referencias actuales
+                            join RegistroLibros rl on rl.id_libro = l.id_libro
+                            join Notaciones not_new on not_new.id_notacion = rl.id_notacion
+                            join Editoriales ed_new on ed_new.id_editorial = not_new.id_editorial
+                            join Autores aut_new on aut_new.id_autor = not_new.id_autor
+                            join Lugares lug_new on lug_new.id_lugar = rl.id_lugar
+                            join SistemaDewey sd_new on sd_new.codigo_seccion = rl.codigo_seccion
+                            -- Referencias antiguas (pueden ser NULL si no se almacenaron)
+                            left join Notaciones not_old on not_old.id_notacion = lm.id_notacion_antigua
+                            left join Editoriales ed_old on ed_old.id_editorial = lm.id_editorial_antigua
+                            left join Autores aut_old on aut_old.id_autor = lm.id_autor_antiguo
+                            left join Lugares lug_old on lug_old.id_lugar = lm.id_lugar_antiguo
+                            left join SistemaDewey sd_old on sd_old.codigo_seccion = lm.codigo_seccion_antiguo
                             where 1=1 {SQL_where_busqueda}{SQL_where_rol}
                             order by lm.fecha_modificacion desc
                             limit {libros_por_pagina} offset {offset}""")
@@ -539,8 +607,12 @@ def revertir_cambios(id_modificacion):
     conexion = conexion_BD()
     query = conexion.cursor()
 
-    # Obtener los datos de la modificación a revertir
-    query.execute("SELECT id_libro,titulo,tomo,num_paginas,num_copias,portada FROM libros_modificados WHERE id_modificacion = ?", (id_modificacion,))
+    # Obtener los datos de la modificación a revertir (incluyendo nuevos campos)
+    query.execute("""SELECT id_libro, titulo, tomo, num_paginas, num_copias, portada, 
+                     ISBN_antiguo, ano_publicacion_antiguo,
+                     id_notacion_antigua, id_editorial_antigua, id_autor_antiguo, 
+                     id_lugar_antiguo, codigo_seccion_antiguo 
+                     FROM libros_modificados WHERE id_modificacion = ?""", (id_modificacion,))
     modificacion = query.fetchone()
 
     if not modificacion:
@@ -554,9 +626,15 @@ def revertir_cambios(id_modificacion):
     antiguo_num_paginas = modificacion[3]
     antiguo_num_copias = modificacion[4]
     antigua_portada = modificacion[5]
+    antiguo_isbn = modificacion[6]
+    antiguo_anio = modificacion[7]
+    antigua_id_notacion = modificacion[8]
+    antiguo_id_lugar = modificacion[11]
+    antiguo_codigo_seccion = modificacion[12]
 
     # Obtener los datos actuales del libro
-    query.execute("SELECT id_libro,titulo,tomo,numero_paginas,numero_copias,portada FROM libros WHERE id_libro = ?", (id_libro,))
+    query.execute("""SELECT id_libro, titulo, tomo, numero_paginas, numero_copias, portada, 
+                     ISBN, ano_publicacion FROM libros WHERE id_libro = ?""", (id_libro,))
     libro_actual = query.fetchone()
 
     if not libro_actual:
@@ -564,20 +642,24 @@ def revertir_cambios(id_modificacion):
         conexion.close()
         return "Libro no encontrado", 404
 
-    # Revertir los cambios solo si los nuevos valores son diferentes de los actuales
-    titulo_revertido = antiguo_titulo if antiguo_titulo != libro_actual[1] else libro_actual[1]
-    tomo_revertido = antiguo_tomo if antiguo_tomo != libro_actual[2] else libro_actual[2]
-    num_paginas_revertido = antiguo_num_paginas if antiguo_num_paginas != libro_actual[3] else libro_actual[3]
-    num_copias_revertido = antiguo_num_copias if antiguo_num_copias != libro_actual[4] else libro_actual[4]
-    portada_revertida = antigua_portada if antigua_portada != libro_actual[5] else libro_actual[5]
-
-    # Actualizar el libro con los valores revertidos
+    # Revertir los cambios en la tabla Libros
     query.execute("""
         UPDATE libros
-        SET Titulo = ?, Tomo = ?, numero_paginas = ?, numero_copias = ?, portada = ?
+        SET Titulo = ?, Tomo = ?, numero_paginas = ?, numero_copias = ?, portada = ?,
+            ISBN = ?, ano_publicacion = ?
         WHERE id_libro = ?
-    """, (titulo_revertido, tomo_revertido, num_paginas_revertido, num_copias_revertido, portada_revertida, id_libro))
+    """, (antiguo_titulo, antiguo_tomo, antiguo_num_paginas, antiguo_num_copias, 
+          antigua_portada, antiguo_isbn, antiguo_anio, id_libro))
 
+    # Revertir los cambios en RegistroLibros (si existen referencias antiguas)
+    if antigua_id_notacion and antiguo_id_lugar and antiguo_codigo_seccion:
+        query.execute("""
+            UPDATE RegistroLibros
+            SET id_notacion = ?, id_lugar = ?, codigo_seccion = ?
+            WHERE id_libro = ?
+        """, (antigua_id_notacion, antiguo_id_lugar, antiguo_codigo_seccion, id_libro))
+
+    # Eliminar el registro de modificación
     query.execute("DELETE FROM libros_modificados WHERE id_modificacion = ?", (id_modificacion,))
     
     conexion.commit()

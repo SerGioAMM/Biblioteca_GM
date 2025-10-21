@@ -13,6 +13,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
+    <!--* Nuevos estilos de alertas y animaciones -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/alertas.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animaciones.css') }}">
+
 </head>
 <body>
     <header>
@@ -55,7 +59,7 @@
                                 </div>
                                 <div class="col-12 col-md-6 mx-auto text-center mb-3">
                                     <br>
-                                    <button class="btn btn-secondary w-50" type="submit">Registrar visitantes</button>
+                                    <button class="btn btn-secondary w-50 boton" type="submit">Registrar visitantes</button>
                                     <br><br>
                                 </div>
                             </form>
@@ -66,13 +70,9 @@
         {% endif %}
         
         {% if (alerta) %}
-        <span class="error-eliminacion">
-            <h4><strong>{{alerta}}</strong></h4>
-        </span>
+        <span class="error-eliminacion" data-alert-message="{{alerta}}" style="display: none;"></span>
         {% elif (registro_exitoso) %}
-        <span class="exito-ingreso">
-            <h4><strong>{{registro_exitoso}}</strong></h4>
-        </span>
+        <span class="exito-ingreso" data-alert-message="{{registro_exitoso}}" style="display: none;"></span>
         {% endif %}           
 
     </main>
@@ -90,5 +90,9 @@
             fechaInput.value = today;
         });
     </script>
+    
+    <!--* Scripts de alertas y animaciones -->
+    <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animaciones.js') }}"></script>
 </body>
 </html>

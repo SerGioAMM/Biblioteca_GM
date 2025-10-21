@@ -17,6 +17,10 @@
     <!-- <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet"> -->
 
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!--* Nuevos estilos de alertas y animaciones -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/alertas.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animaciones.css') }}">
 
 </head>
 <body class="bg-custom">
@@ -29,13 +33,14 @@
                 <h2>Gestión de Visitantes</h2>
                 <h4 class="p-3">Administra los registros de visitantes de la biblioteca.</h4>
                 <form class="frm-usuarios" action="/buscar_visitante" method="GET" id="form-busqueda">
-                    <div class="input-group mx-auto" style="width: 60%;">
-                        <div class="row w-100">
-                            <div class="col-md-6">
+                    <div class="input-group mx-auto w-75">
+                        <div class="row row-cols-lg-12 g-0 p-2 w-100">
+                            <div class="col-md-5 mx-auto">
                                 <label for="fecha_inicio" class="form-label">Mes de inicio:</label>
                                 <input type="month" name="fecha_inicio" class="form-control" value="{{ fecha_inicio if fecha_inicio else '' }}">
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-1 mx-auto"></div>
+                            <div class="col-md-5 mx-auto">
                                 <label for="fecha_fin" class="form-label">Mes final:</label>
                                 <input type="month" name="fecha_fin" class="form-control" value="{{ fecha_fin if fecha_fin else '' }}">
                             </div>
@@ -48,9 +53,7 @@
             </div>
         </div>
         {% if (exito) %}
-        <span class="exito-ingreso">
-            <h4><strong>{{exito}}</strong></h4>
-        </span>
+        <span class="exito-ingreso" data-alert-message="{{exito}}" style="display: none;"></span>
         {% endif %} 
         <div class="contendor-usuarios bg-light-custom" id="grupovisitante">
             <div class="row">
@@ -102,7 +105,7 @@
                                         <td><strong>{{ visitante.total }}</strong></td>
                                         <td style="width: 20%;">
                                             
-                                            <a data-bs-toggle="collapse" href="#eliminar{{visitante.id_registro}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-danger mb-1">
+                                            <a data-bs-toggle="collapse" href="#eliminar{{visitante.id_registro}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-danger mb-1 boton">
                                                 <i class="bi bi-trash"></i> Eliminar
                                             </a>
                                             
@@ -122,7 +125,7 @@
                                                             <input type="hidden" value="{{visitante.cantidad_mujeres}}" name="cantidad_mujeres" readonly>
                                                             <input class="form-control" placeholder="Escribe el motivo de la eliminación del registro." name="motivo" required>
                                                         </div>
-                                                        <button class="btn btn-sm btn-outline-danger" type="submit">Confirmar eliminación</button>
+                                                        <button class="btn btn-sm btn-outline-danger boton" type="submit">Confirmar eliminación</button>
                                                     </form>
                                                     <br>
                                                 </div>
@@ -190,6 +193,10 @@
     <!--! Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 
+    <!--* Scripts de alertas y animaciones -->
+    <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animaciones.js') }}"></script>
+    
     <!-- Custom Scripts -->
     <script src="{{ url_for('static', filename='js/filtros_visitantes.js') }}"></script>
 </body>

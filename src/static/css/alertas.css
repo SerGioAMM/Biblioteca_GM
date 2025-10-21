@@ -1,0 +1,123 @@
+/* ========================================
+   SISTEMA DE ALERTAS MEJORADO - Bootstrap 5
+   ======================================== */
+
+/* Contenedor de alertas - Posicionado arriba derecha */
+.alert-container {
+    position: fixed;
+    top: 80px; /* Debajo de la navbar */
+    right: 20px;
+    width: 350px;
+    max-width: calc(100vw - 40px);
+    pointer-events: none; /* Permitir clicks debajo del contenedor */
+}
+
+/* Las alertas individuales sí deben ser clickeables */
+.alert-container > .alert {
+    pointer-events: auto;
+}
+
+/* Animación de entrada - Slide desde la derecha */
+@keyframes slideInRight {
+    from {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Animación de salida - Slide hacia la derecha */
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+}
+
+/* Clase para alertas animadas */
+.alert-animated {
+    animation: slideInRight 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-left: 4px solid;
+    margin-bottom: 15px;
+}
+
+/* Clase para ocultar con animación */
+.alert-hiding {
+    animation: slideOutRight 0.4s ease-out forwards;
+}
+
+/* Estilos específicos por tipo */
+.alert-success {
+    border-left-color: #198754 !important;
+}
+
+.alert-danger {
+    border-left-color: #dc3545 !important;
+}
+
+.alert-info {
+    border-left-color: #0dcaf0 !important;
+}
+
+.alert-warning {
+    border-left-color: #ffc107 !important;
+}
+
+/* Icono dentro de la alerta */
+.alert .alert-icon {
+    font-size: 1.25rem;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+/* Botón de cierre mejorado */
+.alert .btn-close {
+    filter: none;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.alert .btn-close:hover {
+    opacity: 1;
+}
+
+/* Barra de progreso de auto-cierre */
+.alert-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background-color: rgba(0, 0, 0, 0.2);
+    animation: progressBar 4s linear forwards;
+}
+
+/* Barra de progreso para alertas con duración personalizada */
+.alert-progress.duration-10s {
+    animation: progressBar 10s linear forwards;
+}
+
+@keyframes progressBar {
+    from {
+        width: 100%;
+    }
+    to {
+        width: 0%;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .alert-container {
+        top: 70px;
+        right: 10px;
+        width: calc(100vw - 20px);
+    }
+}

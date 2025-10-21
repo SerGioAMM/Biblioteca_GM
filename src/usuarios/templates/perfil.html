@@ -12,19 +12,19 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    
+    <!--* Nuevos estilos de alertas y animaciones -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/alertas.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animaciones.css') }}">
 </head>
 <body class="bg-light-custom">
     <header>
         {% include 'navbar.html' %}
     </header>
     {% if (alerta) %}
-        <span class="error-eliminacion">
-            <h4><strong>{{alerta}}</strong></h4>
-        </span>
+        <span class="error-eliminacion" data-alert-message="{{alerta}}" style="display: none;"></span>
     {% elif (exito) %}
-        <span class="exito-ingreso">
-            <h4><strong>{{exito}}</strong></h4>
-        </span>
+        <span class="exito-ingreso" data-alert-message="{{exito}}" style="display: none;"></span>
     {% endif %}
     
     <section class="py-3 py-md-5 py-xl-8" style="min-height: 80vh;">
@@ -52,22 +52,22 @@
                                     {% endif %}
                                     
                                     <div class="d-grid gap-2">
-                                        <button class="btn btn-primary" type="button" id="btn-perfil">
+                                        <button class="btn btn-dark boton" type="button" id="btn-perfil">
                                             <i class="bi bi-person"></i> Mi Perfil
                                         </button>
-                                        <button class="btn btn-outline-primary" type="button" id="btn-actividad">
+                                        <button class="btn btn-outline-primary boton" type="button" id="btn-actividad">
                                             <i class="bi bi-clock-history"></i> Actividad Reciente
                                         </button>
-                                        <button class="btn btn-outline-info" type="button" id="btn-notificaciones">
+                                        <button class="btn btn-outline-primary boton" type="button" id="btn-notificaciones">
                                             <i class="bi bi-bell"></i> Notificaciones
                                             {% if notificaciones_no_vistas > 0 %}
                                                 <span class="badge bg-danger">{{ notificaciones_no_vistas }}</span>
                                             {% endif %}
                                         </button>
-                                        <button class="btn btn-outline-secondary" type="button" id="btn-editar">
+                                        <button class="btn btn-outline-primary boton" type="button" id="btn-editar">
                                             <i class="bi bi-pencil-square"></i> <span>Editar Perfil</span>
                                         </button>
-                                        <button type="submit" class="btn btn-outline-success d-none" id="btn-guardar" form="form-editar-perfil" disabled>
+                                        <button type="submit" class="btn btn-outline-primary boton d-none" id="btn-guardar" form="form-editar-perfil" disabled>
                                             <i class="bi bi-floppy"></i> Guardar Cambios
                                         </button>
                                     </div>
@@ -277,10 +277,14 @@
     <!-- Footer -->
     {% include 'footer.html' %}
 
-    <!-- Custom Scripts -->
-    <script src="{{ url_for('static', filename='js/perfil.js') }}"></script>
-
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    
+    <!--* Scripts de alertas y animaciones -->
+    <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animaciones.js') }}"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="{{ url_for('static', filename='js/perfil.js') }}"></script>
 </body>
 </html>

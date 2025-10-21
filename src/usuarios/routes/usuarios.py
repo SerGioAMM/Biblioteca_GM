@@ -273,7 +273,7 @@ def ver_perfil():
                         FROM Notificaciones n
                         LEFT JOIN Notificaciones_admins na ON n.id_notificacion = na.id_notificacion 
                             AND na.id_administrador = ?
-                        WHERE DATE(n.fecha) = DATE('now')
+                        WHERE DATE(n.fecha) = DATE('now', 'localtime')
                         ORDER BY n.fecha DESC""", (id_usuario,))
         notificaciones_hoy = dict_factory(query)
         
@@ -293,7 +293,7 @@ def ver_perfil():
                         FROM Notificaciones n
                         LEFT JOIN Notificaciones_admins na ON n.id_notificacion = na.id_notificacion 
                             AND na.id_administrador = ?
-                        WHERE DATE(n.fecha) = DATE('now', '-1 day')
+                        WHERE DATE(n.fecha) = DATE('now', 'localtime', '-1 day')
                         ORDER BY n.fecha DESC""", (id_usuario,))
         notificaciones_ayer = dict_factory(query)
         
@@ -313,7 +313,7 @@ def ver_perfil():
                         FROM Notificaciones n
                         LEFT JOIN Notificaciones_admins na ON n.id_notificacion = na.id_notificacion 
                             AND na.id_administrador = ?
-                        WHERE DATE(n.fecha) < DATE('now', '-1 day')
+                        WHERE DATE(n.fecha) < DATE('now', 'localtime', '-1 day')
                         ORDER BY n.fecha DESC
                         LIMIT 50""", (id_usuario,))
         notificaciones_anteriores = dict_factory(query)

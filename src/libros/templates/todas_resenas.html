@@ -11,6 +11,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <!--* Nuevos estilos de alertas y animaciones -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/alertas.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animaciones.css') }}">
 </head>
 <body class="bg-light-custom">
     <header>
@@ -38,7 +42,7 @@
                                 <div class="col">
                                     <h3 class="mb-1">{{ libro.Titulo }}</h3>
                                     <p class="text-muted mb-1">{{ libro.nombre_autor }} {{ libro.apellido_autor }}</p>
-                                    <a href="{{ url_for('libros.detalle_libro', ID=libro.id_libro, Titulo=libro.Titulo) }}" class="btn btn-sm btn-outline-primary">
+                                    <a href="{{ url_for('libros.detalle_libro', ID=libro.id_libro, Titulo=libro.Titulo) }}" class="btn btn-sm btn-outline-primary boton">
                                         <i class="bi bi-arrow-left"></i> Volver a detalles
                                     </a>
                                 </div>
@@ -95,7 +99,16 @@
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
                                     <h6 class="mb-0">{{ opinion.nombre_creador }} {{ opinion.apellido_creador }}</h6>
-                                    <small class="text-muted">{{ opinion.fecha_opinion }}</small>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <small class="text-muted">{{ opinion.fecha_opinion }}</small>
+                                        {% if session and session.rol in ['Administrador', 'Bibliotecario'] %}
+                                        <button class="btn btn-outline-danger btn-sm boton" type="button" data-bs-toggle="collapse" 
+                                                data-bs-target="#eliminarOpinion{{ opinion.id_opinion }}" 
+                                                aria-expanded="false" aria-controls="eliminarOpinion{{ opinion.id_opinion }}">
+                                            <i class="bi bi-trash"></i> Eliminar
+                                        </button>
+                                        {% endif %}
+                                    </div>
                                 </div>
                                 <div class="mb-2">
                                     {% for i in range(opinion.valoracion) %}
@@ -107,6 +120,20 @@
                                     <span class="text-muted">({{ opinion.valoracion }}/5)</span>
                                 </div>
                                 <p class="mb-0">{{ opinion.opinion }}</p>
+                                {% if session and session.rol in ['Administrador', 'Bibliotecario'] %}
+                                    <div class="collapse" id="eliminarOpinion{{ opinion.id_opinion }}" data-bs-parent="#grupoPrestamo">
+                                        <form class="frm-eliminar-opinion-aceptada mt-3 text-center p-3 border border-secondary-subtle rounded border-opacity-50" action="/eliminar_opinion_aceptada" method="POST">
+                                            <div class="mb-3">
+                                                <h6><strong>¿Está seguro de que desea eliminar esta opinión?</strong></h6>
+                                                <input type="hidden" name="id_opinion" value="{{ opinion.id_opinion }}">
+                                                <input type="hidden" name="id_libro" value="{{ libro.id_libro }}">
+                                                <input type="hidden" name="titulo_libro" value="{{ libro.Titulo }}">
+                                                <input class="form-control" type="text" placeholder="Escribe el motivo de la eliminación de la opinión." name="motivo" required autocomplete="off">
+                                            </div>
+                                            <button class="btn btn-sm btn-outline-danger boton" type="submit">Confirmar eliminación</button> 
+                                        </form>
+                                    </div>
+                                    {% endif %}
                             </div>
                         </div>
                         {% endfor %}

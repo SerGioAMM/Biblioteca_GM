@@ -14,6 +14,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <!--? Tom Select CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+    
+    <!--* Nuevos estilos de animaciones -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animaciones.css') }}">
 </head>
 <body class="bg-custom">
     <header>
@@ -38,7 +41,7 @@
                 <form class="frm-libros_e" action="/buscar_libro_e" method="GET" id="form-busqueda">
                     <div class="input-group mx-auto" style="width: 45%;">
                     <select class="w-75" name="buscar" id="cuadro-busqueda" data-placeholder="Buscar..."  autocomplete="off" cursor="text"></select>
-                    <button class="btn btn-success w-25" type="submit">Buscar</button>
+                    <button class="btn btn-success w-25" type="submit"><i class="bi bi-search"></i> Buscar</button>
                     </div>
                     <div class="input-group mx-auto" style="width: 45%;">
                         <select name="filtro-busqueda" id="filtro-busqueda" class="form-select mt-3 btn btn-secondary">

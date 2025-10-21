@@ -227,8 +227,6 @@ def registrar_libro(Titulo,NumeroPaginas,ISBN,tomo,NumeroCopias,NombreAutor,Apel
         
         if libro_existente:
             alerta = f"Error: Ya existe un libro con el título '{Titulo}'."
-            query.close()
-            conexion.close()
             return alerta
 
         #? INSERT DE LIBROS
@@ -289,15 +287,34 @@ def editar_libro(id_libro, usuario, new_titulo, new_portada, new_tomo, new_numer
         # Normalizar el nuevo título
         new_titulo = normalizar_titulo(new_titulo)
         
-        # Obtener datos actuales del libro
         libro = get_detalle_libro(id_libro)
         old_titulo = libro[0]['Titulo']
         old_portada = libro[0]['portada']
         old_tomo = libro[0]['Tomo']
         old_numero_paginas = libro[0]['numero_paginas']
         old_numero_copias = libro[0]['numero_copias']
+        old_isbn = libro[0]['ISBN']
+        old_anio = libro[0]['ano_publicacion']
         
-        # Manejar portada
+        query.execute("""
+            SELECT rl.id_notacion, rl.id_lugar, rl.codigo_seccion,
+                   n.id_autor, n.id_editorial
+            FROM RegistroLibros rl
+            JOIN Notaciones n ON n.id_notacion = rl.id_notacion
+            WHERE rl.id_libro = ?
+        """, (id_libro,))
+        registro_actual = query.fetchone()
+        
+        if not registro_actual:
+            raise Exception("No se encontró el registro del libro en RegistroLibros")
+        
+        # Almacenar las referencias antiguas (para guardar en Libros_modificados)
+        old_id_notacion = registro_actual[0]
+        old_id_lugar = registro_actual[1]
+        old_codigo_seccion = registro_actual[2]
+        old_id_autor = registro_actual[3]
+        old_id_editorial = registro_actual[4]
+        
         if not new_portada:
             new_portada = old_portada
         else:
@@ -310,32 +327,34 @@ def editar_libro(id_libro, usuario, new_titulo, new_portada, new_tomo, new_numer
             upload_result = cloudinary.uploader.upload(new_portada, folder="bibliotecagm/portadas")
             new_portada = upload_result.get('secure_url')
         
-        # Registrar modificación en log
-        query.execute("insert into libros_modificados(id_libro, id_administrador, titulo, tomo, num_paginas, num_copias, portada, fecha_modificacion, motivo) values (?,?,?,?,?,?,?,date('now'),?)",
-                    (id_libro, usuario, old_titulo, old_tomo, old_numero_paginas, old_numero_copias, old_portada, motivo))
-
-        # Actualizar información básica del libro
-        query.execute("update libros set titulo = ?, portada = ?, tomo = ?, numero_paginas = ?, numero_copias = ?, isbn = ?, ano_publicacion = ? where id_libro = ?", 
-                        (new_titulo, new_portada, to_int(new_tomo), to_int(new_numero_paginas), to_int(new_numero_copias), new_isbn, new_anio, id_libro))
+        query.execute("""
+            UPDATE libros 
+            SET titulo = ?, portada = ?, tomo = ?, numero_paginas = ?, numero_copias = ?, isbn = ?, ano_publicacion = ? 
+            WHERE id_libro = ?
+        """, (new_titulo, new_portada, to_int(new_tomo), to_int(new_numero_paginas), 
+              to_int(new_numero_copias), new_isbn, new_anio, id_libro))
         
-        # Actualizar o insertar lugar
+        
+        # Lugar de publicación
         if not new_lugar or new_lugar.strip() == "":
             new_lugar = "-"
-        query.execute("insert or ignore into lugares (lugar) values (?)", (new_lugar,))
-        query.execute("select id_lugar from lugares where lugar = ?", (new_lugar,))
-        id_lugar = query.fetchone()[0]
+        query.execute("INSERT OR IGNORE INTO lugares (lugar) VALUES (?)", (new_lugar,))
+        query.execute("SELECT id_lugar FROM lugares WHERE lugar = ?", (new_lugar,))
+        new_id_lugar = query.fetchone()[0]
+
+        # Autor
+        query.execute("INSERT OR IGNORE INTO autores (nombre_autor, apellido_autor) VALUES (?, ?)", 
+                        (new_nombre_autor, new_apellido_autor))
+        query.execute("SELECT id_autor FROM autores WHERE nombre_autor = ? AND apellido_autor = ?", 
+                        (new_nombre_autor, new_apellido_autor))
+        new_id_autor = query.fetchone()[0]
         
-        # Actualizar o insertar autor
-        query.execute("insert or ignore into autores (nombre_autor, apellido_autor) values (?, ?)", (new_nombre_autor, new_apellido_autor))
-        query.execute("select id_autor from autores where nombre_autor = ? and apellido_autor = ?", (new_nombre_autor, new_apellido_autor))
-        id_autor = query.fetchone()[0]
-        
-        # Actualizar o insertar editorial
+        # Editorial
         if not new_editorial or new_editorial.strip() == "":
             new_editorial = "Otros"
-        query.execute("insert or ignore into editoriales (editorial) values (?)", (new_editorial,))
-        query.execute("select id_editorial from editoriales where editorial = ?", (new_editorial,))
-        id_editorial = query.fetchone()[0]
+        query.execute("INSERT OR IGNORE INTO editoriales (editorial) VALUES (?)", (new_editorial,))
+        query.execute("SELECT id_editorial FROM editoriales WHERE editorial = ?", (new_editorial,))
+        new_id_editorial = query.fetchone()[0]
         
         # Determinar nueva notación
         if new_editorial and new_editorial.strip() and new_editorial != "Otros":
@@ -347,14 +366,70 @@ def editar_libro(id_libro, usuario, new_titulo, new_portada, new_tomo, new_numer
         else:
             Notacion = "OTR"
         
-        # Actualizar o insertar notación
-        query.execute("insert or ignore into notaciones (notacion, id_editorial, id_autor) values (?, ?, ?)", (Notacion, id_editorial, id_autor))
-        query.execute("select id_notacion from notaciones where notacion = ? and id_autor = ? and id_editorial = ?", (Notacion, id_autor, id_editorial))
-        id_notacion = query.fetchone()[0]
+        # Crear o buscar notación
+        query.execute("INSERT OR IGNORE INTO notaciones (notacion, id_editorial, id_autor) VALUES (?, ?, ?)", 
+                     (Notacion, new_id_editorial, new_id_autor))
+        query.execute("SELECT id_notacion FROM notaciones WHERE notacion = ? AND id_autor = ? AND id_editorial = ?", 
+                     (Notacion, new_id_autor, new_id_editorial))
+        new_id_notacion = query.fetchone()[0]
         
-        # Actualizar RegistroLibros
-        query.execute("update RegistroLibros set id_notacion = ?, id_lugar = ?, codigo_seccion = ? where id_libro = ?",
-                     (id_notacion, id_lugar, new_seccion, id_libro))
+        # Verificar si ya existe un registro de modificación para este libro
+        query.execute("SELECT id_modificacion FROM libros_modificados WHERE id_libro = ?", (id_libro,))
+        registro_existente = query.fetchone()
+        
+        if registro_existente:
+            # Ya existe un registro: ACTUALIZAR con los datos actuales como "antiguos"
+            query.execute("""
+                UPDATE libros_modificados 
+                SET id_administrador = ?,
+                    titulo = ?,
+                    tomo = ?,
+                    num_paginas = ?,
+                    num_copias = ?,
+                    portada = ?,
+                    fecha_modificacion = date('now','localtime'),
+                    motivo = ?,
+                    id_notacion_antigua = ?,
+                    id_editorial_antigua = ?,
+                    id_autor_antiguo = ?,
+                    id_lugar_antiguo = ?,
+                    codigo_seccion_antiguo = ?,
+                    ISBN_antiguo = ?,
+                    ano_publicacion_antiguo = ?
+                WHERE id_libro = ?
+            """, (usuario, old_titulo, old_tomo, old_numero_paginas, old_numero_copias, 
+                  old_portada, motivo, old_id_notacion, old_id_editorial, old_id_autor, 
+                  old_id_lugar, old_codigo_seccion, old_isbn, old_anio, id_libro))
+        else:
+            # No existe registro: INSERTAR nuevo
+            query.execute("""
+                INSERT INTO libros_modificados(
+                    id_libro, 
+                    id_administrador, 
+                    titulo, 
+                    tomo, 
+                    num_paginas, 
+                    num_copias, 
+                    portada, 
+                    fecha_modificacion, 
+                    motivo,
+                    id_notacion_antigua,
+                    id_editorial_antigua,
+                    id_autor_antiguo,
+                    id_lugar_antiguo,
+                    codigo_seccion_antiguo,
+                    ISBN_antiguo,
+                    ano_publicacion_antiguo
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, date('now','localtime'), ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (id_libro, usuario, old_titulo, old_tomo, old_numero_paginas, old_numero_copias, 
+                    old_portada, motivo, old_id_notacion, old_id_editorial, old_id_autor, 
+                    old_id_lugar, old_codigo_seccion, old_isbn, old_anio))
+        
+        query.execute("""
+            UPDATE RegistroLibros 
+            SET id_notacion = ?, id_lugar = ?, codigo_seccion = ? 
+            WHERE id_libro = ?
+        """, (new_id_notacion, new_id_lugar, new_seccion, id_libro))
         
         alerta = "Libro editado exitósamente."
     except Exception as e:
