@@ -128,7 +128,10 @@ def graficas_generales():
             SUM(CASE WHEN tv.tipo_visitante = 'Profesionales' THEN v.cantidad_hombres + v.cantidad_mujeres ELSE 0 END) as profesionales,
             SUM(CASE WHEN tv.tipo_visitante = 'Trabajadores' THEN v.cantidad_hombres + v.cantidad_mujeres ELSE 0 END) as trabajadores,
             SUM(CASE WHEN tv.tipo_visitante = 'Personal de la institución' THEN v.cantidad_hombres + v.cantidad_mujeres ELSE 0 END) as personal_institucion,
-            SUM(CASE WHEN tv.tipo_visitante = 'Otros usuarios' THEN v.cantidad_hombres + v.cantidad_mujeres ELSE 0 END) as otros_usuarios
+            SUM(CASE WHEN tv.tipo_visitante = 'Otros usuarios' THEN v.cantidad_hombres + v.cantidad_mujeres ELSE 0 END) as otros_usuarios,
+            -- Tipos creados por el usuario (todos los que no sean los predefinidos)
+            SUM(CASE WHEN tv.tipo_visitante NOT IN ('Estudiantes universitarios', 'Estudiantes de primaria', 'Estudiantes de nivel medio', 'Profesionales', 'Trabajadores', 'Personal de la institución', 'Otros usuarios') 
+                THEN v.cantidad_hombres + v.cantidad_mujeres ELSE 0 END) as creados
         FROM Visitantes v
         JOIN Tipos_Visitantes tv ON v.id_tipo_visitante = tv.id_tipo_visitante
         GROUP BY strftime('%Y-%m', fecha)
@@ -139,16 +142,29 @@ def graficas_generales():
     resultados_visitantes_mes = dict_factory(query)
     
     # Separar las etiquetas y datos para gráfico de visitantes por mes
-    labels_visitantes_mes = [f"{resultado['mes_nombre']} ({resultado['universitarios'] + resultado['primaria'] + resultado['nivel_medio'] + resultado['profesionales'] + resultado['trabajadores'] + resultado['personal_institucion'] + resultado['otros_usuarios']})" for resultado in resultados_visitantes_mes]
-    
-    # Datos por tipo de visitante (total hombres + mujeres)
-    datos_universitarios = [resultado["universitarios"] for resultado in resultados_visitantes_mes]
-    datos_primaria = [resultado["primaria"] for resultado in resultados_visitantes_mes]
-    datos_nivel_medio = [resultado["nivel_medio"] for resultado in resultados_visitantes_mes]
-    datos_profesionales = [resultado["profesionales"] for resultado in resultados_visitantes_mes]
-    datos_trabajadores = [resultado["trabajadores"] for resultado in resultados_visitantes_mes]
-    datos_personal_institucion = [resultado["personal_institucion"] for resultado in resultados_visitantes_mes]
-    datos_otros_usuarios = [resultado["otros_usuarios"] for resultado in resultados_visitantes_mes]
+    if resultados_visitantes_mes:
+        labels_visitantes_mes = [f"{resultado['mes_nombre']} ({resultado['universitarios'] + resultado['primaria'] + resultado['nivel_medio'] + resultado['profesionales'] + resultado['trabajadores'] + resultado['personal_institucion'] + resultado['otros_usuarios'] + resultado['creados']})" for resultado in resultados_visitantes_mes]
+        
+        # Datos por tipo de visitante (total hombres + mujeres)
+        datos_universitarios = [resultado["universitarios"] or 0 for resultado in resultados_visitantes_mes]
+        datos_primaria = [resultado["primaria"] or 0 for resultado in resultados_visitantes_mes]
+        datos_nivel_medio = [resultado["nivel_medio"] or 0 for resultado in resultados_visitantes_mes]
+        datos_profesionales = [resultado["profesionales"] or 0 for resultado in resultados_visitantes_mes]
+        datos_trabajadores = [resultado["trabajadores"] or 0 for resultado in resultados_visitantes_mes]
+        datos_personal_institucion = [resultado["personal_institucion"] or 0 for resultado in resultados_visitantes_mes]
+        datos_otros_usuarios = [resultado["otros_usuarios"] or 0 for resultado in resultados_visitantes_mes]
+        datos_creados = [resultado["creados"] or 0 for resultado in resultados_visitantes_mes]
+    else:
+        # Valores por defecto si no hay visitantes
+        labels_visitantes_mes = []
+        datos_universitarios = []
+        datos_primaria = []
+        datos_nivel_medio = []
+        datos_profesionales = []
+        datos_trabajadores = []
+        datos_personal_institucion = []
+        datos_otros_usuarios = []
+        datos_creados = []
 
     # Totales para mostrar en contenedores
     query.execute("SELECT COUNT(*) FROM Prestamos")
@@ -178,6 +194,7 @@ def graficas_generales():
                             datos_trabajadores=datos_trabajadores,
                             datos_personal_institucion=datos_personal_institucion,
                             datos_otros_usuarios=datos_otros_usuarios,
+                            datos_creados=datos_creados,
                             total_prestamos=total_prestamos,
                             total_libros=total_libros,
                             total_visitantes=total_visitantes)

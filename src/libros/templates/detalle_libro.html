@@ -283,19 +283,19 @@
                         </div>
                         <div class="col-12 col-md-3">
                             <label for="tomo" class="form-label">Tomo</label>
-                            <input name="tomo" type="number" class="form-control editable" id="" placeholder="" autocomplete="off" value="{{libro.Tomo}}">
+                            <input name="tomo" type="number" class="form-control editable" min="0" id="" placeholder="" autocomplete="off" value="{{libro.Tomo}}">
                         </div>
                         <div class="col-12 col-md-3 mb-3">
                             <label for="anio" class="form-label">Año de Publicación</label>
-                            <input name="anio" type="text" class="form-control editable" id="" placeholder="" autocomplete="off" value="{{libro.ano_publicacion}}">
+                            <input name="anio" type="number" class="form-control editable" min="0" id="" placeholder="" autocomplete="off" value="{{libro.ano_publicacion}}">
                         </div>
                         <div class="col-12 col-md-3 mb-3">
                             <label for="numero_paginas" class="form-label">Número de Páginas*</label>
-                            <input name="numero_paginas" type="number" class="form-control editable" id="" placeholder="" autocomplete="off" value="{{libro.numero_paginas}}" required>
+                            <input name="numero_paginas" type="number" class="form-control editable" min="1" id="" placeholder="" autocomplete="off" value="{{libro.numero_paginas}}" required>
                         </div>
                         <div class="col-12 col-md-3 mb-3">
                             <label for="numero_copias" class="form-label">Número de Copias*</label>
-                            <input name="numero_copias" type="text" class="form-control editable" id="" required autocomplete="off" value="{{libro.numero_copias}}" required>
+                            <input name="numero_copias" type="number" class="form-control editable" min="0" id="" placeholder="" required autocomplete="off" value="{{libro.numero_copias}}" required>
                         </div>
                         <div class="col-12 col-md-4 mb-3">
                             <label for="lugar" class="form-label">Lugar de Publicación</label>

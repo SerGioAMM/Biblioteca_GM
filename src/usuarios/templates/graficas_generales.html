@@ -121,6 +121,7 @@
     <div id="datos_trabajadores" data-values='{{ datos_trabajadores | tojson }}'></div>
     <div id="datos_personal_institucion" data-values='{{ datos_personal_institucion | tojson }}'></div>
     <div id="datos_otros_usuarios" data-values='{{ datos_otros_usuarios | tojson }}'></div>
+    <div id="datos_creados" data-values='{{ datos_creados | tojson }}'></div>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const ctx1 = document.getElementById('grafica1');
@@ -138,6 +139,7 @@
         const datostrabajadores = JSON.parse(document.getElementById('datos_trabajadores').dataset.values);
         const datospersonalinstitucion = JSON.parse(document.getElementById('datos_personal_institucion').dataset.values);
         const datosotrosusuarios = JSON.parse(document.getElementById('datos_otros_usuarios').dataset.values);
+        const datoscreados = JSON.parse(document.getElementById('datos_creados').dataset.values);
         new Chart(ctx1, {
             type: 'pie',
             data: {
@@ -321,6 +323,13 @@
                     data: datosotrosusuarios,
                     backgroundColor: 'rgba(220, 53, 69, 0.8)', // Rojo
                     borderColor: 'rgba(220, 53, 69, 1)',
+                    borderWidth: 2,
+                    borderRadius: 5
+                }, {
+                    label: 'Creados (Personalizados)',
+                    data: datoscreados,
+                    backgroundColor: 'rgba(255, 99, 255, 0.8)', // Rosa (mismo que Arte, música y deportes)
+                    borderColor: 'rgba(255, 99, 255, 1)',
                     borderWidth: 2,
                     borderRadius: 5
                 }]
