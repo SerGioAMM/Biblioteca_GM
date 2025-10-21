@@ -107,7 +107,7 @@ def rechazar_opinion():
         alerta = "Error al rechazar reseña."
         return redirect(url_for('opiniones.opiniones_pendientes', alerta=alerta))
 
-# ----------------------------------------------------- CONTAR OPINIONES PENDIENTES (API) ----------------------------------------------------- #
+# ----------------------------------------------------- CONTAR OPINIONES PENDIENTES ----------------------------------------------------- #
 
 @bp_opiniones.route("/api/opiniones_pendientes_count", methods=["GET"])
 def api_opiniones_pendientes_count():
@@ -147,3 +147,38 @@ def detalle_opinion_rechazada(id_opinion):
     opinion = opiniones_model.get_opinion_detalle(id_opinion)
     
     return render_template("detalle_opinion_rechazada.html", opinion=opinion)
+
+# ----------------------------------------------------- ELIMINAR OPINIÓN ACEPTADA ----------------------------------------------------- #
+
+@bp_opiniones.route("/eliminar_opinion_aceptada", methods=["POST"])
+def eliminar_opinion_aceptada():
+    """
+    Elimina (rechaza) una opinión que fue aceptada previamente.
+    La opinión se marca como rechazada y se agrega al log.
+    """
+    if "usuario" not in session:
+        return redirect("/")
+    
+    id_opinion = request.form["id_opinion"]
+    motivo = request.form["motivo"]
+    id_administrador = session.get("id_administrador")
+    id_libro = request.form["id_libro"]
+    titulo_libro = request.form["titulo_libro"]
+    
+    try:
+        alerta = opiniones_model.rechazar_opinion(id_opinion, id_administrador, motivo)
+        
+        if not alerta:
+            # Crear notificación
+            from src.usuarios.routes.usuarios import crear_notificacion
+            crear_notificacion(f"{session['rol']} {session['usuario']} ha eliminado una reseña del libro: {titulo_libro}")
+            
+            exito = "Reseña eliminada exitosamente."
+            return redirect(url_for('libros.detalle_libro', ID=id_libro, Titulo=titulo_libro, exito=exito))
+        else:
+            return redirect(url_for('libros.detalle_libro', ID=id_libro, Titulo=titulo_libro, alerta=alerta))
+            
+    except Exception as e:
+        print(f"Error: {e}")
+        alerta = "Error al eliminar reseña."
+        return redirect(url_for('libros.detalle_libro', ID=id_libro, Titulo=titulo_libro, alerta=alerta))

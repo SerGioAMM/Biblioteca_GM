@@ -26,47 +26,69 @@
     <main>
         <!-- Search Bar with Dropdown -->
     <div class="div-busqueda h-100">
-        <div class="m-auto fondo-principal p-5">
-            <h2>Catalogo de Libros</h2>
-            <h4 class="p-3">Explora nuestra colección de libros y encuentra tu próxima lectura.</h4>
+        <div class="m-auto fondo-principal p-3 p-md-5">
+            <h2 class="text-center">Catalogo de Libros</h2>
+            <h4 class="p-2 p-md-3 text-center">Explora nuestra colección de libros y encuentra tu próxima lectura.</h4>
             <form class="frm-libros" action="/buscar_libro" method="GET" id="form-busqueda">
-                <div class="input-group mx-auto" style="width: 45%;">
-                <select class="w-75" name="buscar" id="cuadro-busqueda" data-placeholder="Buscar..."  autocomplete="off" cursor="text"></select>
-                <button class="btn btn-success w-25" type="submit"><i class="bi bi-search"></i> Buscar</button>
+                <!-- Barra de búsqueda principal -->
+                <div class="row justify-content-center mb-3">
+                    <div class="col-12 col-md-10 col-lg-8 col-xl-6">
+                        <div class="input-group">
+                            <select class="form-control p-0" name="buscar" id="cuadro-busqueda" 
+                                    data-placeholder="Buscar..." autocomplete="off" style="min-height: 44px;">
+                            </select>
+                            <button class="btn btn-success px-3 px-md-4" type="submit" style="min-width: 100px;">
+                                <i class="bi bi-search"></i> <span class="d-none d-sm-inline">Buscar</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="input-group mx-auto" style="width: 45%;">
-                    <select name="filtro-busqueda" id="filtro-busqueda" class="form-select mt-3 btn btn-secondary">
-                        <!-- Estas decisiones sirven para guardar la seleccion de filtros -->
-                        <option value="Titulo" 
-                            {% if filtro_busqueda == "Titulo" %}
-                                selected
-                            {% endif %}>
-                            Titulo
-                        </option>
-                        <option value="Autor" 
-                            {% if filtro_busqueda == "Autor" %}
-                                selected
-                            {% endif %}>
-                            Autor
-                        </option>
-                    </select>
-                    <select name="categorias" id="filtro-categorias" class="form-select mt-3 ms-3 btn btn-secondary">
-                        <option value="Todas" 
-                            {% if Seccion == "Todas" %}
-                                selected
-                            {% endif %}>
-                            Todas las categorias
-                        </option>
-                        {% for categoria in categorias %}
-                            <option value="{{ categoria[0] }}" 
-                                {% if Seccion == categoria[0]|string %}
-                                    selected
-                                {% endif %}>
-                                {{ categoria[0] }} - {{ categoria[1] }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                    
+                
+                <!-- Filtros -->
+                <div class="row justify-content-center">
+                    <div class="col-10 col-md-10 col-lg-8 col-xl-6">
+                        <div class="row g-2 g-md-3">
+                            <!-- Filtro de búsqueda por campo -->
+                            <div class="col-sm-6">
+                                <select name="filtro-busqueda" id="filtro-busqueda" 
+                                        class="form-select btn btn-secondary" style="min-height: 30px;">
+                                    <option value="Titulo" 
+                                        {% if filtro_busqueda == "Titulo" %}
+                                            selected
+                                        {% endif %}>
+                                        Titulo
+                                    </option>
+                                    <option value="Autor" 
+                                        {% if filtro_busqueda == "Autor" %}
+                                            selected
+                                        {% endif %}>
+                                        Autor
+                                    </option>
+                                </select>
+                            </div>
+                            
+                            <!-- Filtro de categorías -->
+                            <div class="col-sm-6">
+                                <select name="categorias" id="filtro-categorias" 
+                                        class="form-select btn btn-secondary" style="min-height: 30px;">
+                                    <option value="Todas" 
+                                        {% if Seccion == "Todas" %}
+                                            selected
+                                        {% endif %}>
+                                        Todas las categorias
+                                    </option>
+                                    {% for categoria in categorias %}
+                                        <option value="{{ categoria[0] }}" 
+                                            {% if Seccion == categoria[0]|string %}
+                                                selected
+                                            {% endif %}>
+                                            {{ categoria[0] }} - {{ categoria[1] }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -90,9 +112,9 @@
                 </div>
 
                 {% if libro.portada == "book.png" %}
-                <img src="{{ url_for('static', filename='img/book.png') }}" class="card-img-top" alt="...">
+                <img src="{{ url_for('static', filename='img/book.png') }}" class="card-img-top mx-auto" style="max-width: 200px; max-height: 250px;" alt="...">
                 {% else %}
-                <img src="{{ libro.portada }}" class="card-img-top" alt="...">
+                <img src="{{ libro.portada }}" class="card-img-top mx-auto" style="max-width: 200px; max-height: 250px;" alt="...">
                 {% endif %}
 
                 <div class="card-body d-flex flex-column h-100">

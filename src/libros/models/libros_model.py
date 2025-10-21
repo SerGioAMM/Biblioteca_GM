@@ -287,9 +287,6 @@ def editar_libro(id_libro, usuario, new_titulo, new_portada, new_tomo, new_numer
         # Normalizar el nuevo título
         new_titulo = normalizar_titulo(new_titulo)
         
-        # ============================================================================
-        # PASO 1: Obtener datos actuales del libro (tabla Libros)
-        # ============================================================================
         libro = get_detalle_libro(id_libro)
         old_titulo = libro[0]['Titulo']
         old_portada = libro[0]['portada']
@@ -299,10 +296,6 @@ def editar_libro(id_libro, usuario, new_titulo, new_portada, new_tomo, new_numer
         old_isbn = libro[0]['ISBN']
         old_anio = libro[0]['ano_publicacion']
         
-        # ============================================================================
-        # PASO 2: Obtener referencias actuales de RegistroLibros
-        # Estas son las FK que se guardarán en Libros_modificados
-        # ============================================================================
         query.execute("""
             SELECT rl.id_notacion, rl.id_lugar, rl.codigo_seccion,
                    n.id_autor, n.id_editorial
@@ -322,9 +315,6 @@ def editar_libro(id_libro, usuario, new_titulo, new_portada, new_tomo, new_numer
         old_id_autor = registro_actual[3]
         old_id_editorial = registro_actual[4]
         
-        # ============================================================================
-        # PASO 3: Procesar y subir nueva portada (si existe)
-        # ============================================================================
         if not new_portada:
             new_portada = old_portada
         else:
@@ -337,9 +327,6 @@ def editar_libro(id_libro, usuario, new_titulo, new_portada, new_tomo, new_numer
             upload_result = cloudinary.uploader.upload(new_portada, folder="bibliotecagm/portadas")
             new_portada = upload_result.get('secure_url')
         
-        # ============================================================================
-        # PASO 4: Actualizar tabla Libros (datos básicos)
-        # ============================================================================
         query.execute("""
             UPDATE libros 
             SET titulo = ?, portada = ?, tomo = ?, numero_paginas = ?, numero_copias = ?, isbn = ?, ano_publicacion = ? 
@@ -347,32 +334,29 @@ def editar_libro(id_libro, usuario, new_titulo, new_portada, new_tomo, new_numer
         """, (new_titulo, new_portada, to_int(new_tomo), to_int(new_numero_paginas), 
               to_int(new_numero_copias), new_isbn, new_anio, id_libro))
         
-        # ============================================================================
-        # PASO 5: Procesar nuevas relaciones (Lugar, Autor, Editorial, Notación)
-        # ============================================================================
         
-        # 5.1 - Lugar de publicación
+        # Lugar de publicación
         if not new_lugar or new_lugar.strip() == "":
             new_lugar = "-"
         query.execute("INSERT OR IGNORE INTO lugares (lugar) VALUES (?)", (new_lugar,))
         query.execute("SELECT id_lugar FROM lugares WHERE lugar = ?", (new_lugar,))
         new_id_lugar = query.fetchone()[0]
-        
-        # 5.2 - Autor
+
+        # Autor
         query.execute("INSERT OR IGNORE INTO autores (nombre_autor, apellido_autor) VALUES (?, ?)", 
-                     (new_nombre_autor, new_apellido_autor))
+                        (new_nombre_autor, new_apellido_autor))
         query.execute("SELECT id_autor FROM autores WHERE nombre_autor = ? AND apellido_autor = ?", 
-                     (new_nombre_autor, new_apellido_autor))
+                        (new_nombre_autor, new_apellido_autor))
         new_id_autor = query.fetchone()[0]
         
-        # 5.3 - Editorial
+        # Editorial
         if not new_editorial or new_editorial.strip() == "":
             new_editorial = "Otros"
         query.execute("INSERT OR IGNORE INTO editoriales (editorial) VALUES (?)", (new_editorial,))
         query.execute("SELECT id_editorial FROM editoriales WHERE editorial = ?", (new_editorial,))
         new_id_editorial = query.fetchone()[0]
         
-        # 5.4 - Determinar nueva notación
+        # Determinar nueva notación
         if new_editorial and new_editorial.strip() and new_editorial != "Otros":
             Notacion = validar_notacion(new_editorial)
         elif new_apellido_autor and new_apellido_autor.strip() and new_apellido_autor != "-":
@@ -382,19 +366,12 @@ def editar_libro(id_libro, usuario, new_titulo, new_portada, new_tomo, new_numer
         else:
             Notacion = "OTR"
         
-        # 5.5 - Crear o buscar notación
+        # Crear o buscar notación
         query.execute("INSERT OR IGNORE INTO notaciones (notacion, id_editorial, id_autor) VALUES (?, ?, ?)", 
                      (Notacion, new_id_editorial, new_id_autor))
         query.execute("SELECT id_notacion FROM notaciones WHERE notacion = ? AND id_autor = ? AND id_editorial = ?", 
                      (Notacion, new_id_autor, new_id_editorial))
         new_id_notacion = query.fetchone()[0]
-        
-        # ============================================================================
-        # PASO 6: Actualizar o insertar registro en Libros_modificados
-        # Solo debe existir UN registro por libro (sin duplicados)
-        # Si ya existe, se actualiza con los nuevos datos antiguos
-        # Si no existe, se inserta normalmente
-        # ============================================================================
         
         # Verificar si ya existe un registro de modificación para este libro
         query.execute("SELECT id_modificacion FROM libros_modificados WHERE id_libro = ?", (id_libro,))
@@ -410,7 +387,7 @@ def editar_libro(id_libro, usuario, new_titulo, new_portada, new_tomo, new_numer
                     num_paginas = ?,
                     num_copias = ?,
                     portada = ?,
-                    fecha_modificacion = date('now'),
+                    fecha_modificacion = date('now','localtime'),
                     motivo = ?,
                     id_notacion_antigua = ?,
                     id_editorial_antigua = ?,
@@ -443,15 +420,11 @@ def editar_libro(id_libro, usuario, new_titulo, new_portada, new_tomo, new_numer
                     codigo_seccion_antiguo,
                     ISBN_antiguo,
                     ano_publicacion_antiguo
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, date('now'), ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, date('now','localtime'), ?, ?, ?, ?, ?, ?, ?, ?)
             """, (id_libro, usuario, old_titulo, old_tomo, old_numero_paginas, old_numero_copias, 
-                  old_portada, motivo, old_id_notacion, old_id_editorial, old_id_autor, 
-                  old_id_lugar, old_codigo_seccion, old_isbn, old_anio))
+                    old_portada, motivo, old_id_notacion, old_id_editorial, old_id_autor, 
+                    old_id_lugar, old_codigo_seccion, old_isbn, old_anio))
         
-        # ============================================================================
-        # PASO 7: Actualizar RegistroLibros con las nuevas referencias
-        # NO se duplica el registro, solo se actualiza el existente
-        # ============================================================================
         query.execute("""
             UPDATE RegistroLibros 
             SET id_notacion = ?, id_lugar = ?, codigo_seccion = ? 

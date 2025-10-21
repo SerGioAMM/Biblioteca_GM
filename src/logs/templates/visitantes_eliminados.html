@@ -38,35 +38,7 @@
             <div class="m-auto fondo-principal p-5">
                 <h2>Registros de visitantes eliminados</h2>
                 <h4 class="p-3">Visualiza los registros de visitantes eliminados, quien, cuando y porque los eliminó.</h4>
-                <form class="frm-visitantes_e" action="/buscar_visitante_e" method="GET" id="form-busqueda">
-                    <div class="input-group mx-auto" style="width: 45%;">
-                    <select class="w-75" name="buscar" id="cuadro-busqueda" data-placeholder="Buscar..."  autocomplete="off" cursor="text"></select>
-                    <button class="btn btn-success w-25" type="submit"><i class="bi bi-search"></i> Buscar</button>
-                    </div>
-                    <div class="input-group mx-auto" style="width: 45%;">
-                        <select name="filtro-busqueda" id="filtro-busqueda" class="form-select mt-3 btn btn-secondary">
-                            <!-- Estas decisiones sirven para guardar la seleccion de filtros -->
-                            <option value="Todos" 
-                                {% if rol == "Todos" %}
-                                    selected
-                                {% endif %}>
-                                Todos
-                            </option>
-                            <option value="Administrador" 
-                                {% if rol == "Administrador" %}
-                                    selected
-                                {% endif %}>
-                                Administradores
-                            </option>
-                            <option value="Bibliotecario" 
-                                {% if rol == "Bibliotecario" %}
-                                    selected
-                                {% endif %}>
-                                Bibliotecarios
-                            </option>
-                        </select>                        
-                    </div>
-                </form>
+                
             </div>
         </div>
         <div class="container mx-a mt-3 bg-light-custom p-3 contenedor-prestamos" id="grupoPrestamo">

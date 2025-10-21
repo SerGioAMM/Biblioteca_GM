@@ -11,7 +11,7 @@ def crear_opinion(id_libro, nombre_creador, apellido_creador, opinion, valoracio
         query.execute("""
             INSERT INTO Opiniones (id_libro, nombre_creador, apellido_creador, opinion, 
                                    fecha_opinion, valoracion, id_estado)
-            VALUES (?, ?, ?, ?, date('now'), ?, 1)
+            VALUES (?, ?, ?, ?, date('now','localtime'), ?, 1)
         """, (id_libro, nombre_creador, apellido_creador, opinion, valoracion))
         conexion.commit()
         alerta = ""
@@ -66,7 +66,7 @@ def get_opiniones_aceptadas_libro(id_libro, limit=None):
     
     sql = """
         SELECT o.id_opinion, o.nombre_creador, o.apellido_creador, 
-               o.opinion, o.fecha_opinion, o.valoracion
+        o.opinion, strftime('%d-%m-%Y', o.fecha_opinion) as fecha_opinion, o.valoracion
         FROM Opiniones o
         WHERE o.id_libro = ? AND o.id_estado = 2
         ORDER BY o.valoracion DESC
@@ -204,7 +204,6 @@ def get_promedio_valoracion_libro(id_libro):
             'total': resultado[1]
         }
     return {'promedio': 0, 'total': 0}
-
 
 def get_libro_opinion(id_opinion):
     """

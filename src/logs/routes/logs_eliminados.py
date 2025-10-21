@@ -607,8 +607,12 @@ def revertir_cambios(id_modificacion):
     conexion = conexion_BD()
     query = conexion.cursor()
 
-    # Obtener los datos de la modificación a revertir
-    query.execute("SELECT id_libro,titulo,tomo,num_paginas,num_copias,portada FROM libros_modificados WHERE id_modificacion = ?", (id_modificacion,))
+    # Obtener los datos de la modificación a revertir (incluyendo nuevos campos)
+    query.execute("""SELECT id_libro, titulo, tomo, num_paginas, num_copias, portada, 
+                     ISBN_antiguo, ano_publicacion_antiguo,
+                     id_notacion_antigua, id_editorial_antigua, id_autor_antiguo, 
+                     id_lugar_antiguo, codigo_seccion_antiguo 
+                     FROM libros_modificados WHERE id_modificacion = ?""", (id_modificacion,))
     modificacion = query.fetchone()
 
     if not modificacion:
@@ -622,9 +626,15 @@ def revertir_cambios(id_modificacion):
     antiguo_num_paginas = modificacion[3]
     antiguo_num_copias = modificacion[4]
     antigua_portada = modificacion[5]
+    antiguo_isbn = modificacion[6]
+    antiguo_anio = modificacion[7]
+    antigua_id_notacion = modificacion[8]
+    antiguo_id_lugar = modificacion[11]
+    antiguo_codigo_seccion = modificacion[12]
 
     # Obtener los datos actuales del libro
-    query.execute("SELECT id_libro,titulo,tomo,numero_paginas,numero_copias,portada FROM libros WHERE id_libro = ?", (id_libro,))
+    query.execute("""SELECT id_libro, titulo, tomo, numero_paginas, numero_copias, portada, 
+                     ISBN, ano_publicacion FROM libros WHERE id_libro = ?""", (id_libro,))
     libro_actual = query.fetchone()
 
     if not libro_actual:
@@ -632,20 +642,24 @@ def revertir_cambios(id_modificacion):
         conexion.close()
         return "Libro no encontrado", 404
 
-    # Revertir los cambios solo si los nuevos valores son diferentes de los actuales
-    titulo_revertido = antiguo_titulo if antiguo_titulo != libro_actual[1] else libro_actual[1]
-    tomo_revertido = antiguo_tomo if antiguo_tomo != libro_actual[2] else libro_actual[2]
-    num_paginas_revertido = antiguo_num_paginas if antiguo_num_paginas != libro_actual[3] else libro_actual[3]
-    num_copias_revertido = antiguo_num_copias if antiguo_num_copias != libro_actual[4] else libro_actual[4]
-    portada_revertida = antigua_portada if antigua_portada != libro_actual[5] else libro_actual[5]
-
-    # Actualizar el libro con los valores revertidos
+    # Revertir los cambios en la tabla Libros
     query.execute("""
         UPDATE libros
-        SET Titulo = ?, Tomo = ?, numero_paginas = ?, numero_copias = ?, portada = ?
+        SET Titulo = ?, Tomo = ?, numero_paginas = ?, numero_copias = ?, portada = ?,
+            ISBN = ?, ano_publicacion = ?
         WHERE id_libro = ?
-    """, (titulo_revertido, tomo_revertido, num_paginas_revertido, num_copias_revertido, portada_revertida, id_libro))
+    """, (antiguo_titulo, antiguo_tomo, antiguo_num_paginas, antiguo_num_copias, 
+          antigua_portada, antiguo_isbn, antiguo_anio, id_libro))
 
+    # Revertir los cambios en RegistroLibros (si existen referencias antiguas)
+    if antigua_id_notacion and antiguo_id_lugar and antiguo_codigo_seccion:
+        query.execute("""
+            UPDATE RegistroLibros
+            SET id_notacion = ?, id_lugar = ?, codigo_seccion = ?
+            WHERE id_libro = ?
+        """, (antigua_id_notacion, antiguo_id_lugar, antiguo_codigo_seccion, id_libro))
+
+    # Eliminar el registro de modificación
     query.execute("DELETE FROM libros_modificados WHERE id_modificacion = ?", (id_modificacion,))
     
     conexion.commit()

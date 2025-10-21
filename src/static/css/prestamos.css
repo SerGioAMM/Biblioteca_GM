@@ -110,7 +110,7 @@ body{
     opacity: 1;
 }*/
 
-.badge{
+.card .badge{
     width: auto;
     position: absolute;
     right: 1rem;
