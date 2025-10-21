@@ -35,52 +35,73 @@
         {% endif %}
 
         <div class="div-busqueda h-100">
-            <div class="m-auto fondo-principal p-5">
-                <h2>Préstamos eliminados</h2>
-                <h4 class="p-3">Visualiza los préstamos eliminados, quien, cuando y porque lo eliminó.</h4>
+            <div class="m-auto fondo-principal p-3 p-md-5">
+                <h2 class="text-center">Préstamos eliminados</h2>
+                <h4 class="p-2 p-md-3 text-center">Visualiza los préstamos eliminados, quien, cuando y porque lo eliminó.</h4>
                 <form class="frm-prestamos_e" action="/buscar_prestamo_e" method="GET" id="form-busqueda">
-                    <div class="input-group mx-auto" style="width: 45%;">
-                    <select class="w-75" name="buscar" id="cuadro-busqueda" data-placeholder="Buscar..."  autocomplete="off" cursor="text"></select>
-                    <button class="btn btn-success w-25" type="submit"><i class="bi bi-search"></i> Buscar</button>
+                    <!-- Barra de búsqueda principal -->
+                    <div class="row justify-content-center mb-3">
+                        <div class="col-12 col-md-10 col-lg-8 col-xl-6">
+                            <div class="input-group">
+                                <select class="form-control p-0" name="buscar" id="cuadro-busqueda" 
+                                        data-placeholder="Buscar..." autocomplete="off" style="min-height: 44px;">
+                                </select>
+                                <button class="btn btn-success px-3 px-md-4" type="submit" style="min-width: 100px;">
+                                    <i class="bi bi-search"></i> <span class="d-none d-sm-inline">Buscar</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="input-group mx-auto" style="width: 45%;">
-                        <select name="filtro-busqueda" id="filtro-busqueda" class="form-select mt-3 btn btn-secondary">
-                            <!-- Estas decisiones sirven para guardar la seleccion de filtros -->
-                            <option value="Titulo" 
-                                {% if filtro_busqueda == "Titulo" %}
-                                    selected
-                                {% endif %}>
-                                Titulo
-                            </option>
-                            <option value="Usuario" 
-                                {% if filtro_busqueda == "Usuario" %}
-                                    selected
-                                {% endif %}>
-                                Usuario
-                            </option>
-                        </select>
-                        <select name="rol" id="filtro-categorias" class="form-select mt-3 ms-3 btn btn-secondary">
-                            <!-- Estas decisiones sirven para guardar la seleccion de filtros -->
-                            <option value="Todos" 
-                                {% if rol == "Todos" %}
-                                    selected
-                                {% endif %}>
-                                Todos
-                            </option>
-                            <option value="Administrador" 
-                                {% if rol == "Administrador" %}
-                                    selected
-                                {% endif %}>
-                                Administradores
-                            </option>
-                            <option value="Bibliotecario" 
-                                {% if rol == "Bibliotecario" %}
-                                    selected
-                                {% endif %}>
-                                Bibliotecarios
-                            </option>
-                        </select>
-                        
+                    
+                    <!-- Filtros -->
+                    <div class="row justify-content-center">
+                        <div class="col-10 col-md-10 col-lg-8 col-xl-6">
+                            <div class="row g-2 g-md-3">
+                                <!-- Filtro de búsqueda por campo -->
+                                <div class="col-sm-6">
+                                    <select name="filtro-busqueda" id="filtro-busqueda" 
+                                            class="form-select btn btn-secondary" style="min-height: 30px;">
+                                        <option value="Titulo" 
+                                            {% if filtro_busqueda == "Titulo" %}
+                                                selected
+                                            {% endif %}>
+                                            Titulo
+                                        </option>
+                                        <option value="Usuario" 
+                                            {% if filtro_busqueda == "Usuario" %}
+                                                selected
+                                            {% endif %}>
+                                            Usuario
+                                        </option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Filtro de roles -->
+                                <div class="col-sm-6">
+                                    <select name="rol" id="filtro-categorias" 
+                                            class="form-select btn btn-secondary" style="min-height: 30px;">
+                                        <option value="Todos" 
+                                            {% if rol == "Todos" %}
+                                                selected
+                                            {% endif %}>
+                                            Todos
+                                        </option>
+                                        <option value="Administrador" 
+                                            {% if rol == "Administrador" %}
+                                                selected
+                                            {% endif %}>
+                                            Administradores
+                                        </option>
+                                        <option value="Bibliotecario" 
+                                            {% if rol == "Bibliotecario" %}
+                                                selected
+                                            {% endif %}>
+                                            Bibliotecarios
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>

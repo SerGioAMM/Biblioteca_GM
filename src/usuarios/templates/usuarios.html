@@ -173,24 +173,6 @@
                                     </tr>
                                     <tr>
                                         <td colspan="6" class="p-0 border-0">
-                                            <div class="collapse" id="desactivar{{usuario.id_administrador}}" data-bs-parent="#grupousuario">
-                                                <div class="bg-light">
-                                                    <form class="frm-desactivar-usuario text-center w-75 mx-auto" action="/desactivar_usuario" method="POST">
-                                                        <div class="mb-3">
-                                                            <br>
-                                                            <h6><strong>¿Está seguro de que desea eliminar este registro?</strong></h6>
-                                                            <input type="hidden" value="{{usuario.id_administrador}}" name="id_administrador" readonly>
-                                                            <input class="form-control" placeholder="Escribe el motivo de la eliminación del registro." name="motivo" required>
-                                                        </div>
-                                                        <button class="btn btn-sm btn-outline-danger boton" type="submit">Confirmar eliminación</button>
-                                                    </form>
-                                                    <br>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="6" class="p-0 border-0">
                                             <div class="collapse" id="activar{{usuario.id_administrador}}" data-bs-parent="#grupousuario">
                                                 <div class="bg-light">
                                                     <form class="frm-activar-usuario w-75 mx-auto" action="/activar_usuario" method="POST">
