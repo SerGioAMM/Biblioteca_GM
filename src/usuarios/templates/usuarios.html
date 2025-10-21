@@ -18,6 +18,10 @@
 
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 
+    <!--* Nuevos estilos de alertas y animaciones -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/alertas.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animaciones.css') }}">
+
 </head>
 <body class="bg-custom">
     <header>
@@ -31,7 +35,7 @@
                 <form class="frm-usuarios" action="/buscar_usuario" method="GET" id="form-busqueda">
                     <div class="input-group mx-auto" style="width: 45%;">
                         <select class="w-75" name="buscar" id="cuadro-busqueda" data-placeholder="Buscar..."  autocomplete="off" cursor="text"></select>
-                        <button class="btn btn-success w-25" type="submit">Buscar</button>
+                        <button class="btn btn-success w-25" type="submit"><i class="bi bi-search"></i> Buscar</button>
                     </div>
                     <div class="input-group mx-auto" style="width: 45%;">
                         <select name="filtro-busqueda" id="filtro-busqueda" class="form-select mt-3 btn btn-secondary">
@@ -79,9 +83,7 @@
             </div>
         </div>
         {% if (exito) %}
-        <span class="exito-ingreso">
-            <h4><strong>{{exito}}</strong></h4>
-        </span>
+        <span class="exito-ingreso" data-alert-message="{{exito}}" style="display: none;"></span>
         {% endif %} 
         <div class="contendor-usuarios bg-light-custom" id="grupousuario">
             <div class="row">
@@ -141,12 +143,12 @@
                                         </td>
                                         <td style="width: 20%;">
                                             {% if usuario.estado == 'Inactivo'%}
-                                                <a data-bs-toggle="collapse" href="#activar{{usuario.id_administrador}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-success">Activar</a>
+                                                <a data-bs-toggle="collapse" href="#activar{{usuario.id_administrador}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-success boton">Activar</a>
                                             {% else %}
                                                 {% if usuario.id_administrador == 1 or session["id_administrador"] == usuario.id_administrador %}
-                                                <button class="btn btn-sm btn-outline-danger" disabled>Desactivar</button>
+                                                <button class="btn btn-sm btn-outline-danger boton" disabled>Desactivar</button>
                                                 {% else %}
-                                                <a data-bs-toggle="collapse" href="#desactivar{{usuario.id_administrador}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-danger">Desactivar</a>
+                                                <a data-bs-toggle="collapse" href="#desactivar{{usuario.id_administrador}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-danger boton">Desactivar</a>
                                                 {% endif %}
                                             {% endif %}
                                         </td>
@@ -161,10 +163,28 @@
                                                         <div class="mb-1">
                                                             <input class="form-control" type="text" placeholder="Escribe el motivo de la desactivación del usuario." name="motivo" required autocomplete="off">
                                                         </div>
-                                                        <button class="btn btn-sm btn-outline-danger mb-3" type="submit">
+                                                        <button class="btn btn-sm btn-outline-danger mb-3 boton" type="submit">
                                                             Confirmar desactivación
                                                         </button>
                                                     </form>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6" class="p-0 border-0">
+                                            <div class="collapse" id="desactivar{{usuario.id_administrador}}" data-bs-parent="#grupousuario">
+                                                <div class="bg-light">
+                                                    <form class="frm-desactivar-usuario text-center w-75 mx-auto" action="/desactivar_usuario" method="POST">
+                                                        <div class="mb-3">
+                                                            <br>
+                                                            <h6><strong>¿Está seguro de que desea eliminar este registro?</strong></h6>
+                                                            <input type="hidden" value="{{usuario.id_administrador}}" name="id_administrador" readonly>
+                                                            <input class="form-control" placeholder="Escribe el motivo de la eliminación del registro." name="motivo" required>
+                                                        </div>
+                                                        <button class="btn btn-sm btn-outline-danger boton" type="submit">Confirmar eliminación</button>
+                                                    </form>
+                                                    <br>
                                                 </div>
                                             </div>
                                         </td>
@@ -177,11 +197,8 @@
                                                         <br><input type="hidden" value="{{usuario.id_administrador}}" name="id_usuario" readonly>
                                                         <label for=""> Este usuario fue desactivado por el siguiente motivo: <strong>{{usuario.motivo}}</strong>
                                                             <br> ¿Seguro que quieres activar este usuario? </label><br>
-                                                        <button class="btn btn-sm btn-outline-success mb-3 mt-1" type="submit">
+                                                        <button class="btn btn-sm btn-outline-success mb-3 mt-1 boton" type="submit">
                                                             Confirmar activación
-                                                        </button>
-                                                        <button class="btn btn-sm btn-outline-danger mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#activar{{usuario.id_administrador}}" aria-expanded="false" aria-controls="collapseExample">
-                                                            Cancelar
                                                         </button>
                                                     </form>
                                                 </div>
@@ -229,5 +246,9 @@
 
     <!--! Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    
+    <!--* Scripts de alertas y animaciones -->
+    <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animaciones.js') }}"></script>
 </body>
 </html>

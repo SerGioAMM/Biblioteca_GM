@@ -1,0 +1,316 @@
+/* ========================================
+   SISTEMA DE ANIMACIONES GENERAL
+   ======================================== */
+
+/* ==================== ANIMACIONES DE CARGA ==================== */
+/* DESHABILITADAS - El usuario no quiere animaciones de carga en las páginas */
+
+/* Fade In con delay escalonado para tarjetas - DESHABILITADO */
+/*
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+*/
+
+/* Aplicar a tarjetas de libros con delay - DESHABILITADO */
+/*
+.card-animate {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+*/
+
+/* Delays escalonados para efecto cascada - DESHABILITADO */
+/*
+.card-animate:nth-child(1) { animation-delay: 0.05s; }
+.card-animate:nth-child(2) { animation-delay: 0.1s; }
+.card-animate:nth-child(3) { animation-delay: 0.15s; }
+.card-animate:nth-child(4) { animation-delay: 0.2s; }
+.card-animate:nth-child(5) { animation-delay: 0.25s; }
+.card-animate:nth-child(6) { animation-delay: 0.3s; }
+.card-animate:nth-child(7) { animation-delay: 0.35s; }
+.card-animate:nth-child(8) { animation-delay: 0.4s; }
+.card-animate:nth-child(9) { animation-delay: 0.45s; }
+.card-animate:nth-child(10) { animation-delay: 0.5s; }
+.card-animate:nth-child(11) { animation-delay: 0.55s; }
+.card-animate:nth-child(12) { animation-delay: 0.6s; }
+.card-animate:nth-child(n+13) { animation-delay: 0.65s; }
+*/
+
+/* ==================== ANIMACIONES DE DROPDOWN ==================== */
+
+/* Dropdown suave desde arriba */
+/* @keyframes dropdownSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Aplicar a dropdowns de navbar - CORREGIDO para funcionar con hover Y click *
+
+.navbar .dropdown-menu {
+    display: none;
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+/* Cuando Bootstrap agrega la clase .show *
+.navbar .dropdown-menu.show {
+    display: block;
+    animation: dropdownSlideDown 0.3s ease-out forwards;
+} */
+
+/* Transición suave para items del dropdown - SIN translateX */
+.dropdown-item {
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+/* Solo cambiar color de fondo en hover, sin movimiento */
+.dropdown-item:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* ==================== ANIMACIONES DE HOVER ==================== */
+
+/* Hover suave para tarjetas */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover para cards de logs (libros modificados, eliminados, etc.) */
+.contenedor-libros .card:hover,
+.bg-light-custom .card:hover,
+.card-log:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* ==================== ANIMACIONES DE TABLAS ==================== */
+/* DESHABILITADAS - El usuario no quiere animaciones de carga */
+
+/* Fade in para filas de tabla - DESHABILITADO */
+/*
+@keyframes tableRowFadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.table-animate tbody tr {
+    opacity: 0;
+    animation: tableRowFadeIn 0.4s ease-out forwards;
+}
+*/
+
+/* Delays para filas - DESHABILITADO */
+/*
+.table-animate tbody tr:nth-child(1) { animation-delay: 0.05s; }
+.table-animate tbody tr:nth-child(2) { animation-delay: 0.1s; }
+.table-animate tbody tr:nth-child(3) { animation-delay: 0.15s; }
+.table-animate tbody tr:nth-child(4) { animation-delay: 0.2s; }
+.table-animate tbody tr:nth-child(5) { animation-delay: 0.25s; }
+.table-animate tbody tr:nth-child(6) { animation-delay: 0.3s; }
+.table-animate tbody tr:nth-child(7) { animation-delay: 0.35s; }
+.table-animate tbody tr:nth-child(8) { animation-delay: 0.4s; }
+.table-animate tbody tr:nth-child(9) { animation-delay: 0.45s; }
+.table-animate tbody tr:nth-child(10) { animation-delay: 0.5s; }
+.table-animate tbody tr:nth-child(n+11) { animation-delay: 0.55s; }
+*/
+
+/* ==================== ANIMACIONES DE FORMULARIOS ==================== */
+
+/* Smooth focus para inputs */
+.form-control,
+.form-select,
+.form-check-input {
+    transition: all 0.3s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    transform: scale(1.01);
+}
+
+/* ==================== ANIMACIONES DE BOTONES ==================== */
+
+/* Botones de búsqueda y filtros SIN animaciones */
+.div-busqueda .btn {
+    transition: none;
+}
+
+.div-busqueda .btn:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* Botones de acción (importar/exportar) CON animaciones */
+.btn-importar,
+.btn-exportar,
+.btn-action,
+.boton {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.btn-importar:hover,
+.btn-exportar:hover,
+.btn-action:hover,
+.boton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-importar:active,
+.btn-exportar:active,
+.btn-action:active,
+.boton:active {
+    transform: translateY(0);
+}
+
+/* ==================== ANIMACIONES DE COLLAPSE ==================== */
+
+/* Suavizar apertura de collapse */
+.collapse {
+    transition: height 0.35s ease;
+}
+
+.collapsing {
+    transition: height 0.35s ease;
+}
+
+/* ==================== ANIMACIONES DE MODALES ==================== */
+
+/* Fade in para modales */
+.modal.fade .modal-dialog {
+    transform: scale(0.8);
+    opacity: 0;
+    transition: all 0.3s ease-out;
+}
+
+.modal.show .modal-dialog {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* ==================== ANIMACIONES DE BADGES ==================== */
+
+/* Pulse para badges importantes */
+@keyframes badgePulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.5);
+    }
+}
+
+.badge-pulse {
+    animation: badgePulse 2s infinite;
+}
+
+/* ==================== ANIMACIONES DE LOADING ==================== */
+
+/* Skeleton loading */
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        #f0f0f0 0%,
+        #e0e0e0 50%,
+        #f0f0f0 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite;
+}
+
+/* ==================== ANIMACIONES DE PAGINACIÓN ==================== */
+
+.paginacion a,
+.paginacion strong {
+    transition: all 0.3s ease;
+}
+
+.paginacion a:hover {
+    transform: scale(1.1);
+}
+
+/* ==================== UTILIDADES ==================== */
+
+/* Clase para deshabilitar todas las animaciones */
+.no-animations,
+.no-animations * {
+    animation: none !important;
+    transition: none !important;
+}
+
+/* Clase para animación de entrada genérica */
+.fade-in {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Clase para hover suave genérico */
+.hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+/* Reducir animaciones en móviles */
+@media (max-width: 768px) {
+    .card-animate {
+        animation-duration: 0.4s;
+    }
+    
+    .card-animate:nth-child(n+7) {
+        animation-delay: 0.3s;
+    }
+    
+    .table-animate tbody tr {
+        animation-duration: 0.3s;
+    }
+}
+
+/* Respetar preferencias de reducción de movimiento */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

@@ -1034,3 +1034,56 @@ ModuleNotFoundError: No module named 'usuarios'
 2025-10-20 09:42:23 | ERROR | Datos incorrectos - Usuario: alfredo
 2025-10-20 09:42:26 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: alfredo
 2025-10-20 09:43:32 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 2 minutos. - Usuario: alfredo
+2025-10-20 14:13:53 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:13:58 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:14:02 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:14:06 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:14:11 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:17:48 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:17:51 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:17:54 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:17:58 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:24:25 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:24:29 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:24:32 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:24:36 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:24:49 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:24:53 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:25:36 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:25:50 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:25:53 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:29:25 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:29:30 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:29:33 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:29:36 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:29:47 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:29:51 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:29:55 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:29:59 | ERROR | Datos incorrectos - Usuario: alfredo
+2025-10-20 14:31:08 | ERROR | Datos incorrectos. Intentos fallidos: 1 - Usuario: alfredo
+2025-10-20 14:31:13 | ERROR | Datos incorrectos. Intentos fallidos: 1 - Usuario: alfredo
+2025-10-20 14:31:17 | ERROR | Datos incorrectos. Intentos fallidos: 1 - Usuario: alfredo
+2025-10-20 14:32:16 | ERROR | Datos incorrectos. Intentos fallidos: 1 - Usuario: alfredo
+2025-10-20 14:32:20 | ERROR | Datos incorrectos. Intentos fallidos: 2 - Usuario: alfredo
+2025-10-20 14:32:24 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: alfredo
+2025-10-20 14:32:31 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 3 minutos. - Usuario: alfredo
+2025-10-20 14:33:36 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 1:47. - Usuario: alfredo
+2025-10-20 14:34:36 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 0:47. - Usuario: alfredo
+2025-10-20 16:00:41 | ERROR | Datos incorrectos, intentos fallidos: 1 - Usuario: alfredo
+2025-10-20 16:00:45 | ERROR | Datos incorrectos, intentos fallidos: 2 - Usuario: alfredo
+2025-10-20 16:00:48 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: alfredo
+2025-10-20 16:22:02 | ERROR | database is locked
+2025-10-20 16:22:02 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 68, in login
+    query.execute("""
+    ~~~~~~~~~~~~~^^^^
+        UPDATE administradores
+        ^^^^^^^^^^^^^^^^^^^^^^
+        SET login_fail = 0, tiempo_bloqueo = NULL
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        WHERE id_administrador = ?
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    """, (id_admin,))
+    ^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: database is locked
+

@@ -31,33 +31,33 @@ function ocultarTodasLasSecciones() {
 
 function resetearBotones() {
     // Resetear todos los botones a su estado normal
-    btn_perfil.classList.remove('btn-primary');
-    btn_perfil.classList.add('btn-outline-primary');
+    btn_perfil.classList.remove('btn-dark');
+    btn_perfil.classList.add('btn-outline-dark');
     
     btn_actividad.classList.remove('btn-primary');
     btn_actividad.classList.add('btn-outline-primary');
     
     btn_notificaciones.classList.remove('btn-primary');
-    btn_notificaciones.classList.add('btn-outline-info');
+    btn_notificaciones.classList.add('btn-outline-primary');
     
     // Resetear botón editar
     btn_texto.textContent = 'Editar Perfil';
     btn_editar.querySelector('i').className = 'bi bi-pencil-square';
-    btn_editar.classList.remove('btn-outline-danger');
-    btn_editar.classList.add('btn-outline-secondary');
+    btn_editar.classList.remove('btn-danger', 'btn-primary');
+    btn_editar.classList.add('btn-outline-primary');
     ocultar(btn_guardar);
 }
 
 function activarBoton(boton, estiloActivo) {
     resetearBotones();
-    boton.classList.remove('btn-outline-primary', 'btn-outline-info', 'btn-outline-secondary');
+    boton.classList.remove('btn-outline-dark', 'btn-outline-primary');
     boton.classList.add(estiloActivo);
 }
 
 // Event Listeners
 btn_perfil.addEventListener("click", () => {
     ocultarTodasLasSecciones();
-    activarBoton(btn_perfil, 'btn-primary');
+    activarBoton(btn_perfil, 'btn-dark');
     mostrar(detalles_perfil);
 });
 
@@ -80,12 +80,13 @@ btn_editar.addEventListener("click", () => {
         mostrar(form_editar);
         mostrar(btn_guardar);
         
+        // Cambiar a modo "Cancelar" (rojo)
         btn_texto.textContent = 'Cancelar';
         btn_editar.querySelector('i').className = 'bi bi-x-circle';
-        btn_editar.classList.remove('btn-outline-secondary');
-        btn_editar.classList.add('btn-outline-danger');
+        btn_editar.classList.remove('btn-outline-primary', 'btn-primary');
+        btn_editar.classList.add('btn-danger');
     } else {
-        // Cancelar edición
+        // Cancelar edición y volver a perfil
         ocultarTodasLasSecciones();
         mostrar(detalles_perfil);
         resetearBotones();
@@ -199,6 +200,6 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         // Mostrar perfil por defecto
         mostrar(detalles_perfil);
-        activarBoton(btn_perfil, 'btn-primary');
+        activarBoton(btn_perfil, 'btn-dark');
     }
 });

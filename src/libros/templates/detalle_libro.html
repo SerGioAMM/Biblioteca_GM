@@ -15,19 +15,20 @@
     
     <!--? Tom Select CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+    
+    <!--* Nuevos estilos de alertas y animaciones -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/alertas.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animaciones.css') }}">
 </head>
 <body class="bg-light-custom">
     <header>
         {% include 'navbar.html'   %}
     </header>
+    <!-- Las alertas antiguas serán convertidas automáticamente por el JS -->
     {% if (alerta) %}
-        <span class="error-eliminacion">
-            <h4><strong>{{alerta}}</strong></h4>
-        </span>
+        <span class="error-eliminacion" data-alert-type="danger" data-alert-message="{{alerta}}"></span>
     {% elif (exito) %}
-        <span class="exito-ingreso">
-            <h4><strong>{{exito}}</strong></h4>
-        </span>
+        <span class="exito-ingreso" data-alert-type="success" data-alert-message="{{exito}}"></span>
     {% endif %}
     <section class="py-3 py-md-5 py-xl-8">
     <div class="container">
@@ -48,11 +49,11 @@
                     </div>
                     <div class="d-grid m-0">
                     {% if session %}
-                        <button class="btn btn-outline-primary my-1" type="button" id="btn-editar"> <i class="bi bi-pencil-square"></i> <span>Editar</span></button>
-                        <a data-bs-toggle="collapse" href="#eliminar{{libro.id_libro}}" role="button" id="btn-eliminar" aria-controls="collapseExample" class="btn btn-outline-danger my-1"><i class="bi bi-x-square" ></i> Eliminar</a>
-                        <button type="submit" class="btn btn-outline-primary my-1 d-none" id="btn-guardar" form="form-editar-libro" disabled><i class="bi bi-floppy"></i> Guardar cambios</button>
+                        <button class="btn btn-outline-primary my-1 boton" type="button" id="btn-editar"> <i class="bi bi-pencil-square"></i> <span>Editar</span></button>
+                        <a data-bs-toggle="collapse" href="#eliminar{{libro.id_libro}}" role="button" id="btn-eliminar" aria-controls="collapseExample" class="btn btn-outline-danger my-1 boton"><i class="bi bi-x-square" ></i> Eliminar</a>
+                        <button type="submit" class="btn btn-outline-primary my-1 d-none boton" id="btn-guardar" form="form-editar-libro" disabled><i class="bi bi-floppy"></i> Guardar cambios</button>
                     {% endif %}
-                    <button class="btn btn-outline-primary my-1" type="button" id="btn-resena" data-bs-toggle="modal" data-bs-target="#modalResena"> <i class="bi bi-chat-right-text"></i> <span>Escribir reseña</span></button>
+                    <button class="btn btn-outline-dark my-1 boton" type="button" id="btn-resena" data-bs-toggle="modal" data-bs-target="#modalResena"> <i class="bi bi-chat-right-text"></i> <span>Escribir reseña</span></button>
                     </div>
                 </div>
                 </div>
@@ -70,7 +71,7 @@
                             <input type="hidden" value="{{libro.id_libro}}" name="id_libro" readonly>
                             <input class="form-control" type="text" placeholder="Escribe el motivo de la eliminación del libro." name="motivo" required autocomplete="off">
                         </div>
-                        <button class="btn btn-outline-danger" type="submit">Confirmar eliminación</button> 
+                        <button class="btn btn-outline-danger boton" type="submit">Confirmar eliminación</button> 
                     </form>
                 </div>    
                 <div class="tab-content pt-4" id="profileTabContent">
@@ -175,7 +176,7 @@
                             
                             {% if total_opiniones > 3 %}
                             <div class="text-center">
-                                <a href="{{ url_for('libros.todas_resenas', ID=libro.id_libro, Titulo=libro.Titulo) }}" class="btn btn-outline-primary">
+                                <a href="{{ url_for('libros.todas_resenas', ID=libro.id_libro, Titulo=libro.Titulo) }}" class="btn btn-outline-primary boton">
                                     Ver todas las reseñas ({{ total_opiniones }})
                                 </a>
                             </div>
@@ -213,7 +214,7 @@
                                         
                                         <div class="card-footer">
                                             <a href="{{ url_for('libros.detalle_libro', ID=rec.id_libro )}}">
-                                                <button class="btn btn-outline-primary btn-sm m-2 rounded-3"> <small>Ver detalles</small> </button>
+                                                <button class="btn btn-outline-primary btn-sm m-2 rounded-3 boton"> <small>Ver detalles</small> </button>
                                             </a>
                                             <span id="span-info-libro-d"> 
                                                 <h5 id="h4-seccion-{{ (rec.codigo_seccion|int // 100) if (rec.codigo_seccion|int < 1000) else 9 }}">
@@ -379,6 +380,9 @@
 <!-- Footer -->
 {% include 'footer.html' %}
 
+<!--! Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+
 <!--? Tom Select JS -->
 <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 
@@ -386,8 +390,9 @@
 <script src="{{ url_for('static', filename='js/sugerencias.js') }}"></script>
 <script src="{{ url_for('static', filename='js/detalle_libro.js') }}"></script>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+<!--* Nuevos scripts de alertas y animaciones -->
+<script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
+<script src="{{ url_for('static', filename='js/animaciones.js') }}"></script>
     
 </body>
 </html>

@@ -14,6 +14,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <!--? Tom Select CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+    
+    <!--* Nuevos estilos de animaciones -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animaciones.css') }}">
 </head>
 <body class="bg-custom">
     <header>
@@ -62,7 +65,7 @@
                     </div>
                     <br>
                     <div class="col-12">
-                        <button id="btn-vista-previa" type="button" class="btn btn-outline-dark"> Vista previa </button>
+                        <button id="btn-vista-previa" type="button" class="btn btn-outline-dark boton"> Vista previa </button>
                     </div>
                     <br>
                 </form>
@@ -86,7 +89,9 @@
                     </tbody>
                 </table>
                 <div class="col-12">
-                    <button id="btn-exportar" type="submit" class="btn btn-outline-dark d-none" form="form-exportar"> Exportar </button>
+                    <button id="btn-exportar" type="submit" class="btn btn-outline-dark btn-exportar d-none" form="form-exportar">
+                        <i class="bi bi-download"></i> Exportar
+                    </button>
                 </div>
                 <div id="progressbar" class="d-none">
                     <br>

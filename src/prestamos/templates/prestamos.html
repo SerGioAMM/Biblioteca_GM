@@ -12,8 +12,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    
     <!--? Tom Select CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+    
+    <!--* Nuevos estilos de alertas y animaciones -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/alertas.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animaciones.css') }}">
 </head>
 <body class="bg-custom">
     <header>
@@ -21,14 +26,11 @@
     </header>
     {% if (session["rol"] == 'Administrador') or (session["rol"] == 'Bibliotecario') %}
     <main>
+        <!-- Las alertas antiguas serán convertidas automáticamente por el JS -->
         {% if (devuelto) %}
-        <span class="devuelto">
-            <h4><strong>{{devuelto}}</strong></h4>
-        </span>
+        <span class="devuelto" data-alert-type="success" data-alert-message="{{devuelto}}"></span>
         {% elif (exito) %}
-        <span class="exito-ingreso">
-            <h4><strong>{{exito}}</strong></h4>
-        </span>
+        <span class="exito-ingreso" data-alert-type="success" data-alert-message="{{exito}}"></span>
         {% endif %}
 
         <div class="div-busqueda h-100">
@@ -38,7 +40,7 @@
                 <form class="frm-prestamos" action="/buscar_prestamo" method="GET" id="form-busqueda">
                     <div class="input-group mx-auto" style="width: 45%;">
                     <select class="w-75" name="buscar" id="cuadro-busqueda" data-placeholder="Buscar..."  autocomplete="off" cursor="text"></select>
-                    <button class="btn btn-success w-25" type="submit">Buscar</button>
+                    <button class="btn btn-success w-25" type="submit"><i class="bi bi-search"></i> Buscar</button>
 
                     </div>
                     <div class="input-group mx-auto" style="width: 45%;">
@@ -131,10 +133,10 @@
                                 <div class="widget-49-meeting-action mb-2 col-4 text-end">
                                     <br><br><br>
                                     {% if prestamo.estado != "Devuelto" %}
-                                        <a data-bs-toggle="collapse" href="#devolver{{prestamo.id_prestamo}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-success mb-1">Devolver</a>
+                                        <a data-bs-toggle="collapse" href="#devolver{{prestamo.id_prestamo}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-success mb-1 boton">Devolver</a>
                                     {% endif %}
-                                    <a data-bs-toggle="collapse" href="#collapse{{prestamo.id_prestamo}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-primary mb-1">Detalles</a>
-                                    <a data-bs-toggle="collapse" href="#eliminar{{prestamo.id_prestamo}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-danger mb-1">Eliminar</a>
+                                    <a data-bs-toggle="collapse" href="#collapse{{prestamo.id_prestamo}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-primary mb-1 boton">Detalles</a>
+                                    <a data-bs-toggle="collapse" href="#eliminar{{prestamo.id_prestamo}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-danger mb-1 boton">Eliminar</a>
                                 </div>
                                 <div class="collapse" id="collapse{{prestamo.id_prestamo}}" data-bs-parent="#grupoPrestamo">
                                     <div class="card card-body">
@@ -155,7 +157,7 @@
                                             <input type="hidden" value="{{prestamo.id_prestamo}}" name="id_prestamo" readonly>
                                             <input class="form-control" type="text" placeholder="[OPCIONAL] - Escribe obervaciones en la devolución." name="observaciones_devolucion" autocomplete="off">
                                         </div>
-                                        <button class="btn btn-sm btn-outline-success" type="submit">Confirmar devolución</button>
+                                        <button class="btn btn-sm btn-outline-success boton" type="submit">Confirmar devolución</button>
                                     </form>
                                 </div>
                                 <div class="collapse" id="eliminar{{prestamo.id_prestamo}}" data-bs-parent="#grupoPrestamo">
@@ -165,7 +167,7 @@
                                             <input type="hidden" value="{{prestamo.id_prestamo}}" name="id_prestamo" readonly>
                                             <input class="form-control" type="text" placeholder="Escribe el motivo de la eliminación del préstamo." name="motivo_eliminacion" required autocomplete="off">
                                         </div>
-                                        <button class="btn btn-sm btn-outline-danger" type="submit">Confirmar eliminación</button> 
+                                        <button class="btn btn-sm btn-outline-danger boton" type="submit">Confirmar eliminación</button> 
                                     </form>
                                 </div>                 
                             </div>
@@ -205,13 +207,17 @@
     <!-- Footer -->
     {% include 'footer.html' %}
         
+    <!--! Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    
     <!--? Tom Select JS -->
     <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 
     <!-- Custom Scripts -->
     <script src="/static/js/sugerencias.js"></script>
-
-    <!--! Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    
+    <!--* Nuevos scripts de alertas y animaciones -->
+    <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animaciones.js') }}"></script>
 </body>
 </html>

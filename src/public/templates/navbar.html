@@ -1,44 +1,44 @@
 {% set libros_items = [
-    ('libros.libros', 'Catálogo'),
-    ('libros.registro_libros', 'Registrar libros'),
-    ('opiniones.opiniones_pendientes', 'Reseñas pendientes'),
-    ('data_managment.importar_libros', 'Importar libros'),
-    ('data_managment.exportar_libros', 'Exportar libros')
+    ('libros.libros', 'Catálogo', 'bi-book'),
+    ('libros.registro_libros', 'Registrar libros', 'bi-plus-circle'),
+    ('opiniones.opiniones_pendientes', 'Reseñas pendientes', 'bi-clock-history'),
+    ('data_managment.importar_libros', 'Importar libros', 'bi-download'),
+    ('data_managment.exportar_libros', 'Exportar libros', 'bi-upload')
 ] %}
 
 {% set prestamos_items = [
-    ('prestamos.prestamos', 'Todos los préstamos'),
-    ('prestamos.registro_prestamos', 'Registrar préstamo')
+    ('prestamos.prestamos', 'Todos los préstamos', 'bi-list-check'),
+    ('prestamos.registro_prestamos', 'Registrar préstamo', 'bi-plus-square')
     ] %}
     <!--
         ('prestamos.devueltos', 'Devueltos'),
         -->
 
 {% set usuarios_items = [
-    ('usuarios.usuarios', 'Todos los usuarios'),
-    ('usuarios.registro_usuarios', 'Registrar usuario')
+    ('usuarios.usuarios', 'Todos los usuarios', 'bi-people'),
+    ('usuarios.registro_usuarios', 'Registrar usuario', 'bi-person-plus')
 ] %}
 
 {% set visitantes_items = [
-    ('visitantes.visitantes', 'Todos los visitantes'),
-    ('visitantes.registro_visitantes', 'Registrar visitantes')
+    ('visitantes.visitantes', 'Todos los visitantes', 'bi-people-fill'),
+    ('visitantes.registro_visitantes', 'Registrar visitantes', 'bi-person-plus-fill')
 ] %}
 
 {% set logs_items = [
-    ('eliminados.libros_modificados', 'Libros modificados'),
-    ('eliminados.libros_e', 'Libros eliminados'),
-    ('eliminados.prestamos_e', 'Préstamos eliminados'),
-    ('eliminados.visitantes_e', 'Visitantes eliminados'),
-    ('opiniones.opiniones_rechazadas', 'Reseñas rechazadas')
+    ('eliminados.libros_modificados', 'Libros modificados', 'bi-pencil-square'),
+    ('eliminados.libros_e', 'Libros eliminados', 'bi-trash'),
+    ('eliminados.prestamos_e', 'Préstamos eliminados', 'bi-x-circle'),
+    ('eliminados.visitantes_e', 'Visitantes eliminados', 'bi-person-x'),
+    ('opiniones.opiniones_rechazadas', 'Reseñas rechazadas', 'bi-x-circle-fill')
 ] %}
 <!--
     ('usuarios.cambiar_contraseña', 'Cambiar contraseña'),
 -->
 {% set perfil_items = [
-    ('usuarios.ver_perfil', 'Ver perfil'),
-    ('datos.reporte_INE', 'Generar reporte (INE)'),
-    ('datos.graficas_generales', 'Gráficas generales'),
-    ('login.logout', 'Cerrar sesión')
+    ('usuarios.ver_perfil', 'Ver perfil', 'bi-person-circle'),
+    ('datos.reporte_INE', 'Generar reporte (INE)', 'bi-file-earmark-bar-graph'),
+    ('datos.graficas_generales', 'Gráficas generales', 'bi-bar-chart-line'),
+    ('login.logout', 'Cerrar sesión', 'bi-box-arrow-right')
 ] %}
 
 
@@ -55,14 +55,14 @@
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle position-relative {% if (request.endpoint.startswith('libros.')) or (request.endpoint.startswith('opiniones.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Libros
+                        <i class="bi bi-book"></i> Libros
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        {% for endpoint, label in libros_items %}
+                        {% for endpoint, label, icon in libros_items %}
                             <li>
                                 <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
                                     href="{{ url_for(endpoint) }}">
-                                    {{ label }}
+                                    <i class="bi {{ icon }}"></i> {{ label }}
                                 </a>
                             </li>
                         {% endfor %}
@@ -70,14 +70,14 @@
                     </li>
                     <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('prestamos.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Préstamos
+                        <i class="bi bi-card-checklist"></i> Préstamos
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        {% for endpoint, label in prestamos_items %}
+                        {% for endpoint, label, icon in prestamos_items %}
                             <li>
                                 <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
                                     href="{{ url_for(endpoint) }}">
-                                    {{ label }}
+                                    <i class="bi {{ icon }}"></i> {{ label }}
                                 </a>
                             </li>
                         {% endfor %}
@@ -85,14 +85,14 @@
                     </li>
                     <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('visitantes.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Visitantes
+                        <i class="bi bi-people"></i> Visitantes
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        {% for endpoint, label in visitantes_items %}
+                        {% for endpoint, label, icon in visitantes_items %}
                             <li>
                                 <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
                                     href="{{ url_for(endpoint) }}">
-                                    {{ label }}
+                                    <i class="bi {{ icon }}"></i> {{ label }}
                                 </a>
                             </li>
                         {% endfor %}
@@ -101,14 +101,14 @@
                     {% if session["rol"] == 'Administrador' %}
                     <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('eliminados.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Logs
+                        <i class="bi bi-journal-text"></i> Logs
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        {% for endpoint, label in logs_items %}
+                        {% for endpoint, label, icon in logs_items %}
                             <li>
                                 <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
                                     href="{{ url_for(endpoint) }}">
-                                    {{ label }}
+                                    <i class="bi {{ icon }}"></i> {{ label }}
                                 </a>
                             </li>
                         {% endfor %}    
@@ -116,14 +116,14 @@
                     </li>
                     <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('usuarios.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Usuarios
+                        <i class="bi bi-person-gear"></i> Usuarios
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        {% for endpoint, label in usuarios_items %}
+                        {% for endpoint, label, icon in usuarios_items %}
                             <li>
                                 <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
                                     href="{{ url_for(endpoint) }}">
-                                    {{ label }}
+                                    <i class="bi {{ icon }}"></i> {{ label }}
                                 </a>
                             </li>
                         {% endfor %}
@@ -161,14 +161,14 @@
                     </li>
                     <li class="nav-item dropdown ms-lg-3 mb-lg-0">
                     <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('eliminados.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        {{ session["usuario"] }}
+                        <i class="bi bi-person-circle"></i> {{ session["usuario"] }}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        {% for endpoint, label in perfil_items %}
+                        {% for endpoint, label, icon in perfil_items %}
                             <li>
                                 <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
                                     href="{{ url_for(endpoint) }}">
-                                    {{ label }}
+                                    <i class="bi {{ icon }}"></i> {{ label }}
                                 </a>
                             </li>
                         {% endfor %}    
@@ -196,7 +196,7 @@
                 <form class="d-flex" role="search" action="/buscar_libro" method="GET" id="form-busqueda">
                     <input class="d-none" value="Titulo" id="filtro-busqueda" type="text">
                     <select class="w-a" name="buscar" id="cuadro-busqueda" data-placeholder="Buscar..."  autocomplete="off" cursor="text"></select>
-                    <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+                    <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i> Buscar</button>
                 </form>
                 {% endif %}
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">

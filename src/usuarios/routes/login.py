@@ -46,8 +46,12 @@ def login():
                     if isinstance(tiempo_bloqueo, str):
                         tiempo_bloqueo = datetime.fromisoformat(tiempo_bloqueo)
                 if tiempo_bloqueo and tiempo_bloqueo > ahora:
-                    alerta = f"Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en {((tiempo_bloqueo-ahora).seconds//60 + 1)} minutos."
+                    tiempo_restante = (tiempo_bloqueo - ahora).seconds
+                    minutos = tiempo_restante // 60
+                    segundos = tiempo_restante % 60
+                    alerta = f"Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en {minutos}:{segundos:02d}."
                     logger.add_to_log("error", f"{alerta} - Usuario: {usuario}")
+                    #return render_template("login.html", alerta=alerta)
                 else:
                     if tiempo_bloqueo and tiempo_bloqueo <= ahora:
                         query.execute("""
@@ -73,7 +77,7 @@ def login():
                             alerta = "Usuario inactivo, contacte al administrador"
                         else:
                             new_fails = (login_fail or 0) + 1
-                            alerta = "Datos incorrectos"
+                            alerta = f"Datos incorrectos, intentos fallidos: {new_fails}"
                             if new_fails >= 3:
                                 lock_until = ahora + timedelta(minutes=3)  # Bloqueo de 3 minutos
                                 query.execute("""
@@ -90,6 +94,7 @@ def login():
                                     SET login_fail = ? 
                                     WHERE id_administrador = ?
                                 """, (new_fails, id_admin))
+                                conexion.commit()
 
                         logger.add_to_log("error", f"{alerta} - Usuario: {usuario}")
                         session["rol"] = "false"
