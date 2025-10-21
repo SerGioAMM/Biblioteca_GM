@@ -115,6 +115,72 @@
     <script src="/static/js/sugerencias.js"></script>
     <script src="/static/js/obtener_fecha.js"></script>
     
+    <script>
+        // Validación de fechas de préstamo
+        document.addEventListener('DOMContentLoaded', function() {
+            const fechaPrestamoInput = document.getElementById('fecha_prestamo');
+            const fechaEntregaInput = document.getElementById('fecha_entrega_estimada');
+            const form = document.querySelector('form');
+            
+            // Obtener fecha de hoy
+            const hoy = new Date();
+            
+            // Formatear fechas para input type="date" (YYYY-MM-DD)
+            const formatearFecha = (fecha) => {
+                const año = fecha.getFullYear();
+                const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+                const dia = String(fecha.getDate()).padStart(2, '0');
+                return `${año}-${mes}-${dia}`;
+            };
+            
+            const hoyStr = formatearFecha(hoy);
+            
+            // Establecer fecha de hoy por defecto y máximo = hoy
+            fechaPrestamoInput.value = hoyStr;
+            fechaPrestamoInput.max = hoyStr;
+            
+            // Cuando cambia la fecha de préstamo, actualizar mínimo de fecha de entrega
+            fechaPrestamoInput.addEventListener('change', function() {
+                // La fecha de entrega no puede ser antes de la fecha de préstamo
+                fechaEntregaInput.min = this.value;
+                
+                // Si la fecha de entrega ya está seleccionada y es menor, resetearla
+                if (fechaEntregaInput.value && fechaEntregaInput.value < this.value) {
+                    fechaEntregaInput.value = '';
+                    alert('La fecha límite de entrega debe ser igual o posterior a la fecha de préstamo.');
+                }
+            });
+            
+            // Validación al enviar el formulario
+            form.addEventListener('submit', function(e) {
+                const fechaPrestamo = new Date(fechaPrestamoInput.value);
+                const fechaEntrega = new Date(fechaEntregaInput.value);
+                const hoyTemprano = new Date(hoyStr);
+                
+                // Validar que fecha de préstamo no sea mayor a hoy
+                if (fechaPrestamo > hoyTemprano) {
+                    e.preventDefault();
+                    alert('La fecha de préstamo no puede ser posterior a hoy.');
+                    fechaPrestamoInput.focus();
+                    return false;
+                }
+                
+                // Validar que fecha de entrega no sea antes de fecha de préstamo
+                if (fechaEntrega < fechaPrestamo) {
+                    e.preventDefault();
+                    alert('La fecha límite de entrega debe ser igual o posterior a la fecha de préstamo.');
+                    fechaEntregaInput.focus();
+                    return false;
+                }
+            });
+            
+            // Inicializar el mínimo de fecha de entrega
+            if (fechaPrestamoInput.value) {
+                fechaEntregaInput.min = fechaPrestamoInput.value;
+            }
+        });
+    </script>
+    
     <!--* Nuevos scripts de alertas y animaciones -->
     <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
     <script src="{{ url_for('static', filename='js/animaciones.js') }}"></script>

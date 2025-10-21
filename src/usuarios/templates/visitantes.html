@@ -40,12 +40,12 @@
                                 <div class="col-12 col-sm-6">
                                     <label for="fecha_inicio" class="form-label">Mes de inicio:</label>
                                     <input type="month" name="fecha_inicio" class="form-control" 
-                                           style="min-height: 44px;" value="{{ fecha_inicio if fecha_inicio else '' }}">
+                                            style="min-height: 44px;" value="{{ fecha_inicio if fecha_inicio else '' }}">
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <label for="fecha_fin" class="form-label">Mes final:</label>
                                     <input type="month" name="fecha_fin" class="form-control" 
-                                           style="min-height: 44px;" value="{{ fecha_fin if fecha_fin else '' }}">
+                                            style="min-height: 44px;" value="{{ fecha_fin if fecha_fin else '' }}">
                                 </div>
                             </div>
                         </div>
@@ -70,6 +70,7 @@
                                 <tr>
                                     <th><span>Fecha</span></th>
                                     <th><span>Tipo de Visitante</span></th>
+                                    <th><span>Rango de Edad</span></th>
                                     <th><span>Hombres</span></th>
                                     <th><span>Mujeres</span></th>
                                     <th><span>Total</span></th>
@@ -100,11 +101,18 @@
                                             {% elif visitante.tipo_visitante == 'Otros usuarios' %}
                                                 {% set badge = 'otros-usuarios' %}
                                             {% else %}
-                                                <span class="badge bg-secondary">{{ visitante.tipo_visitante }}</span>
+                                                {% set badge = 'personalizados' %}
                                             {% endif %}
                                             <span class="badge badge-{{badge}} text-center p-1 rounded-pill">
                                                 &nbsp;&nbsp;&nbsp; {{visitante.tipo_visitante}} &nbsp;&nbsp;&nbsp;
                                             </span>
+                                        </td>
+                                        <td>
+                                            {% if visitante.rango_edad %}
+                                                <span class="">{{ visitante.rango_edad }} años</span>
+                                            {% else %}
+                                                <span class="">No especificado</span>
+                                            {% endif %}
                                         </td>
                                         <td>{{ visitante.cantidad_hombres }}</td>
                                         <td>{{ visitante.cantidad_mujeres }}</td>
@@ -119,7 +127,7 @@
                                     </tr>
                                     
                                     <tr>
-                                        <td colspan="6" class="p-0 border-0">
+                                        <td colspan="7" class="p-0 border-0">
                                             <div class="collapse" id="eliminar{{visitante.id_registro}}" data-bs-parent="#grupovisitante">
                                                 <div class="bg-light">
                                                     <form class="frm-eliminar-visitante text-center w-75 mx-auto" action="/eliminar_visitante" method="POST">
@@ -142,8 +150,26 @@
                                 {% endfor %}
                             </tbody>
                             <tfoot class="table-secondary">
+                                {# Subtotales por rango de edad #}
+                                {% set rangos = ['0-12', '13-21', '22+'] %}
+                                {% for rango in rangos %}
+                                    {% set hombres_rango = visitantes|selectattr('rango_edad', 'equalto', rango)|sum(attribute='cantidad_hombres') %}
+                                    {% set mujeres_rango = visitantes|selectattr('rango_edad', 'equalto', rango)|sum(attribute='cantidad_mujeres') %}
+                                    {% if hombres_rango > 0 or mujeres_rango > 0 %}
+                                    <tr>
+                                        <th colspan="2" class="text-end">{{ rango }} años:</th>
+                                        <th></th>
+                                        <th>{{ hombres_rango }}</th>
+                                        <th>{{ mujeres_rango }}</th>
+                                        <th>{{ hombres_rango + mujeres_rango }}</th>
+                                        <th></th>
+                                    </tr>
+                                    {% endif %}
+                                {% endfor %}
+                                {# Total general #}
                                 <tr>
-                                    <th colspan="2" class="text-end"><strong>Totales:</strong></th>
+                                    <th colspan="2" class="text-end"><strong>Totales Generales:</strong></th>
+                                    <th></th>
                                     <th>
                                         {% set total_hombres = visitantes|sum(attribute='cantidad_hombres') %}
                                         <strong>{{ total_hombres }}</strong>

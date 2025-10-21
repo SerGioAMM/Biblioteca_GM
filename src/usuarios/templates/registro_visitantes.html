@@ -50,12 +50,32 @@
                                     <input type="date" name="fecha" class="form-control" autocomplete="off" required>
                                 </div>
                                 <div class="col-12 col-md-6 mb-3">
-                                    <label for="tipo_visitante" class="form-label">Tipo de Visitante*</label>
-                                    <select name="tipo_visitante" id="tipo_visitante" class="form-select" required>
-                                        {% for tipo in tipos_visitantes %}
-                                        <option value="{{ tipo[0] }}">{{ tipo[1] }}</option>
+                                    <label for="id_rango_edad" class="form-label">Rango de Edad*</label>
+                                    <select name="id_rango_edad" id="id_rango_edad" class="form-select" required>
+                                        <option value="">Seleccione un rango</option>
+                                        {% for rango in rangos_edad %}
+                                        <option value="{{ rango[0] }}" data-rango="{{ rango[1] }}">{{ rango[1] }} años</option>
                                         {% endfor %}
                                     </select>
+                                </div>
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label for="tipo_visitante" class="form-label">Tipo de Visitante*</label>
+                                    <select name="tipo_visitante" id="tipo_visitante" class="form-select" required>
+                                        <option value="">Seleccione un tipo</option>
+                                        {% for tipo in tipos_visitantes %}
+                                        <option value="{{ tipo[0] }}" data-tipo="{{ tipo[1] }}">{{ tipo[1] }}</option>
+                                        {% endfor %}
+                                        <option value="nuevo" style="font-weight: bold;">
+                                            <i class="bi bi-plus-square"></i> + Agregar nuevo tipo
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-12 mb-3" id="nuevo-tipo-container" style="display: none;">
+                                    <label for="nuevo_tipo_visitante" class="form-label">Nuevo Tipo de Visitante*</label>
+                                    <input type="text" name="nuevo_tipo_visitante" id="nuevo_tipo_visitante" 
+                                           class="form-control" placeholder="Ingrese el nuevo tipo de visitante" 
+                                           autocomplete="off">
+                                    <small class="form-text text-muted">Este campo es obligatorio si seleccionó "Agregar nuevo tipo"</small>
                                 </div>
                                 <div class="col-12 col-md-6 mx-auto text-center mb-3">
                                     <br>
@@ -83,11 +103,146 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
     
     <script>
-        // Establecer la fecha actual por defecto
+        // Establecer la fecha actual por defecto y validación de fecha máxima
         document.addEventListener('DOMContentLoaded', function() {
             const fechaInput = document.querySelector('input[name="fecha"]');
             const today = new Date().toISOString().split('T')[0];
             fechaInput.value = today;
+            fechaInput.max = today; // Evita seleccionar fechas futuras
+            
+            // Referencias a los elementos
+            const rangoSelect = document.getElementById('id_rango_edad');
+            const tipoSelect = document.getElementById('tipo_visitante');
+            const nuevoTipoContainer = document.getElementById('nuevo-tipo-container');
+            const nuevoTipoInput = document.getElementById('nuevo_tipo_visitante');
+            const form = document.querySelector('form');
+            
+            // Definir restricciones por rango de edad
+            const restriccionesPorRango = {
+                '0-12': {
+                    prohibidos: [
+                        'Profesionales',
+                        'Estudiantes universitarios',
+                        'Estudiantes de nivel medio',
+                        'Trabajadores',
+                        'Personal de la institución'
+                    ],
+                    mensaje: 'Este tipo de visitante no es válido para el rango de edad 0-12 años'
+                },
+                '13-21': {
+                    prohibidos: [
+                        'Estudiantes de primaria'
+                    ],
+                    mensaje: 'Este tipo de visitante no es válido para el rango de edad 13-21 años'
+                },
+                '22+': {
+                    prohibidos: [
+                        'Estudiantes de primaria',
+                        'Estudiantes de nivel medio'
+                    ],
+                    mensaje: 'Este tipo de visitante no es válido para el rango de edad 22+ años'
+                }
+            };
+            
+            // Función para validar y filtrar opciones
+            function validarYFiltrarOpciones() {
+                const rangoSeleccionado = rangoSelect.options[rangoSelect.selectedIndex];
+                const rangoTexto = rangoSeleccionado ? rangoSeleccionado.getAttribute('data-rango') : null;
+                
+                if (!rangoTexto) {
+                    // Habilitar todas las opciones si no hay rango seleccionado
+                    Array.from(tipoSelect.options).forEach(option => {
+                        if (option.value !== 'nuevo' && option.value !== '') {
+                            option.disabled = false;
+                            option.style.color = '';
+                        }
+                    });
+                    return;
+                }
+                
+                const restricciones = restriccionesPorRango[rangoTexto];
+                
+                if (restricciones) {
+                    Array.from(tipoSelect.options).forEach(option => {
+                        const tipoTexto = option.getAttribute('data-tipo');
+                        
+                        if (tipoTexto && restricciones.prohibidos.includes(tipoTexto)) {
+                            option.disabled = true;
+                            option.style.color = '#ccc';
+                        } else if (option.value !== 'nuevo' && option.value !== '') {
+                            option.disabled = false;
+                            option.style.color = '';
+                        }
+                    });
+                    
+                    // Si la opción actual está deshabilitada, resetear
+                    if (tipoSelect.selectedIndex > 0 && tipoSelect.options[tipoSelect.selectedIndex].disabled) {
+                        tipoSelect.value = '';
+                    }
+                }
+            }
+            
+            // Función para mostrar/ocultar campo de nuevo tipo
+            function toggleNuevoTipo() {
+                if (tipoSelect.value === 'nuevo') {
+                    nuevoTipoContainer.style.display = 'block';
+                    nuevoTipoInput.required = true;
+                } else {
+                    nuevoTipoContainer.style.display = 'none';
+                    nuevoTipoInput.required = false;
+                    nuevoTipoInput.value = '';
+                }
+            }
+            
+            // Event listeners
+            rangoSelect.addEventListener('change', validarYFiltrarOpciones);
+            tipoSelect.addEventListener('change', function() {
+                toggleNuevoTipo();
+                validarSeleccion();
+            });
+            
+            // Validación al enviar el formulario
+            function validarSeleccion() {
+                const rangoSeleccionado = rangoSelect.options[rangoSelect.selectedIndex];
+                const tipoSeleccionado = tipoSelect.options[tipoSelect.selectedIndex];
+                
+                if (!rangoSeleccionado || !tipoSeleccionado) return true;
+                
+                const rangoTexto = rangoSeleccionado.getAttribute('data-rango');
+                const tipoTexto = tipoSeleccionado.getAttribute('data-tipo');
+                
+                if (rangoTexto && tipoTexto) {
+                    const restricciones = restriccionesPorRango[rangoTexto];
+                    
+                    if (restricciones && restricciones.prohibidos.includes(tipoTexto)) {
+                        alert(restricciones.mensaje);
+                        return false;
+                    }
+                }
+                return true;
+            }
+            
+            // Validación final al enviar
+            form.addEventListener('submit', function(e) {
+                // Validar nuevo tipo si está seleccionado
+                if (tipoSelect.value === 'nuevo') {
+                    if (!nuevoTipoInput.value.trim()) {
+                        e.preventDefault();
+                        alert('Debe ingresar el nombre del nuevo tipo de visitante');
+                        nuevoTipoInput.focus();
+                        return false;
+                    }
+                }
+                
+                // Validar restricciones de rango-tipo
+                if (!validarSeleccion()) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+            
+            // Inicializar
+            validarYFiltrarOpciones();
         });
     </script>
     

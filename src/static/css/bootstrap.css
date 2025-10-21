@@ -165,6 +165,12 @@
     color: rgb(154, 28, 40);
     border: 1px solid rgb(220, 53, 69);
 }
+.badge-personalizados {
+    background-color: rgba(255, 167, 255, 0.2); 
+    color: rgb(154, 28, 154);
+    border: 1px solid rgb(219, 112, 219);
+}
+
 
 
 

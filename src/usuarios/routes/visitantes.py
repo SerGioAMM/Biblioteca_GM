@@ -17,6 +17,9 @@ def registro_visitantes():
 
     query.execute("SELECT * FROM Tipos_Visitantes")
     tipos_visitantes = query.fetchall()
+    
+    query.execute("SELECT * FROM Rangos_Edad ORDER BY id_rango")
+    rangos_edad = query.fetchall()
 
     # Verifica la acción que realiza el formulario en registro_visitantes.html
     if request.method == "POST":
@@ -24,12 +27,40 @@ def registro_visitantes():
         cantidad_hombres = request.form["cantidad_hombres"]
         cantidad_mujeres = request.form["cantidad_mujeres"]
         tipo_visitante = request.form["tipo_visitante"]
+        id_rango_edad = request.form["id_rango_edad"]
         fecha = request.form["fecha"]
+        
+        # Si el usuario eligió "nuevo", crear el nuevo tipo
+        if tipo_visitante == "nuevo":
+            nuevo_tipo = request.form.get("nuevo_tipo_visitante", "").strip()
+            if not nuevo_tipo:
+                alerta = "Debe ingresar el nombre del nuevo tipo de visitante."
+                return render_template("registro_visitantes.html", tipos_visitantes=tipos_visitantes, rangos_edad=rangos_edad, alerta=alerta)
+            
+            try:
+                # Verificar si el tipo ya existe
+                query.execute("SELECT id_tipo_visitante FROM Tipos_Visitantes WHERE tipo_visitante = ?", (nuevo_tipo,))
+                tipo_existente = query.fetchone()
+                
+                if tipo_existente:
+                    tipo_visitante = tipo_existente[0]
+                else:
+                    # Insertar el nuevo tipo
+                    query.execute("INSERT INTO Tipos_Visitantes (tipo_visitante) VALUES (?)", (nuevo_tipo,))
+                    conexion.commit()
+                    tipo_visitante = query.lastrowid
+                    
+                    # Notificación
+                    from src.usuarios.routes.usuarios import crear_notificacion
+                    crear_notificacion(f"{session['rol']} {session['usuario']} ha creado un nuevo tipo de visitante: {nuevo_tipo}")
+            except Exception as e:
+                alerta = f"Error al crear el nuevo tipo de visitante: {str(e)}"
+                return render_template("registro_visitantes.html", tipos_visitantes=tipos_visitantes, rangos_edad=rangos_edad, alerta=alerta)
 
         try:
             # INSERT DE VISITANTES
-            query.execute("""INSERT INTO Visitantes(cantidad_hombres, cantidad_mujeres, id_tipo_visitante, fecha)
-                            VALUES (?,?,?,?)""", (cantidad_hombres, cantidad_mujeres, tipo_visitante, fecha))
+            query.execute("""INSERT INTO Visitantes(cantidad_hombres, cantidad_mujeres, id_tipo_visitante, id_rango_edad, fecha)
+                            VALUES (?,?,?,?,?)""", (cantidad_hombres, cantidad_mujeres, tipo_visitante, id_rango_edad, fecha))
 
             # Guardar cambios
             conexion.commit()
@@ -40,16 +71,16 @@ def registro_visitantes():
             crear_notificacion(f"{session['rol']} {session['usuario']} ha registrado {total_visitantes} visitantes.")
             
             registro_exitoso = "El registro de visitantes se completó exitosamente."
-            return render_template("registro_visitantes.html", tipos_visitantes=tipos_visitantes, registro_exitoso=registro_exitoso)
+            return render_template("registro_visitantes.html", tipos_visitantes=tipos_visitantes, rangos_edad=rangos_edad, registro_exitoso=registro_exitoso)
 
         except Exception as e:
             alerta = f"Error al registrar visitantes: {str(e)}"
-            return render_template("registro_visitantes.html", tipos_visitantes=tipos_visitantes, alerta=alerta)
+            return render_template("registro_visitantes.html", tipos_visitantes=tipos_visitantes, rangos_edad=rangos_edad, alerta=alerta)
         finally:
             query.close()
             conexion.close()
 
-    return render_template("registro_visitantes.html", tipos_visitantes=tipos_visitantes)
+    return render_template("registro_visitantes.html", tipos_visitantes=tipos_visitantes, rangos_edad=rangos_edad)
 
 # ----------------------------------------------------- VISITANTES ----------------------------------------------------- #
 
@@ -75,9 +106,10 @@ def visitantes():
 
     query.execute("""SELECT v.id_registro, v.cantidad_hombres, v.cantidad_mujeres, 
                         (v.cantidad_hombres + v.cantidad_mujeres) as total,
-                        tv.tipo_visitante, v.fecha
+                        tv.tipo_visitante, re.rango as rango_edad, v.fecha
                         FROM Visitantes v
                         JOIN Tipos_Visitantes tv ON v.id_tipo_visitante = tv.id_tipo_visitante
+                        LEFT JOIN Rangos_Edad re ON v.id_rango_edad = re.id_rango
                         ORDER BY v.fecha DESC
                         LIMIT ? OFFSET ?""", (visitantes_por_pagina, offset))
     visitantes = dict_factory(query)
@@ -175,6 +207,7 @@ def buscar_visitante():
     # Consulta para contar visitantes con filtros
     query_count = f"""SELECT COUNT(*) FROM Visitantes v
                         JOIN Tipos_Visitantes tv ON v.id_tipo_visitante = tv.id_tipo_visitante
+                        LEFT JOIN Rangos_Edad re ON v.id_rango_edad = re.id_rango
                         WHERE 1=1 {SQL_where_fecha}"""
     query.execute(query_count)
     total_visitantes = query.fetchone()[0]
@@ -182,9 +215,10 @@ def buscar_visitante():
 
     query_busqueda = f"""SELECT v.id_registro, v.cantidad_hombres, v.cantidad_mujeres, 
                             (v.cantidad_hombres + v.cantidad_mujeres) as total,
-                            tv.tipo_visitante, v.fecha
+                            tv.tipo_visitante, re.rango as rango_edad, v.fecha
                             FROM Visitantes v
                             JOIN Tipos_Visitantes tv ON v.id_tipo_visitante = tv.id_tipo_visitante
+                            LEFT JOIN Rangos_Edad re ON v.id_rango_edad = re.id_rango
                             WHERE 1=1 {SQL_where_fecha}
                             ORDER BY v.fecha DESC
                             LIMIT {visitantes_por_pagina} OFFSET {offset}"""

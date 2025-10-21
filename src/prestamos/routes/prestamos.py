@@ -309,6 +309,40 @@ def registro_prestamos():
         fecha_prestamo = request.form["fecha_prestamo"]
         fecha_entrega_estimada = request.form["fecha_entrega_estimada"]
         Estado = 2 #Activo
+        
+        # Validaciones de fechas
+        from datetime import timedelta
+        
+        try:
+            fecha_prest_obj = datetime.strptime(fecha_prestamo, '%Y-%m-%d')
+            fecha_entrega_obj = datetime.strptime(fecha_entrega_estimada, '%Y-%m-%d')
+            hoy = datetime.now().date()
+            
+            # Validar que fecha de préstamo no sea mayor a hoy
+            if fecha_prest_obj.date() > hoy:
+                alerta = "La fecha de préstamo no puede ser posterior a hoy."
+                return render_template("registro_prestamos.html", alerta=alerta,
+                        DPI=DPI, nombre_lector=NombreLector, apellido_lector=ApellidoLector,
+                        direccion=Direccion, num_telefono=Telefono, libro=Libro,
+                        grado=GradoEstudio, fecha_prestamo=fecha_prestamo,
+                        fecha_entrega_estimada=fecha_entrega_estimada)
+            
+            # Validar que fecha de entrega no sea antes de fecha de préstamo
+            if fecha_entrega_obj < fecha_prest_obj:
+                alerta = "La fecha límite de entrega debe ser igual o posterior a la fecha de préstamo."
+                return render_template("registro_prestamos.html", alerta=alerta,
+                        DPI=DPI, nombre_lector=NombreLector, apellido_lector=ApellidoLector,
+                        direccion=Direccion, num_telefono=Telefono, libro=Libro,
+                        grado=GradoEstudio, fecha_prestamo=fecha_prestamo,
+                        fecha_entrega_estimada=fecha_entrega_estimada)
+                        
+        except ValueError:
+            alerta = "Formato de fecha inválido. Por favor, use el selector de fechas."
+            return render_template("registro_prestamos.html", alerta=alerta,
+                    DPI=DPI, nombre_lector=NombreLector, apellido_lector=ApellidoLector,
+                    direccion=Direccion, num_telefono=Telefono, libro=Libro,
+                    grado=GradoEstudio, fecha_prestamo=fecha_prestamo,
+                    fecha_entrega_estimada=fecha_entrega_estimada)
             
         try:
             # Verificar si el libro existe y tiene al menos 1 copia
