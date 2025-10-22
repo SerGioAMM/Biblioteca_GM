@@ -1,0 +1,80 @@
+/* Animaciones de fade-in para la página de bienvenida */
+
+/* Fade in básico con movimiento hacia arriba */
+.fade-in-up {
+    animation: fadeInUp 0.7s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Fade in con retraso para la frase motivadora */
+.fade-in-delayed {
+    animation: fadeInUp .5s ease-out 1s forwards;
+    opacity: 0;
+}
+
+/* Fade in con más retraso para el botón */
+.fade-in-delayed-more {
+    animation: fadeInUp 1s ease-out 1.2s forwards;
+    opacity: 0;
+}
+
+/* Estilos adicionales para la página de bienvenida */
+.bienvenida-texto h1 {
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.frase-motivadora .card {
+    border-radius: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.frase-motivadora .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Responsividad para móviles */
+@media (max-width: 768px) {
+    .bienvenida-texto h1 {
+        font-size: 2.5rem;
+    }
+    
+    .bienvenida-texto h2 {
+        font-size: 1.5rem;
+    }
+    
+    .frase-motivadora .card {
+        border-radius: 15px;
+    }
+    
+    .frase-motivadora .card-body {
+        padding: 1.5rem 1rem !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .bienvenida-texto h1 {
+        font-size: 2rem;
+    }
+    
+    .bienvenida-texto h2 {
+        font-size: 1.25rem;
+    }
+    
+    .btn-lg {
+        font-size: 1rem;
+        padding: 0.75rem 2rem !important;
+    }
+}

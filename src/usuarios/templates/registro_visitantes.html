@@ -37,19 +37,19 @@
                         <br><br>
                         <div class="container-fluid w-75 bg-light-custom rounded">
                             <form method="POST" action="/registro_visitantes" class="row g-3 text-start">
-                                <div class="col-12 col-md-6 mb-3">
+                                <div class="col-12 col-md-4 mb-3">
                                     <label for="cantidad_hombres" class="form-label">Cantidad Hombres*</label>
                                     <input class="form-control" type="number" name="cantidad_hombres" placeholder="0" min="0" autocomplete="off" required>
                                 </div>
-                                <div class="col-12 col-md-6 mb-3">
+                                <div class="col-12 col-md-4 mb-3">
                                     <label for="cantidad_mujeres" class="form-label p-0">Cantidad Mujeres*</label>
                                     <input type="number" name="cantidad_mujeres" class="form-control" placeholder="0" min="0" autocomplete="off" required>
                                 </div>
-                                <div class="col-12 col-md-6 mb-3">
+                                <div class="col-12 col-md-4 mb-3">
                                     <label for="fecha" class="form-label p-0">Fecha*</label>
                                     <input type="date" name="fecha" class="form-control" autocomplete="off" required>
                                 </div>
-                                <div class="col-12 col-md-6 mb-3">
+                                <div class="col-12 col-md-4 mb-3">
                                     <label for="id_rango_edad" class="form-label">Rango de Edad*</label>
                                     <select name="id_rango_edad" id="id_rango_edad" class="form-select" required>
                                         <option value="">Seleccione un rango</option>
@@ -58,7 +58,7 @@
                                         {% endfor %}
                                     </select>
                                 </div>
-                                <div class="col-12 col-md-6 mb-3">
+                                <div class="col-12 col-md-4 mb-3">
                                     <label for="tipo_visitante" class="form-label">Tipo de Visitante*</label>
                                     <select name="tipo_visitante" id="tipo_visitante" class="form-select" required>
                                         <option value="">Seleccione un tipo</option>
@@ -70,12 +70,11 @@
                                         </option>
                                     </select>
                                 </div>
-                                <div class="col-12 mb-3" id="nuevo-tipo-container" style="display: none;">
+                                <div class="col-12 col-md-4 mb-3" id="nuevo-tipo-container" style="display: none;">
                                     <label for="nuevo_tipo_visitante" class="form-label">Nuevo Tipo de Visitante*</label>
                                     <input type="text" name="nuevo_tipo_visitante" id="nuevo_tipo_visitante" 
-                                           class="form-control" placeholder="Ingrese el nuevo tipo de visitante" 
-                                           autocomplete="off">
-                                    <small class="form-text text-muted">Este campo es obligatorio si seleccionó "Agregar nuevo tipo"</small>
+                                            class="form-control" placeholder="Ingrese el nuevo tipo de visitante" 
+                                            autocomplete="off">
                                 </div>
                                 <div class="col-12 col-md-6 mx-auto text-center mb-3">
                                     <br>

@@ -76,8 +76,8 @@
                                     </div>
                                     <div class="widget-49-meeting-action mb-2 col-4 text-end">
                                         <br><br><br>
-                                        <a data-bs-toggle="collapse" href="#aceptar{{opinion.id_opinion}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-success mb-1">Aceptar</a>
-                                        <a data-bs-toggle="collapse" href="#rechazar{{opinion.id_opinion}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-danger mb-1">Rechazar</a>
+                                        <a data-bs-toggle="collapse" href="#aceptar{{opinion.id_opinion}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-success mb-1 boton">Aceptar</a>
+                                        <a data-bs-toggle="collapse" href="#rechazar{{opinion.id_opinion}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-danger mb-1 boton">Rechazar</a>
                                     </div>
 
                                     <!-- Aceptar -->
@@ -86,7 +86,7 @@
                                             <h6><strong>¿Está seguro de que desea aceptar esta reseña?</strong></h6>
                                             <input type="hidden" value="{{opinion.id_opinion}}" name="id_opinion" readonly>
                                             <input type="hidden" value="{{opinion.titulo}}" name="titulo_libro" readonly>
-                                            <button class="btn btn-outline-success" type="submit">Confirmar aceptación</button>
+                                            <button class="btn btn-outline-success boton" type="submit">Confirmar aceptación</button>
                                         </form>
                                     </div>
 
@@ -99,7 +99,7 @@
                                                 <input type="hidden" value="{{opinion.titulo}}" name="titulo_libro" readonly>
                                                 <input class="form-control" type="text" placeholder="Escribe el motivo del rechazo." name="motivo" required autocomplete="off">
                                             </div>
-                                            <button class="btn btn-outline-danger" type="submit">Confirmar rechazo</button>
+                                            <button class="btn btn-outline-danger boton" type="submit">Confirmar rechazo</button>
                                         </form>
                                     </div>
                                 </div>

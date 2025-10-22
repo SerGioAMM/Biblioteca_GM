@@ -101,9 +101,8 @@
 }
 
 /* ==================== ANIMACIONES DE TABLAS ==================== */
-/* DESHABILITADAS - El usuario no quiere animaciones de carga */
 
-/* Fade in para filas de tabla - DESHABILITADO */
+/* Fade in para filas de tabla */
 /*
 @keyframes tableRowFadeIn {
     from {
@@ -122,7 +121,7 @@
 }
 */
 
-/* Delays para filas - DESHABILITADO */
+/* Delays para filas */
 /*
 .table-animate tbody tr:nth-child(1) { animation-delay: 0.05s; }
 .table-animate tbody tr:nth-child(2) { animation-delay: 0.1s; }
