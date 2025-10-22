@@ -71,7 +71,7 @@ def login():
                             WHERE id_administrador = ?
                         """, (id_admin,))
                         conexion.commit()
-                        return redirect(url_for('prestamos.prestamos'))
+                        return redirect(url_for('bienvenida.bienvenida'))
                     else:
                         if estado != "Activo":
                             alerta = "Usuario inactivo, contacte al administrador"

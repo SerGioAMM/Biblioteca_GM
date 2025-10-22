@@ -217,10 +217,10 @@ def detalle_libro(ID):
         recomendaciones = []
     
     return render_template("detalle_libro.html", detalle=detalle, secciones=secciones, 
-                         opiniones=opiniones, total_opiniones=total_opiniones,
-                         promedio_valoracion=promedio_info['promedio'],
-                         total_valoraciones=promedio_info['total'],
-                         recomendaciones=recomendaciones)
+                            opiniones=opiniones, total_opiniones=total_opiniones,
+                            promedio_valoracion=promedio_info['promedio'],
+                            total_valoraciones=promedio_info['total'],
+                            recomendaciones=recomendaciones)
 
 @bp_libros.route("/todas_resenas/<ID>/<Titulo>", methods=["GET"])
 def todas_resenas(ID, Titulo):
@@ -235,9 +235,9 @@ def todas_resenas(ID, Titulo):
     promedio_info = opiniones_model.get_promedio_valoracion_libro(ID)
     
     return render_template("todas_resenas.html", detalle=detalle, 
-                         opiniones=opiniones,
-                         promedio_valoracion=promedio_info['promedio'],
-                         total_valoraciones=promedio_info['total'])
+                            opiniones=opiniones,
+                            promedio_valoracion=promedio_info['promedio'],
+                            total_valoraciones=promedio_info['total'])
 
 @bp_libros.route("/editar_libro", methods=["GET", "POST"])
 def editar_libro():
@@ -259,8 +259,8 @@ def editar_libro():
         usuario = session.get("id_administrador")
         try:
             libros_model.editar_libro(id_libro, usuario, new_titulo, new_portada, new_tomo, new_numero_paginas, 
-                                     new_numero_copias, new_isbn, new_anio, new_nombre_autor, new_apellido_autor, 
-                                     new_editorial, new_lugar, new_seccion, motivo)
+                                        new_numero_copias, new_isbn, new_anio, new_nombre_autor, new_apellido_autor, 
+                                        new_editorial, new_lugar, new_seccion, motivo)
             
             # Crear notificación
             from src.usuarios.routes.usuarios import crear_notificacion
