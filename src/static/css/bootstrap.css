@@ -29,12 +29,20 @@
   --color-principal: #f2e5d0;
   --color-oscuro: #715c3a;
   --color-secundario: #fca72b;
-  --color-claro: #f9f3ee;
+  --color-claro: #faeee4;
+  --color-terciario: #fff8f4;
+  --color-muyclaro: #fffcfaca;
 
 }
 
 .bg-custom {
   background-color: var(--color-principal) !important;
+}
+.bg-tertiary-custom {
+  background-color: var(--color-terciario) !important;
+}
+.bg-lighter-custom {
+  background-color: var(--color-muyclaro) !important;
 }
 .bg-accent-custom {
   background-color: var(--color-secundario) !important;

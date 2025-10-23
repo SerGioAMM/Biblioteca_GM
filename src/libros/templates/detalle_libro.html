@@ -38,7 +38,7 @@
                 <div class="col-12">
                 {% if detalle %}
                 {% set libro = detalle[0] %}
-                <div class="card widget-card border-light shadow-sm">
+                <div class="card widget-card border-light shadow bg-lighter-custom">
                     <div class="card-body">
                         <div class="text-center mb-3">
                         {% if libro.portada == "book.png" %}
@@ -50,7 +50,7 @@
                     <div class="d-grid m-0">
                     {% if session %}
                         <button class="btn btn-outline-primary my-1 boton" type="button" id="btn-editar"> <i class="bi bi-pencil-square"></i> <span>Editar</span></button>
-                        <a data-bs-toggle="collapse" href="#eliminar{{libro.id_libro}}" role="button" id="btn-eliminar" aria-controls="collapseExample" class="btn btn-outline-danger my-1 boton"><i class="bi bi-x-square" ></i> Eliminar</a>
+                        <button class="btn btn-outline-danger my-1 boton" type="button" id="btn-eliminar" data-bs-toggle="modal" data-bs-target="#modalEliminar"><i class="bi bi-trash"></i> Eliminar</button>
                         <button type="submit" class="btn btn-outline-primary my-1 d-none boton" id="btn-guardar" form="form-editar-libro" disabled><i class="bi bi-floppy"></i> Guardar cambios</button>
                     {% endif %}
                     <button class="btn btn-outline-dark my-1 boton" type="button" id="btn-resena" data-bs-toggle="modal" data-bs-target="#modalResena"> <i class="bi bi-chat-right-text"></i> <span>Escribir reseña</span></button>
@@ -61,19 +61,8 @@
         </div>
         </div>
         <div class="col-12 col-lg-8 col-xl-9">
-            <div class="card widget-card border-light shadow-sm">
-            <div class="card-body p-4">
-                
-                <div class="collapse" id="eliminar{{libro.id_libro}}" data-bs-parent="#grupoLibro">
-                    <form class="frm-eliminar-libro mt-3 bg-body-tertiary border border-secondary-subtle rounded-2 p-3" action="/eliminar_libro" method="POST">
-                        <h6><strong>¿Está seguro de que desea eliminar este libro?</strong></h6>
-                        <div class="mb-3">
-                            <input type="hidden" value="{{libro.id_libro}}" name="id_libro" readonly>
-                            <input class="form-control" type="text" placeholder="Escribe el motivo de la eliminación del libro." name="motivo" required autocomplete="off">
-                        </div>
-                        <button class="btn btn-outline-danger boton" type="submit">Confirmar eliminación</button> 
-                    </form>
-                </div>    
+            <div class="card widget-card border-light shadow">
+            <div class="card-body p-4 bg-tertiary-custom">
                 <div class="tab-content pt-4" id="profileTabContent">
                 <div class="tab-pane fade show active detalles-libro" id="overview-tab-pane" role="tabpanel" aria-labelledby="overview-tab" tabindex="0">
                     <h1> {{libro.Titulo}} </h1>
@@ -85,32 +74,32 @@
                         <h6>Detalles</h6>
                     </div>
                     <div class="col-12 col-md-12 mb-3 row">
-                        <div class="col-12 mb-3 col-md-3 bg-light rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
+                        <div class="col-12 mb-3 col-md-3 bg-lighter-custom rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
                             <p class="p-2 m-0"> 
                             <span class="text-body-secondary">Año de publicacion</span><br>
                             <span>{% if libro.ano_publicacion %}{{libro.ano_publicacion}}{% else %}-{% endif %}</span></p>
                         </div>
-                        <div class="col-12 mb-3 col-md-3 bg-light rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
+                        <div class="col-12 mb-3 col-md-3 bg-lighter-custom rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
                             <p class="m-0 p-2"> <span class="text-body-secondary">Editorial</span><br>
                             <span>{{libro.editorial}}</span></p>
                         </div>
-                        <div class="col-12 mb-3 col-md-3 bg-light rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
+                        <div class="col-12 mb-3 col-md-3 bg-lighter-custom rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
                             <p class="m-0 p-2"> <span class="text-body-secondary">Tomo</span><br>
                             <span>{% if libro.Tomo %}{{libro.Tomo}}{% else %}-{% endif %}</span></p>
                         </div>
                     </div>
 
                         <div class="col-12 col-md-12 mb-3 row">
-                            <div class="col-12 mb-3 col-md-3 bg-light rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
+                            <div class="col-12 mb-3 col-md-3 bg-lighter-custom rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
                                 <p class="p-2 m-0"> 
                                 <span class="text-body-secondary">Numero de paginas</span><br>
                                 <span>{{ libro.numero_paginas }}</span></p>
                             </div>
-                            <div class="col-12 mb-3 col-md-3 bg-light rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
+                            <div class="col-12 mb-3 col-md-3 bg-lighter-custom rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
                                 <p class="m-0 p-2"> <span class="text-body-secondary">Lugar de publicacion</span><br>
                                 <span>{% if libro.lugar %}{{libro.lugar}}{% else %}-{% endif %}</span></p>
                             </div>
-                            <div class="col-12 mb-3 col-md-3 bg-light rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
+                            <div class="col-12 mb-3 col-md-3 bg-lighter-custom rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
                                 <p class="m-0 p-2"> <span class="text-body-secondary">ISBN</span><br>
                                 <span> {% if libro.ISBN %}{{ libro.ISBN }}{% else %}-{% endif %} </span></p>
                             </div>
@@ -154,7 +143,7 @@
                             <h5><i class="bi bi-chat-right-text"></i> Reseñas</h5>
                             
                             {% for opinion in opiniones %}
-                            <div class="card mb-3 border-tertiary">
+                            <div class="card mb-3 border-tertiary  bg-lighter-custom">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start mb-2">
                                         <h6 class="mb-0">{{ opinion.nombre_creador }} {{ opinion.apellido_creador }}</h6>
@@ -188,9 +177,14 @@
                                                 <input type="hidden" name="id_opinion" value="{{ opinion.id_opinion }}">
                                                 <input type="hidden" name="id_libro" value="{{ libro.id_libro }}">
                                                 <input type="hidden" name="titulo_libro" value="{{ libro.Titulo }}">
-                                                <input class="form-control" type="text" placeholder="Escribe el motivo de la eliminación de la opinión." name="motivo" required autocomplete="off">
+                                                <input class="form-control" type="text" id="motivo-eliminar-opinion-{{ opinion.id_opinion }}" placeholder="Escribe el motivo de la eliminación de la opinión." name="motivo" maxlength="200" required autocomplete="off">
+                                                <div class="text-end mt-1">
+                                                    <small class="text-muted">
+                                                        <span id="contador-eliminar-opinion-{{ opinion.id_opinion }}">0</span>/200 caracteres
+                                                    </small>
+                                                </div>
                                             </div>
-                                            <button class="btn btn-sm btn-outline-danger boton" type="submit">Confirmar eliminación</button> 
+                                            <button class="btn btn-sm btn-outline-danger boton" type="submit"><i class="bi bi-trash"></i> Confirmar eliminación</button> 
                                         </form>
                                     </div>
                                     {% endif %}
@@ -318,7 +312,12 @@
                         </div>
                         <div class="col-12 col-md-12 mb-2">
                             <label for="motivo" class="form-label">Motivo de modificación*</label>
-                            <input name="motivo" type="text" class="form-control" id="motivo" placeholder="Escribe un motivo" required autocomplete="off" disabled>
+                            <input name="motivo" type="text" class="form-control" id="motivo-editar-libro" placeholder="Escribe un motivo" maxlength="200" required autocomplete="off" disabled>
+                            <div class="text-end mt-1">
+                                <small class="text-muted">
+                                    <span id="contador-editar-libro">0</span>/200 caracteres
+                                </small>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -335,7 +334,7 @@
     </section>
 
     <!-- Modal para crear reseña -->
-    <div class="modal fade" id="modalResena" tabindex="-1" aria-labelledby="modalResenaLabel" aria-hidden="true">
+    <div class="modal fade" id="modalResena" tabindex="-1" aria-labelledby="modalResenaLabel">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -385,7 +384,12 @@
                         
                         <div class="mb-3">
                             <label for="opinion" class="form-label">Tu reseña*</label>
-                            <textarea class="form-control" id="opinion" name="opinion" rows="5" required autocomplete="off" placeholder="Escribe tu opinión sobre este libro..."></textarea>
+                            <textarea class="form-control" id="opinion" name="opinion" rows="4" maxlength="200" required autocomplete="off" placeholder="Escribe tu opinión sobre este libro..." style="resize: none;"></textarea>
+                            <div class="text-end mt-1">
+                                <small class="text-muted">
+                                    <span id="charCount">0</span>/200 caracteres
+                                </small>
+                            </div>
                         </div>
                         
                         <div class="alert alert-info">
@@ -395,6 +399,42 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-primary">Enviar reseña</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para eliminar libro -->
+    <div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="modalEliminarLabel">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="modalEliminarLabel"><i class="bi bi-trash"></i> Eliminar Libro</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="/eliminar_libro" method="POST">
+                    <div class="modal-body">
+                        <input type="hidden" value="{{libro.id_libro}}" name="id_libro" readonly>
+                        
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle"></i> <strong>¿Está seguro de que desea eliminar este libro?</strong>
+                            <p class="mb-0 mt-2">Esta acción no se puede deshacer.</p>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="motivo-eliminar-libro" class="form-label">Motivo de eliminación*</label>
+                            <input class="form-control" type="text" id="motivo-eliminar-libro" placeholder="Escribe el motivo de la eliminación del libro." name="motivo" maxlength="200" required autocomplete="off">
+                            <div class="text-end mt-1">
+                                <small class="text-muted">
+                                    <span id="contador-eliminar-libro">0</span>/200 caracteres
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i> Confirmar eliminación</button>
                     </div>
                 </form>
             </div>
@@ -411,6 +451,7 @@
 <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 
 <!-- Custom Scripts -->
+<script src="{{ url_for('static', filename='js/contador_caracteres.js') }}"></script>
 <script src="{{ url_for('static', filename='js/sugerencias.js') }}"></script>
 <script src="{{ url_for('static', filename='js/detalle_libro.js') }}"></script>
 

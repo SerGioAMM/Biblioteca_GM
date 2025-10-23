@@ -153,18 +153,19 @@
                                 <div class="widget-49-meeting-action mb-2 col-4 text-end">
                                     <br><br><br>
                                     {% if prestamo.estado != "Devuelto" %}
-                                        <a data-bs-toggle="collapse" href="#devolver{{prestamo.id_prestamo}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-success mb-1 boton">Devolver</a>
+                                        <a data-bs-toggle="collapse" href="#devolver{{prestamo.id_prestamo}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-success mb-1 boton"><i class="bi bi-check-circle"></i> Devolver</a>
+                                        <a data-bs-toggle="collapse" href="#renovar{{prestamo.id_prestamo}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-success mb-1 boton"><i class="bi bi-arrow-clockwise"></i> Renovar</a>
                                     {% endif %}
-                                    <a data-bs-toggle="collapse" href="#collapse{{prestamo.id_prestamo}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-primary mb-1 boton">Detalles</a>
-                                    <a data-bs-toggle="collapse" href="#eliminar{{prestamo.id_prestamo}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-danger mb-1 boton">Eliminar</a>
+                                    <a data-bs-toggle="collapse" href="#collapse{{prestamo.id_prestamo}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-primary mb-1 boton"><i class="bi bi-file-text"></i> Detalles</a>
+                                    <a data-bs-toggle="collapse" href="#eliminar{{prestamo.id_prestamo}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-danger mb-1 boton"><i class="bi bi-trash"></i> Eliminar</a>
                                 </div>
                                 <div class="collapse" id="collapse{{prestamo.id_prestamo}}" data-bs-parent="#grupoPrestamo">
                                     <div class="card card-body">
                                         <span class="info-lector">
                                             Datos del lector <br>
                                             <ul>
-                                                <li><strong>DPI:</strong> {{prestamo.titulo}}</li>
-                                                <li><strong>Teléfono:</strong> {{prestamo.autor}}</li>
+                                                <li><strong>DPI:</strong> {{prestamo.dpi_usuario}}</li>
+                                                <li><strong>Teléfono:</strong> {{prestamo.num_telefono}}</li>
                                                 <li><strong>Dirección:</strong> {{prestamo.fecha_prestamo}}</li>
                                             </ul>
                                         </span>
@@ -175,9 +176,14 @@
                                         <h6><strong>¿Está seguro de que desea devolver este préstamo?</strong></h6>
                                         <div class="mb-3"> 
                                             <input type="hidden" value="{{prestamo.id_prestamo}}" name="id_prestamo" readonly>
-                                            <input class="form-control" type="text" placeholder="[OPCIONAL] - Escribe obervaciones en la devolución." name="observaciones_devolucion" autocomplete="off">
+                                            <input class="form-control" type="text" id="observaciones-devolver-{{prestamo.id_prestamo}}" placeholder="[OPCIONAL] - Escribe obervaciones en la devolución." name="observaciones_devolucion" maxlength="200" autocomplete="off">
+                                            <div class="text-end mt-1">
+                                                <small class="text-muted">
+                                                    <span id="contador-devolver-{{prestamo.id_prestamo}}">0</span>/200 caracteres
+                                                </small>
+                                            </div>
                                         </div>
-                                        <button class="btn btn-sm btn-outline-success boton" type="submit">Confirmar devolución</button>
+                                        <button class="btn btn-sm btn-outline-success boton" type="submit"><i class="bi bi-check-circle"></i> Confirmar devolución</button>
                                     </form>
                                 </div>
                                 <div class="collapse" id="eliminar{{prestamo.id_prestamo}}" data-bs-parent="#grupoPrestamo">
@@ -185,9 +191,23 @@
                                         <div class="mb-3">
                                             <h6><strong>¿Está seguro de que desea eliminar este préstamo?</strong></h6>
                                             <input type="hidden" value="{{prestamo.id_prestamo}}" name="id_prestamo" readonly>
-                                            <input class="form-control" type="text" placeholder="Escribe el motivo de la eliminación del préstamo." name="motivo_eliminacion" required autocomplete="off">
+                                            <input class="form-control" type="text" id="motivo-eliminar-{{prestamo.id_prestamo}}" placeholder="Escribe el motivo de la eliminación del préstamo." name="motivo_eliminacion" maxlength="200" required autocomplete="off">
+                                            <div class="text-end mt-1">
+                                                <small class="text-muted">
+                                                    <span id="contador-eliminar-{{prestamo.id_prestamo}}">0</span>/200 caracteres
+                                                </small>
+                                            </div>
                                         </div>
-                                        <button class="btn btn-sm btn-outline-danger boton" type="submit">Confirmar eliminación</button> 
+                                        <button class="btn btn-sm btn-outline-danger boton" type="submit"><i class="bi bi-trash"></i> Confirmar eliminación</button> 
+                                    </form>
+                                </div>
+                                <div class="collapse" id="renovar{{prestamo.id_prestamo}}" data-bs-parent="#grupoPrestamo">
+                                    <form class="frm-renovar-prestamo mt-3 text-center p-3 border border-success-subtle rounded border-opacity-50" action="/renovar_prestamo" method="POST">
+                                        <h6><strong>¿Está seguro de que desea renovar este préstamo?</strong></h6>
+                                        <p class="text-muted">Se creará un nuevo préstamo</p>
+                                        <input type="hidden" value="{{prestamo.id_prestamo}}" name="id_prestamo" readonly>
+                                        <input type="hidden" value="{{prestamo.id_libro}}" name="id_libro" readonly>
+                                        <button class="btn btn-sm btn-outline-success boton" type="submit"><i class="bi bi-arrow-clockwise"></i> Confirmar renovación</button>
                                     </form>
                                 </div>                 
                             </div>
@@ -204,7 +224,7 @@
         </div>
             <div class="paginacion">
                 {% if pagina > 1 %} <!-- Verifica que la pagina actual sea despues de la primera, para mostrar un boton de "Anterior" -->
-                    <a href="{{ url_for('prestamos.buscar_prestamo', page=pagina - 1, buscar_prestamo=busqueda, estados=estados, filtro_busqueda=filtro_busqueda) }}">Anterior</a> <!-- Este enlace lleva a la pagina anterior "pagina-1" -->
+                    <a href="{{ url_for('prestamos.buscar_prestamo', page=pagina - 1, buscar=busqueda, estados=estados, filtro_busqueda=filtro_busqueda) }}">Anterior</a> <!-- Este enlace lleva a la pagina anterior "pagina-1" -->
                 {% endif %}
                 
                 {% for p in range(pagina - 1, pagina + 2) %}
@@ -212,13 +232,13 @@
                         {% if p == pagina %} <!-- Verifica cual es la pagina actual para aplicarle otro estilo -->
                             <strong>{{ p }}</strong>
                         {% else %} <!-- Genera todos los demas enlaces o "numeros de pagina", "[1],[2],[3]" -->
-                            <a href="{{ url_for('prestamos.buscar_prestamo', page=p, buscar_prestamo=busqueda, estados=estados, filtro_busqueda=filtro_busqueda) }}">{{ p }}</a>
+                            <a href="{{ url_for('prestamos.buscar_prestamo', page=p, buscar=busqueda, estados=estados, filtro_busqueda=filtro_busqueda) }}">{{ p }}</a>
                         {% endif %}
                     {% endif %}
                 {% endfor %}   
                 
                 {% if pagina < total_paginas %} <!-- Verifica que la pagina actual no sea la ultima, para mostrar un boton de "Siguiente" -->
-                    <a href="{{ url_for('prestamos.buscar_prestamo', page=pagina + 1, buscar_prestamo=busqueda, estados=estados, filtro_busqueda=filtro_busqueda) }}">Siguiente</a> <!-- Este enlace lleva a la pagina siguiente "pagina+1" -->
+                    <a href="{{ url_for('prestamos.buscar_prestamo', page=pagina + 1, buscar=busqueda, estados=estados, filtro_busqueda=filtro_busqueda) }}">Siguiente</a> <!-- Este enlace lleva a la pagina siguiente "pagina+1" -->
                 {% endif %}
             </div> 
         </main>
@@ -234,10 +254,30 @@
     <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 
     <!-- Custom Scripts -->
+    <script src="{{ url_for('static', filename='js/contador_caracteres.js') }}"></script>
     <script src="/static/js/sugerencias.js"></script>
     
     <!--* Nuevos scripts de alertas y animaciones -->
     <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
     <script src="{{ url_for('static', filename='js/animaciones.js') }}"></script>
+    
+    <!--* Inicializar contadores -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar contadores para observaciones de devolución
+            const observacionesDevolver = document.querySelectorAll('[id^="observaciones-devolver-"]');
+            observacionesDevolver.forEach(input => {
+                const prestamoId = input.id.replace('observaciones-devolver-', '');
+                inicializarContador(`observaciones-devolver-${prestamoId}`, `contador-devolver-${prestamoId}`, 200);
+            });
+            
+            // Inicializar contadores para motivos de eliminación
+            const motivosEliminar = document.querySelectorAll('[id^="motivo-eliminar-"]');
+            motivosEliminar.forEach(input => {
+                const prestamoId = input.id.replace('motivo-eliminar-', '');
+                inicializarContador(`motivo-eliminar-${prestamoId}`, `contador-eliminar-${prestamoId}`, 200);
+            });
+        });
+    </script>
 </body>
 </html>

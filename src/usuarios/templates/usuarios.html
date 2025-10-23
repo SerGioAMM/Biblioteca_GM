@@ -29,55 +29,79 @@
     </header>
     <main>
         <div class="div-busqueda h-100">
-            <div class="m-auto fondo-principal p-5">
-                <h2>Gestión de Usuarios</h2>
-                <h4 class="p-3">Administra los usuarios del sistema existentes.</h4>
+            <div class="m-auto fondo-principal p-3 p-md-5">
+                <h2 class="text-center">Gestión de Usuarios</h2>
+                <h4 class="p-2 p-md-3 text-center">Administra los usuarios del sistema existentes.</h4>
                 <form class="frm-usuarios" action="/buscar_usuario" method="GET" id="form-busqueda">
-                    <div class="input-group mx-auto" style="width: 45%;">
-                        <select class="w-75" name="buscar" id="cuadro-busqueda" data-placeholder="Buscar..."  autocomplete="off" cursor="text"></select>
-                        <button class="btn btn-success w-25" type="submit"><i class="bi bi-search"></i> Buscar</button>
+                    <!-- Barra de búsqueda principal -->
+                    <div class="row justify-content-center mb-3">
+                        <div class="col-12 col-md-10 col-lg-8 col-xl-6">
+                            <div class="input-group">
+                                <select class="form-control p-0" name="buscar" id="cuadro-busqueda" 
+                                        data-placeholder="Buscar..." autocomplete="off" style="min-height: 44px;">
+                                </select>
+                                <button class="btn btn-success px-3 px-md-4" type="submit" style="min-width: 100px;">
+                                    <i class="bi bi-search"></i> <span class="d-none d-sm-inline">Buscar</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="input-group mx-auto" style="width: 45%;">
-                        <select name="filtro-busqueda" id="filtro-busqueda" class="form-select mt-3 btn btn-secondary">
-                            <option value="Todos"
-                                {% if filtro_rol == "Todos" %}
-                                    selected
-                                {% endif %}>
-                                Todos los Roles
-                            </option>
-                            <option value="Administrador"
-                                {% if filtro_rol == "Administrador" %}
-                                    selected
-                                {% endif %}>
-                                Administrador
-                            </option>
-                            <option value="Bibliotecario"
-                                {% if filtro_rol == "Bibliotecario" %}
-                                    selected
-                                {% endif %}>
-                                Bibliotecario
-                            </option>
-                        </select>
-                        <select name="filtro-categorias" id="filtro-categorias" class="form-select mt-3 ms-3 btn btn-secondary">
-                            <option value="Activo"
-                                {% if filtro_estado == "Activo" %}
-                                    selected
-                                {% endif %}>
-                                Activos
-                            </option>
-                            <option value="Todos"
-                                {% if filtro_estado == "Todos" %}
-                                    selected
-                                {% endif %}>
-                                Todos
-                            </option>
-                            <option value="Inactivo"
-                                {% if filtro_estado == "Inactivo" %}
-                                    selected
-                                {% endif %}>
-                                Inactivos
-                            </option>
-                        </select>
+                    
+                    <!-- Filtros -->
+                    <div class="row justify-content-center">
+                        <div class="col-10 col-md-10 col-lg-8 col-xl-6">
+                            <div class="row g-2 g-md-3">
+                                <!-- Filtro de roles -->
+                                <div class="col-sm-6">
+                                    <select name="filtro-busqueda" id="filtro-busqueda" 
+                                            class="form-select btn btn-secondary" style="min-height: 30px;">
+                                        <option value="Todos"
+                                            {% if filtro_rol == "Todos" %}
+                                                selected
+                                            {% endif %}>
+                                            Todos los Roles
+                                        </option>
+                                        <option value="Administrador"
+                                            {% if filtro_rol == "Administrador" %}
+                                                selected
+                                            {% endif %}>
+                                            Administrador
+                                        </option>
+                                        <option value="Bibliotecario"
+                                            {% if filtro_rol == "Bibliotecario" %}
+                                                selected
+                                            {% endif %}>
+                                            Bibliotecario
+                                        </option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Filtro de estados -->
+                                <div class="col-sm-6">
+                                    <select name="filtro-categorias" id="filtro-categorias" 
+                                            class="form-select btn btn-secondary" style="min-height: 30px;">
+                                        <option value="Activo"
+                                            {% if filtro_estado == "Activo" %}
+                                                selected
+                                            {% endif %}>
+                                            Activos
+                                        </option>
+                                        <option value="Todos"
+                                            {% if filtro_estado == "Todos" %}
+                                                selected
+                                            {% endif %}>
+                                            Todos
+                                        </option>
+                                        <option value="Inactivo"
+                                            {% if filtro_estado == "Inactivo" %}
+                                                selected
+                                            {% endif %}>
+                                            Inactivos
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -143,12 +167,12 @@
                                         </td>
                                         <td style="width: 20%;">
                                             {% if usuario.estado == 'Inactivo'%}
-                                                <a data-bs-toggle="collapse" href="#activar{{usuario.id_administrador}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-success boton">Activar</a>
+                                                <a data-bs-toggle="collapse" href="#activar{{usuario.id_administrador}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-success boton"><i class="bi bi-check-circle"></i> Activar</a>
                                             {% else %}
                                                 {% if usuario.id_administrador == 1 or session["id_administrador"] == usuario.id_administrador %}
-                                                <button class="btn btn-sm btn-outline-danger boton" disabled>Desactivar</button>
+                                                <button class="btn btn-sm btn-outline-danger boton" disabled><i class="bi bi-x-circle"></i> Desactivar</button>
                                                 {% else %}
-                                                <a data-bs-toggle="collapse" href="#desactivar{{usuario.id_administrador}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-danger boton">Desactivar</a>
+                                                <a data-bs-toggle="collapse" href="#desactivar{{usuario.id_administrador}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-danger boton"><i class="bi bi-x-circle"></i> Desactivar</a>
                                                 {% endif %}
                                             {% endif %}
                                         </td>
@@ -161,10 +185,15 @@
                                                         <br><h6><strong>¿Está seguro de que desea desactivar este usuario?</strong></h6>
                                                         <input type="hidden" value="{{usuario.id_administrador}}" name="id_usuario" readonly>
                                                         <div class="mb-1">
-                                                            <input class="form-control" type="text" placeholder="Escribe el motivo de la desactivación del usuario." name="motivo" required autocomplete="off">
+                                                            <input class="form-control" type="text" id="motivo-desactivar-{{usuario.id_administrador}}" placeholder="Escribe el motivo de la desactivación del usuario." name="motivo" maxlength="200" required autocomplete="off">
+                                                            <div class="text-end mt-1">
+                                                                <small class="text-muted">
+                                                                    <span id="contador-desactivar-{{usuario.id_administrador}}">0</span>/200 caracteres
+                                                                </small>
+                                                            </div>
                                                         </div>
                                                         <button class="btn btn-sm btn-outline-danger mb-3 boton" type="submit">
-                                                            Confirmar desactivación
+                                                            <i class="bi bi-x-circle"></i> Confirmar desactivación
                                                         </button>
                                                     </form>
                                                 </div>
@@ -180,7 +209,7 @@
                                                         <label for=""> Este usuario fue desactivado por el siguiente motivo: <strong>{{usuario.motivo}}</strong>
                                                             <br> ¿Seguro que quieres activar este usuario? </label><br>
                                                         <button class="btn btn-sm btn-outline-success mb-3 mt-1 boton" type="submit">
-                                                            Confirmar activación
+                                                            <i class="bi bi-check-circle"></i> Confirmar activación
                                                         </button>
                                                     </form>
                                                 </div>
@@ -229,8 +258,23 @@
     <!--! Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
     
+    <!-- Custom Scripts -->
+    <script src="{{ url_for('static', filename='js/contador_caracteres.js') }}"></script>
+    
     <!--* Scripts de alertas y animaciones -->
     <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
     <script src="{{ url_for('static', filename='js/animaciones.js') }}"></script>
+    
+    <!--* Inicializar contadores -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar contadores para motivos de desactivación de usuarios
+            const motivosDesactivar = document.querySelectorAll('[id^="motivo-desactivar-"]');
+            motivosDesactivar.forEach(input => {
+                const usuarioId = input.id.replace('motivo-desactivar-', '');
+                inicializarContador(`motivo-desactivar-${usuarioId}`, `contador-desactivar-${usuarioId}`, 200);
+            });
+        });
+    </script>
 </body>
 </html>

@@ -28,6 +28,16 @@ def registro_usuarios():
         rol = request.form["rol"]
         email = request.form["email"]
 
+        # Verificar si el usuario ya existe
+        query.execute("SELECT COUNT(*) FROM Administradores WHERE usuario = ?", (usuario,))
+        usuario_existe = query.fetchone()[0]
+        
+        if usuario_existe > 0:
+            alerta = f"Error, el nombre de usuario '{usuario}' ya está registrado."
+            query.close()
+            conexion.close()
+            return render_template("registro_usuarios.html", roles=roles, alerta=alerta)
+
         # Hash de la contraseña con salt
         password_hash = generate_password_hash(contrasena, method="scrypt", salt_length=16)
 

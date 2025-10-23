@@ -255,7 +255,8 @@
                                     </div>
                                     <div class="col-12 col-md-6 mb-3">
                                         <label for="nueva_contrasena" class="form-label">Nueva Contraseña</label>
-                                        <input type="password" name="nueva_contrasena" class="form-control editable" placeholder="Dejar vacío para no cambiar" autocomplete="off">
+                                        <input type="password" id="nueva_contrasena" name="nueva_contrasena" class="form-control editable" placeholder="Dejar vacío para no cambiar" autocomplete="off">
+                                        <!-- El feedback se generará dinámicamente aquí -->
                                     </div>
                                     <div class="col-12 col-md-6 mb-3">
                                         <label for="confirmar_contrasena" class="form-label">Confirmar Contraseña</label>
@@ -283,6 +284,7 @@
     <!--* Scripts de alertas y animaciones -->
     <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
     <script src="{{ url_for('static', filename='js/animaciones.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/validacion_password.js') }}"></script>
     
     <!-- Custom Scripts -->
     <script src="{{ url_for('static', filename='js/perfil.js') }}"></script>
