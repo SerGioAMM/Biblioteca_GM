@@ -216,11 +216,16 @@ def detalle_libro(ID):
     else:
         recomendaciones = []
     
+    # Obtener parámetros de alerta y éxito
+    alerta = request.args.get("alerta", "")
+    exito = request.args.get("exito", "")
+    
     return render_template("detalle_libro.html", detalle=detalle, secciones=secciones, 
                             opiniones=opiniones, total_opiniones=total_opiniones,
                             promedio_valoracion=promedio_info['promedio'],
                             total_valoraciones=promedio_info['total'],
-                            recomendaciones=recomendaciones)
+                            recomendaciones=recomendaciones,
+                            alerta=alerta, exito=exito)
 
 @bp_libros.route("/todas_resenas/<ID>/<Titulo>", methods=["GET"])
 def todas_resenas(ID, Titulo):

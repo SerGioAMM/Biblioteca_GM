@@ -180,6 +180,8 @@
     </nav>
     <!-- Script para notificaciones en navbar -->
     <script src="{{ url_for('static', filename='js/notificaciones.js') }}"></script>
+    <!-- Script para timeout de sesión -->
+    <!-- <script src="{{ url_for('static', filename='js/session_timeout.js') }}"></script> -->
     <!-- Script para badge de opiniones pendientes 
     <script src="{{ url_for('static', filename='js/opiniones_badge.js') }}"></script>
     -->
@@ -195,7 +197,7 @@
                 {% if (request.endpoint == 'main.inicio') or (request.endpoint == 'main.acercade') %}
                 <form class="d-flex" role="search" action="/buscar_libro" method="GET" id="form-busqueda">
                     <input class="d-none" value="Titulo" id="filtro-busqueda" type="text">
-                    <select class="w-a" name="buscar" id="cuadro-busqueda" data-placeholder="Buscar..."  autocomplete="off" cursor="text"></select>
+                    <select class="w-a" name="buscar" id="cuadro-busqueda" data-placeholder="Buscar..."  autocomplete="off" cursor="text" style="min-width: 150px;"></select>
                     <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i> Buscar</button>
                 </form>
                 {% endif %}

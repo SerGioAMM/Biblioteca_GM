@@ -76,8 +76,8 @@
                                     </div>
                                     <div class="widget-49-meeting-action mb-2 col-4 text-end">
                                         <br><br><br>
-                                        <a data-bs-toggle="collapse" href="#aceptar{{opinion.id_opinion}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-success mb-1 boton">Aceptar</a>
-                                        <a data-bs-toggle="collapse" href="#rechazar{{opinion.id_opinion}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-danger mb-1 boton">Rechazar</a>
+                                        <a data-bs-toggle="collapse" href="#aceptar{{opinion.id_opinion}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-success mb-1 boton"><i class="bi bi-check-circle"></i> Aceptar</a>
+                                        <a data-bs-toggle="collapse" href="#rechazar{{opinion.id_opinion}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-danger mb-1 boton"><i class="bi bi-x-circle"></i> Rechazar</a>
                                     </div>
 
                                     <!-- Aceptar -->
@@ -86,7 +86,7 @@
                                             <h6><strong>¿Está seguro de que desea aceptar esta reseña?</strong></h6>
                                             <input type="hidden" value="{{opinion.id_opinion}}" name="id_opinion" readonly>
                                             <input type="hidden" value="{{opinion.titulo}}" name="titulo_libro" readonly>
-                                            <button class="btn btn-outline-success boton" type="submit">Confirmar aceptación</button>
+                                            <button class="btn btn-outline-success boton" type="submit"><i class="bi bi-check-circle"></i> Confirmar aceptación</button>
                                         </form>
                                     </div>
 
@@ -97,9 +97,14 @@
                                             <div class="mb-3">
                                                 <input type="hidden" value="{{opinion.id_opinion}}" name="id_opinion" readonly>
                                                 <input type="hidden" value="{{opinion.titulo}}" name="titulo_libro" readonly>
-                                                <input class="form-control" type="text" placeholder="Escribe el motivo del rechazo." name="motivo" required autocomplete="off">
+                                                <input class="form-control" type="text" id="motivo-rechazo-{{opinion.id_opinion}}" placeholder="Escribe el motivo del rechazo." name="motivo" maxlength="200" required autocomplete="off">
+                                                <div class="text-end mt-1">
+                                                    <small class="text-muted">
+                                                        <span id="contador-rechazo-{{opinion.id_opinion}}">0</span>/200 caracteres
+                                                    </small>
+                                                </div>
                                             </div>
-                                            <button class="btn btn-outline-danger boton" type="submit">Confirmar rechazo</button>
+                                            <button class="btn btn-outline-danger boton" type="submit"><i class="bi bi-x-circle"></i> Confirmar rechazo</button>
                                         </form>
                                     </div>
                                 </div>
@@ -123,8 +128,23 @@
     <!--! Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
     
+    <!--* Script contador de caracteres -->
+    <script src="{{ url_for('static', filename='js/contador_caracteres.js') }}"></script>
+    
     <!--* Nuevos scripts de alertas y animaciones -->
     <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
     <script src="{{ url_for('static', filename='js/animaciones.js') }}"></script>
+    
+    <!--* Inicializar contadores -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar contadores para todos los inputs de motivo de rechazo
+            const motivosRechazo = document.querySelectorAll('[id^="motivo-rechazo-"]');
+            motivosRechazo.forEach(input => {
+                const opinionId = input.id.replace('motivo-rechazo-', '');
+                inicializarContador(`motivo-rechazo-${opinionId}`, `contador-rechazo-${opinionId}`, 200);
+            });
+        });
+    </script>
 </body>
 </html>

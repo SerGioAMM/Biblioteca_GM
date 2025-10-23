@@ -36,23 +36,25 @@
                     <div class="col py-3 bg-custom text-body text-center">
                         <br><br>
                         <div class="container-fluid w-75 bg-light-custom rounded">
-                            <form method="POST" action="/registro_usuarios" class="row g-3 text-start">
+                            <form method="POST" action="/registro_usuarios" class="row g-3 text-start" id="form-registro-usuario">
                                 <div class="col-12 col-md-6 mb-3">
                                     <label for="usuario" class="form-label">Usuario*</label>
                                     <input class="form-control" type="text" name="usuario" placeholder="" autocomplete="off" required>
                                 </div>
-                                <div class="col-12 col-md-6 mb-3">
-                                    <label for="contrasena" class="form-label p-0">Contraseña*</label>
-                                    <input type="password" name="contrasena" class="form-control" placeholder="Contraseña" autocomplete="off" required>
-                                </div>
-                                <div class="col-12 col-md-4 mb-3">
+                                <div class="col-12 col-md-3 mb-3">
                                     <label for="email" class="form-label p-0"> Correo </label>
                                     <input type="text" name="email" class="form-control" placeholder="Correo" autocomplete="off">
                                 </div>
-                                <div class="col-12 col-md-4 mb-3">
+                                <div class="col-12 col-md-3 mb-3">
                                     <label for="telefono" class="form-label p-0"> Teléfono </label>
                                     <input type="text" name="telefono" class="form-control" placeholder="Telefono" autocomplete="off">
                                 </div>
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label for="contrasena" class="form-label p-0">Contraseña*</label>
+                                    <input type="password" id="contrasena" name="contrasena" class="form-control" placeholder="Contraseña" autocomplete="off" required>
+                                    <!-- El feedback se generará dinámicamente aquí -->
+                                </div>
+                                
                                 
                                 <div class="col-12 col-md-4 mb-3">
                                     <label for="inputState" class="form-label">Rol</label>
@@ -76,9 +78,9 @@
         {% endif %}
         
         {% if (alerta) %}
-        <span class="error-eliminacion" data-alert-message="{{alerta}}" style="display: none;"></span>
+        <span class="error-eliminacion" data-alert-type="danger" data-alert-message="{{alerta}}" style="display: none;"></span>
         {% elif (registro_exitoso) %}
-        <span class="exito-ingreso" data-alert-message="{{registro_exitoso}}" style="display: none;"></span>
+        <span class="exito-ingreso" data-alert-type="success" data-alert-message="{{registro_exitoso}}" style="display: none;"></span>
         {% endif %}           
 
     </main>
@@ -91,5 +93,6 @@
     <!--* Scripts de alertas y animaciones -->
     <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
     <script src="{{ url_for('static', filename='js/animaciones.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/validacion_password.js') }}"></script>
 </body>
 </html>

@@ -79,7 +79,7 @@ def buscar_prestamo():
     conexion = conexion_BD()
     query = conexion.cursor()
 
-    busqueda = request.args.get("buscar_prestamo","")
+    busqueda = request.args.get("buscar","")  # Cambiado de "buscar_prestamo" a "buscar"
     filtro_busqueda = request.args.get("filtro-busqueda","Titulo")
     estados = request.args.get("estados","Todos")
     exito = request.args.get("exito","")
@@ -252,6 +252,85 @@ def devolver_prestamo():
     devuelto = "Libro devuelto exitósamente."
 
     return redirect(url_for("prestamos.prestamos",devuelto=devuelto))
+
+# ----------------------------------------------------- Renovar Prestamo ----------------------------------------------------- #
+
+@bp_prestamos.route("/renovar_prestamo", methods=["POST"])
+def renovar_prestamo():
+    if "usuario" not in session:
+        return redirect("/")
+    
+    id_prestamo_anterior = request.form["id_prestamo"]
+    id_libro = request.form["id_libro"]
+    
+    conexion = conexion_BD()
+    query = conexion.cursor()
+    
+    try:
+        # Obtener datos del préstamo anterior
+        query.execute("""SELECT dpi_usuario, nombre, apellido, direccion, num_telefono, grado, fecha_entrega_estimada
+                        FROM Prestamos WHERE id_prestamo = ?""", (id_prestamo_anterior,))
+        prestamo_data = query.fetchone()
+        
+        if not prestamo_data:
+            alerta = "No se encontró el préstamo."
+            return redirect(url_for("prestamos.prestamos", alerta=alerta))
+        
+        dpi, nombre, apellido, direccion, telefono, grado, fecha_estimada_anterior = prestamo_data
+        
+        # Verificar si el libro existe y tiene al menos 1 copia
+        query.execute("SELECT numero_copias, titulo FROM Libros WHERE id_libro = ?", (id_libro,))
+        libro_data = query.fetchone()
+        
+        if not libro_data:
+            alerta = "El libro no existe."
+            return redirect(url_for("prestamos.prestamos", alerta=alerta))
+        
+        numero_copias, titulo_libro = libro_data
+        
+        if numero_copias < 1:
+            alerta = "No hay copias disponibles de este libro para renovar."
+            return redirect(url_for("prestamos.prestamos", alerta=alerta))
+        
+        # Agregar observación al préstamo anterior
+        observacion_renovacion = "Préstamo renovado"
+        query.execute("""UPDATE Prestamos SET observaciones_devolucion = ? 
+                        WHERE id_prestamo = ?""", (observacion_renovacion, id_prestamo_anterior))
+        
+        # Calcular nueva fecha de préstamo y entrega
+        from datetime import timedelta
+        hoy = datetime.today().date()
+        # Calcular duración del préstamo anterior para mantener la misma duración
+        fecha_prestamo_anterior = datetime.strptime(fecha_estimada_anterior, "%Y-%m-%d").date()
+        dias_prestamo = 15  # Duración predeterminada de 15 días
+        nueva_fecha_entrega = hoy + timedelta(days=dias_prestamo)
+        
+        # Crear nuevo préstamo
+        query.execute("""INSERT INTO Prestamos
+                        (dpi_usuario, nombre, apellido, direccion, num_telefono, id_libro, grado, id_estado, 
+                        fecha_prestamo, fecha_entrega_estimada, fecha_devolucion)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, 2, ?, ?, NULL)""",
+                        (dpi, nombre, apellido, direccion, telefono, id_libro, grado, hoy, nueva_fecha_entrega))
+        
+        # Reducir número de copias disponibles
+        query.execute("UPDATE Libros SET numero_copias = (numero_copias - 1) WHERE id_libro = ?", (id_libro,))
+        
+        conexion.commit()
+        
+        # Crear notificación
+        from src.usuarios.routes.usuarios import crear_notificacion
+        crear_notificacion(f"{session['rol']} {session['usuario']} ha renovado el préstamo de {nombre} {apellido} para el libro: {titulo_libro}.")
+        
+        exito = "Préstamo renovado exitósamente."
+        return redirect(url_for("prestamos.prestamos", exito=exito))
+        
+    except Exception as e:
+        print(f"Error al renovar préstamo: {e}")
+        alerta = "Error al renovar el préstamo."
+        return redirect(url_for("prestamos.prestamos", alerta=alerta))
+    finally:
+        query.close()
+        conexion.close()
 
 # ----------------------------------------------------- Eliminar Prestamo ----------------------------------------------------- #
 

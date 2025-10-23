@@ -62,9 +62,11 @@ def login():
                         login_fail = 0
                         tiempo_bloqueo = None
                     if estado == "Activo" and check_password_hash(stored_password, password):
+                        session.permanent = True  # Habilitar sesión permanente para usar timeout
                         session["id_administrador"] = id_admin
                         session["usuario"] = usuario_db
                         session["rol"] = rol
+                        session["last_activity"] = datetime.now().isoformat()  # Registrar actividad inicial
                         query.execute("""
                             UPDATE administradores 
                             SET login_fail = 0, tiempo_bloqueo = NULL 

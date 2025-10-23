@@ -337,4 +337,103 @@ h1 {
 
 }
 
+/* ========================================
+   ESTILOS PARA MODAL DE TIMEOUT DE SESIÓN
+   ======================================== */
+#session-warning-modal .modal-content {
+    border: 3px solid #ffc107;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+#session-warning-modal .modal-header {
+    border-bottom: 2px solid #e0a800;
+}
+
+#session-warning-modal #countdown-timer {
+    font-size: 1.5rem;
+    color: #d63384;
+    font-weight: bold;
+}
+
+#session-warning-modal .modal-body p {
+    font-size: 1.1rem;
+}
+
+/* ========================================
+   VALIDACIÓN DE CONTRASEÑAS
+   ======================================== */
+.password-feedback-floating {
+    position: absolute;
+    z-index: 1050;
+    padding: 0.75rem;
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-left: 3px solid #0d6efd;
+    border-radius: 0.375rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+    pointer-events: none;
+}
+
+.password-feedback-floating.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.password-feedback-floating.hide {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+}
+
+.password-feedback-floating small {
+    line-height: 1.8;
+    font-size: 0.875rem;
+    display: block;
+}
+
+.password-feedback-floating i {
+    font-size: 1rem;
+    margin-right: 0.5rem;
+}
+
+/* Animación de fade out */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+        visibility: hidden;
+    }
+}
+
+.password-feedback-floating.fade-out {
+    animation: fadeOut 0.5s ease forwards;
+}
+
+/* Estilos para el feedback antiguo (por si acaso) */
+.password-feedback {
+    padding: 0.75rem;
+    background-color: #f8f9fa;
+    border-left: 3px solid #dee2e6;
+    border-radius: 0.25rem;
+    margin-top: 0.5rem;
+}
+
+.password-feedback small {
+    line-height: 1.8;
+    font-size: 0.875rem;
+}
+
+.password-feedback i {
+    font-size: 1rem;
+    margin-right: 0.5rem;
+}
 

@@ -68,7 +68,7 @@ btn_editar.addEventListener("click", ()=>{
 })
 
 const editables = document.querySelectorAll('.editable');
-const motivo = document.getElementById('motivo');
+const motivo = document.getElementById('motivo-editar-libro');
 let original = []
 let campos = []
 
@@ -114,3 +114,56 @@ for(let i = 0; i < editables.length; i++){
 
 const portadainput = document.getElementById("portadainput");
 portadainput.addEventListener("change", verificarCambios);
+
+// Contador de caracteres para el textarea de reseña
+const opinionTextarea = document.getElementById("opinion");
+const charCountElement = document.getElementById("charCount");
+
+if (opinionTextarea && charCountElement) {
+    // Actualizar contador mientras escribe
+    opinionTextarea.addEventListener("input", function() {
+        const currentLength = this.value.length;
+        const maxLength = this.getAttribute("maxlength");
+        
+        charCountElement.textContent = currentLength;
+        
+        // Cambiar color según el límite
+        if (currentLength >= maxLength) {
+            charCountElement.parentElement.classList.remove('text-muted');
+            charCountElement.parentElement.classList.add('text-danger', 'fw-bold');
+        } else if (currentLength >= maxLength * 0.9) {
+            charCountElement.parentElement.classList.remove('text-muted');
+            charCountElement.parentElement.classList.add('text-warning', 'fw-bold');
+        } else {
+            charCountElement.parentElement.classList.remove('text-danger', 'text-warning', 'fw-bold');
+            charCountElement.parentElement.classList.add('text-muted');
+        }
+    });
+    
+    // Resetear contador cuando se cierra el modal
+    const modalResena = document.getElementById('modalResena');
+    if (modalResena) {
+        modalResena.addEventListener('hidden.bs.modal', function () {
+            opinionTextarea.value = '';
+            charCountElement.textContent = '0';
+            charCountElement.parentElement.classList.remove('text-danger', 'text-warning', 'fw-bold');
+            charCountElement.parentElement.classList.add('text-muted');
+        });
+    }
+}
+
+// Inicializar contadores de caracteres para los inputs de motivo
+document.addEventListener('DOMContentLoaded', function() {
+    // Contador para eliminar libro
+    inicializarContador('motivo-eliminar-libro', 'contador-eliminar-libro', 200);
+    
+    // Contador para editar libro
+    inicializarContador('motivo-editar-libro', 'contador-editar-libro', 200);
+    
+    // Contadores para eliminar opiniones (pueden ser múltiples)
+    const motivosOpiniones = document.querySelectorAll('[id^="motivo-eliminar-opinion-"]');
+    motivosOpiniones.forEach(input => {
+        const opinionId = input.id.replace('motivo-eliminar-opinion-', '');
+        inicializarContador(`motivo-eliminar-opinion-${opinionId}`, `contador-eliminar-opinion-${opinionId}`, 200);
+    });
+});

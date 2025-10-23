@@ -15,12 +15,10 @@ function createAlertContainer() {
 
 // Función para mostrar alertas con Bootstrap 5
 function showAlert(message, type = 'info', duration = 4000, customIcon = null) {
-    console.log('🔔 showAlert llamado:', {message, type, duration, customIcon}); // DEBUG
     
     const container = createAlertContainer();
-    console.log('📦 Contenedor:', container); // DEBUG
     
-    // Determinar icono según el tipo - MEJORADO con más opciones
+    // Determinar icono según el tipo
     const icons = {
         'success': 'bi-check-circle-fill',
         'danger': 'bi-x-circle-fill',
@@ -52,7 +50,6 @@ function showAlert(message, type = 'info', duration = 4000, customIcon = null) {
     container.insertAdjacentHTML('beforeend', alertHTML);
     
     const alertElement = document.getElementById(alertId);
-    console.log('✅ Alerta creada:', alertElement); // DEBUG
     
     // Auto-cerrar después del duration
     setTimeout(() => {
@@ -135,8 +132,20 @@ function convertLegacyAlerts() {
             }
             
             // ========== ERRORES (ROJO) ==========
+            // Usuario duplicado
+            if (messageLower.includes('ya está registrado') || messageLower.includes('ya esta registrado') || 
+                messageLower.includes('elige otro')) {
+                type = 'danger';
+                customIcon = 'bi-person-x-fill';
+            }
+            // Sesión expirada
+            else if (messageLower.includes('sesión expirada') || messageLower.includes('sesion expirada')) {
+                type = 'danger';
+                customIcon = 'bi-clock-history';
+                duration = 6000; // 6 segundos para que el usuario lo vea
+            }
             // Login erróneo / Datos incorrectos
-            if (messageLower.includes('datos incorrectos') || messageLower.includes('datos erroneos') || 
+            else if (messageLower.includes('datos incorrectos') || messageLower.includes('datos erroneos') || 
                 messageLower.includes('usuario inactivo') || messageLower.includes('contacte al administrador')) {
                 type = 'danger';
                 customIcon = 'bi-x-circle-fill';
@@ -210,18 +219,15 @@ function convertLegacyAlerts() {
 
 // Ejecutar conversión cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🚀 Sistema de alertas inicializado'); // DEBUG
     convertLegacyAlerts();
 });
 
 // También ejecutar si el DOM ya está cargado
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-        console.log('🚀 Sistema de alertas inicializado (DOMContentLoaded)'); // DEBUG
         convertLegacyAlerts();
     });
 } else {
-    console.log('🚀 Sistema de alertas inicializado (DOM ya cargado)'); // DEBUG
     convertLegacyAlerts();
 }
 

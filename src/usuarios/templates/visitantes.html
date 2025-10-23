@@ -118,11 +118,9 @@
                                         <td>{{ visitante.cantidad_mujeres }}</td>
                                         <td><strong>{{ visitante.total }}</strong></td>
                                         <td style="width: 20%;">
-                                            
                                             <a data-bs-toggle="collapse" href="#eliminar{{visitante.id_registro}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-danger mb-1 boton">
                                                 <i class="bi bi-trash"></i> Eliminar
                                             </a>
-                                            
                                         </td>
                                     </tr>
                                     
@@ -137,9 +135,14 @@
                                                             <input type="hidden" value="{{visitante.id_registro}}" name="id_registro" readonly>
                                                             <input type="hidden" value="{{visitante.cantidad_hombres}}" name="cantidad_hombres" readonly>
                                                             <input type="hidden" value="{{visitante.cantidad_mujeres}}" name="cantidad_mujeres" readonly>
-                                                            <input class="form-control" placeholder="Escribe el motivo de la eliminación del registro." name="motivo" required>
+                                                            <input class="form-control" id="motivo-eliminar-visitante-{{visitante.id_registro}}" placeholder="Escribe el motivo de la eliminación del registro." name="motivo" maxlength="200" required>
+                                                            <div class="text-end mt-1">
+                                                                <small class="text-muted">
+                                                                    <span id="contador-eliminar-visitante-{{visitante.id_registro}}">0</span>/200 caracteres
+                                                                </small>
+                                                            </div>
                                                         </div>
-                                                        <button class="btn btn-sm btn-outline-danger boton" type="submit">Confirmar eliminación</button>
+                                                        <button class="btn btn-sm btn-outline-danger boton" type="submit"><i class="bi bi-trash"></i> Confirmar eliminación</button>
                                                     </form>
                                                     <br>
                                                 </div>
@@ -225,11 +228,26 @@
     <!--! Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 
+    <!-- Custom Scripts -->
+    <script src="{{ url_for('static', filename='js/contador_caracteres.js') }}"></script>
+    
     <!--* Scripts de alertas y animaciones -->
     <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
     <script src="{{ url_for('static', filename='js/animaciones.js') }}"></script>
     
     <!-- Custom Scripts -->
     <script src="{{ url_for('static', filename='js/filtros_visitantes.js') }}"></script>
+    
+    <!--* Inicializar contadores -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar contadores para motivos de eliminación de visitantes
+            const motivosEliminar = document.querySelectorAll('[id^="motivo-eliminar-visitante-"]');
+            motivosEliminar.forEach(input => {
+                const registroId = input.id.replace('motivo-eliminar-visitante-', '');
+                inicializarContador(`motivo-eliminar-visitante-${registroId}`, `contador-eliminar-visitante-${registroId}`, 200);
+            });
+        });
+    </script>
 </body>
 </html>
