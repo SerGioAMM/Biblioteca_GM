@@ -170,7 +170,22 @@ def get_opiniones_rechazadas():
     query = conexion.cursor()
     query.execute("""
         SELECT l.id_log, l.id_eliminado, l.titulo, l.fecha, l.motivo, 
-        a.usuario, r.rol, o.opinion
+        a.usuario, r.rol, o.opinion,
+        strftime('%d', l.fecha) as dia,
+        CASE strftime('%m', l.fecha)
+            WHEN '01' THEN 'ENE'
+            WHEN '02' THEN 'FEB'
+            WHEN '03' THEN 'MAR'
+            WHEN '04' THEN 'ABR'
+            WHEN '05' THEN 'MAY'
+            WHEN '06' THEN 'JUN'
+            WHEN '07' THEN 'JUL'
+            WHEN '08' THEN 'AGO'
+            WHEN '09' THEN 'SEP'
+            WHEN '10' THEN 'OCT'
+            WHEN '11' THEN 'NOV'
+            WHEN '12' THEN 'DIC'
+        END as mes
         FROM logs_eliminados l
         JOIN Administradores a ON l.id_administrador = a.id_administrador
         JOIN Roles r ON a.id_rol = r.id_rol

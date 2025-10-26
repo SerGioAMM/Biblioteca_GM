@@ -135,13 +135,16 @@
         if (window.sessionTimeout && window.sessionTimeout.countdownInterval) {
             clearInterval(window.sessionTimeout.countdownInterval);
         }
-        
-        // Remover alertas de sesión (buscar por ID que contiene 'session-warning')
-        const sessionAlerts = document.querySelectorAll('[id*="session-warning"]');
-        sessionAlerts.forEach(alert => {
-            alert.style.animation = 'slideOutRight 0.4s ease-out forwards';
-            setTimeout(() => alert.remove(), 400);
-        });
+
+        // Esperar 2 segundos antes de ocultar la alerta para que el usuario pueda apreciarla
+        setTimeout(() => {
+            // Remover alertas de sesión (buscar por ID que contiene 'session-warning')
+            const sessionAlerts = document.querySelectorAll('[id*="session-warning"]');
+            sessionAlerts.forEach(alert => {
+                alert.style.animation = 'slideOutRight 0.4s ease-out forwards';
+                setTimeout(() => alert.remove(), 400);
+            });
+        }, 2000); // 2 segundos de delay
     }
     
     // Countdown actualizado para usar el sistema de alertas

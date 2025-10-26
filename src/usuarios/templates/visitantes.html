@@ -33,26 +33,48 @@
                 <h2 class="text-center">Gestión de Visitantes</h2>
                 <h4 class="p-2 p-md-3 text-center">Administra los registros de visitantes de la biblioteca.</h4>
                 <form class="frm-usuarios" action="/buscar_visitante" method="GET" id="form-busqueda">
-                    <!-- Filtro por fechas -->
+                    <!-- Filtro por fechas y rango de edad -->
                     <div class="row justify-content-center">
                         <div class="col-12 col-md-10 col-lg-8 col-xl-6">
                             <div class="row g-2 g-md-3">
-                                <div class="col-12 col-sm-6">
+                                <div class="col-12 col-sm-3">
                                     <label for="fecha_inicio" class="form-label">Mes de inicio:</label>
                                     <input type="month" name="fecha_inicio" class="form-control" 
                                             style="min-height: 44px;" value="{{ fecha_inicio if fecha_inicio else '' }}">
                                 </div>
-                                <div class="col-12 col-sm-6">
+                                <div class="col-12 col-sm-3">
                                     <label for="fecha_fin" class="form-label">Mes final:</label>
                                     <input type="month" name="fecha_fin" class="form-control" 
                                             style="min-height: 44px;" value="{{ fecha_fin if fecha_fin else '' }}">
+                                </div>
+                                <div class="col-12 col-sm-3">
+                                    <label for="rango_edad" class="form-label">Rango de edad:</label>
+                                    <select name="rango_edad" class="form-select btn btn-secondary" style="min-height: 44px;">
+                                        <option value="">Todas las edades</option>
+                                        {% for rango in rangos_edad %}
+                                        <option value="{{ rango.id_rango }}" {% if rango_edad_seleccionado == rango.id_rango|string %}selected{% endif %}>
+                                            {{ rango.rango }} años
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-12 col-sm-3">
+                                    <label for="tipo_visitante" class="form-label">Tipo de visitante:</label>
+                                    <select name="tipo_visitante" class="form-select btn btn-secondary" style="min-height: 44px;">
+                                        <option value="">Todos los tipos</option>
+                                        {% for tipo in tipos_visitantes %}
+                                        <option value="{{ tipo.id_tipo_visitante }}" {% if tipo_visitante_seleccionado == tipo.id_tipo_visitante|string %}selected{% endif %}>
+                                            {{ tipo.tipo_visitante }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="text-center mt-3">
                         <button class="btn btn-success px-4" type="submit" style="min-width: 150px; min-height: 44px;">
-                            <i class="bi bi-funnel"></i> Filtrar por rango
+                            <i class="bi bi-funnel"></i> Aplicar filtros
                         </button>
                     </div>
                 </form>
@@ -67,6 +89,59 @@
                     <div class="table-responsive rounded-4">
                         <table class="table user-list bg-lighter-custom mb-0">
                             <thead>
+                                <tr class="table-secondary bg-dark">
+                                    <th colspan="7" class="text-center">
+                                        <h5 class="mb-0">Resumen de Totales</h5>
+                                    </th>
+                                </tr>
+                                <tr class="table-secondary">
+                                    <th colspan="2"></th>
+                                    <th></th>
+                                    <th class="text-center">Hombres</th>
+                                    <th class="text-center">Mujeres</th>
+                                    <th class="text-center">Total</th>
+                                    <th></th>
+                                </tr>
+                                {# Subtotales por rango de edad #}
+                                {% set rangos = ['0-12', '13-21', '22+'] %}
+                                {% for rango in rangos %}
+                                    {% set hombres_rango = visitantes|selectattr('rango_edad', 'equalto', rango)|sum(attribute='cantidad_hombres') %}
+                                    {% set mujeres_rango = visitantes|selectattr('rango_edad', 'equalto', rango)|sum(attribute='cantidad_mujeres') %}
+                                    {% if hombres_rango > 0 or mujeres_rango > 0 %}
+                                    <tr class="table-secondary">
+                                        <th colspan="2" class="text-end">{{ rango }} años:</th>
+                                        <th></th>
+                                        <th class="text-center">{{ hombres_rango }}</th>
+                                        <th class="text-center">{{ mujeres_rango }}</th>
+                                        <th class="text-center">{{ hombres_rango + mujeres_rango }}</th>
+                                        <th></th>
+                                    </tr>
+                                    {% endif %}
+                                {% endfor %}
+                                {# Total general #}
+                                <tr class="table-secondary bg-dark">
+                                    <th colspan="2" class="text-end"><strong>Totales Generales:</strong></th>
+                                    <th></th>
+                                    <th class="text-center">
+                                        {% set total_hombres = visitantes|sum(attribute='cantidad_hombres') %}
+                                        <strong>{{ total_hombres }}</strong>
+                                    </th>
+                                    <th class="text-center">
+                                        {% set total_mujeres = visitantes|sum(attribute='cantidad_mujeres') %}
+                                        <strong>{{ total_mujeres }}</strong>
+                                    </th>
+                                    <th class="text-center">
+                                        {% set total_general = total_hombres + total_mujeres %}
+                                        <strong>{{ total_general }}</strong>
+                                    </th>
+                                    <th></th>
+                                </tr>
+                                <tr> <td class="my-4" colspan="7">&nbsp; <br> &nbsp; </td> </tr>
+                                <tr>
+                                    <th colspan="7" class="text-center">
+                                        <h5 class="mb-0">Registros de Visitantes</h5>
+                                    </th>
+                                </tr>
                                 <tr>
                                     <th><span>Fecha</span></th>
                                     <th><span>Tipo de Visitante</span></th>
@@ -152,42 +227,6 @@
                                     
                                 {% endfor %}
                             </tbody>
-                            <tfoot class="table-secondary bg-dark">
-                                {# Subtotales por rango de edad #}
-                                {% set rangos = ['0-12', '13-21', '22+'] %}
-                                {% for rango in rangos %}
-                                    {% set hombres_rango = visitantes|selectattr('rango_edad', 'equalto', rango)|sum(attribute='cantidad_hombres') %}
-                                    {% set mujeres_rango = visitantes|selectattr('rango_edad', 'equalto', rango)|sum(attribute='cantidad_mujeres') %}
-                                    {% if hombres_rango > 0 or mujeres_rango > 0 %}
-                                    <tr>
-                                        <th colspan="2" class="text-end">{{ rango }} años:</th>
-                                        <th></th>
-                                        <th>{{ hombres_rango }}</th>
-                                        <th>{{ mujeres_rango }}</th>
-                                        <th>{{ hombres_rango + mujeres_rango }}</th>
-                                        <th></th>
-                                    </tr>
-                                    {% endif %}
-                                {% endfor %}
-                                {# Total general #}
-                                <tr>
-                                    <th colspan="2" class="text-end"><strong>Totales Generales:</strong></th>
-                                    <th></th>
-                                    <th>
-                                        {% set total_hombres = visitantes|sum(attribute='cantidad_hombres') %}
-                                        <strong>{{ total_hombres }}</strong>
-                                    </th>
-                                    <th>
-                                        {% set total_mujeres = visitantes|sum(attribute='cantidad_mujeres') %}
-                                        <strong>{{ total_mujeres }}</strong>
-                                    </th>
-                                    <th>
-                                        {% set total_general = total_hombres + total_mujeres %}
-                                        <strong>{{ total_general }}</strong>
-                                    </th>
-                                    <th></th>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -197,7 +236,7 @@
         
         <div class="paginacion">
             {% if pagina > 1 %}
-                <a href="{{ url_for('visitantes.buscar_visitante', page=pagina - 1, fecha_inicio=fecha_inicio, fecha_fin=fecha_fin) }}">Anterior</a>
+                <a href="{{ url_for('visitantes.buscar_visitante', page=pagina - 1, fecha_inicio=fecha_inicio, fecha_fin=fecha_fin, rango_edad=rango_edad_seleccionado, tipo_visitante=tipo_visitante_seleccionado) }}">Anterior</a>
             {% endif %}
             
             {% for p in range(pagina - 1, pagina + 2) %}
@@ -205,13 +244,13 @@
                     {% if p == pagina %}
                         <strong>{{ p }}</strong>
                     {% else %}
-                        <a href="{{ url_for('visitantes.buscar_visitante', page=p, fecha_inicio=fecha_inicio, fecha_fin=fecha_fin) }}">{{ p }}</a>
+                        <a href="{{ url_for('visitantes.buscar_visitante', page=p, fecha_inicio=fecha_inicio, fecha_fin=fecha_fin, rango_edad=rango_edad_seleccionado, tipo_visitante=tipo_visitante_seleccionado) }}">{{ p }}</a>
                     {% endif %}
                 {% endif %}
             {% endfor %}   
             
             {% if pagina < total_paginas %}
-                <a href="{{ url_for('visitantes.buscar_visitante', page=pagina + 1, fecha_inicio=fecha_inicio, fecha_fin=fecha_fin) }}">Siguiente</a>
+                <a href="{{ url_for('visitantes.buscar_visitante', page=pagina + 1, fecha_inicio=fecha_inicio, fecha_fin=fecha_fin, rango_edad=rango_edad_seleccionado, tipo_visitante=tipo_visitante_seleccionado) }}">Siguiente</a>
             {% endif %}
         </div>
     </main>

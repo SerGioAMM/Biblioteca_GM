@@ -77,15 +77,21 @@ def buscar_libro_e():
     #Obtiene los datos del formulario filtros en libros.html
     filtro_busqueda = request.args.get("filtro-busqueda","Titulo")
     filtro_rol = request.args.get("rol","Todos")
+    
+    # Construir filtros SQL de manera segura
     if filtro_busqueda == "Titulo":
-        SQL_where_busqueda = (f" and le.titulo like '%{busqueda}%'")
+        SQL_where_busqueda = " and le.titulo like ?"
     else:
-        SQL_where_busqueda = (f" and a.usuario like '%{busqueda}%'")
+        SQL_where_busqueda = " and a.usuario like ?"
+    
+    param_busqueda = f"%{busqueda}%"
+    params = [param_busqueda]
     
     if filtro_rol == "Todos":
         SQL_where_rol = ""
     else:
-        SQL_where_rol = (f" and r.rol = '{filtro_rol}'")
+        SQL_where_rol = " and r.rol = ?"
+        params.append(filtro_rol)
 
     #Paginacion
     pagina = request.args.get("page", 1, type=int) #Recibe el parametro de la URL llamado page
@@ -96,7 +102,7 @@ def buscar_libro_e():
     query.execute(f"""select count(*) from logs_eliminados le 
                     join administradores a on le.id_administrador = a.id_administrador 
                     join roles r on a.id_rol = r.id_rol 
-                    where tabla_afectada = 'Libros' {SQL_where_busqueda}{SQL_where_rol}""")
+                    where tabla_afectada = 'Libros' {SQL_where_busqueda}{SQL_where_rol}""", params)
     total_libros = query.fetchone()[0]
     total_paginas = math.ceil(total_libros / libros_por_pagina)
     
@@ -121,8 +127,11 @@ def buscar_libro_e():
                             join roles r on a.id_rol =  r.id_rol
                             where tabla_afectada = 'Libros'{SQL_where_busqueda}{SQL_where_rol}
                             order by le.fecha desc
-                            limit {libros_por_pagina} offset {offset}""")
-    query.execute(query_busqueda)
+                            limit ? offset ?""")
+    
+    # Agregar parámetros de paginación
+    params.extend([libros_por_pagina, offset])
+    query.execute(query_busqueda, params)
     logs_libros = dict_factory(query)
 
     query.close()
@@ -205,15 +214,21 @@ def buscar_prestamo_e():
     #Obtiene los datos del formulario filtros en libros.html
     filtro_busqueda = request.args.get("filtro-busqueda","Titulo")
     filtro_rol = request.args.get("rol","Todos")
+    
+    # Construir filtros SQL de manera segura
     if filtro_busqueda == "Titulo":
-        SQL_where_busqueda = (f" and le.titulo like '%{busqueda}%'")
+        SQL_where_busqueda = " and le.titulo like ?"
     else:
-        SQL_where_busqueda = (f" and a.usuario like '%{busqueda}%'")
+        SQL_where_busqueda = " and a.usuario like ?"
+    
+    param_busqueda = f"%{busqueda}%"
+    params = [param_busqueda]
     
     if filtro_rol == "Todos":
         SQL_where_rol = ""
     else:
-        SQL_where_rol = (f" and r.rol = '{filtro_rol}'")
+        SQL_where_rol = " and r.rol = ?"
+        params.append(filtro_rol)
 
     pagina = request.args.get("page", 1, type=int) #Recibe el parametro de la URL llamado page
     prestamos_por_pagina = 10
@@ -223,7 +238,7 @@ def buscar_prestamo_e():
     query.execute(f"""select count(*) from logs_eliminados le 
                     join administradores a on le.id_administrador = a.id_administrador 
                     join roles r on a.id_rol = r.id_rol 
-                    where tabla_afectada = 'Prestamos' {SQL_where_busqueda}{SQL_where_rol}""")
+                    where tabla_afectada = 'Prestamos' {SQL_where_busqueda}{SQL_where_rol}""", params)
     total_prestamos_eliminados = query.fetchone()[0]
     total_paginas = math.ceil(total_prestamos_eliminados / prestamos_por_pagina) #Calculo para cantidad de paginas, redondeando hacia arriba (ej, 2.1 = 3)
 
@@ -248,9 +263,11 @@ def buscar_prestamo_e():
                             join roles r on a.id_rol =  r.id_rol
                             where tabla_afectada = 'Prestamos' {SQL_where_busqueda}{SQL_where_rol}
                             order by le.fecha desc
-                            limit {prestamos_por_pagina} offset {offset}""")
+                            limit ? offset ?""")
 
-    query.execute(query_busqueda)
+    # Agregar parámetros de paginación
+    params.extend([prestamos_por_pagina, offset])
+    query.execute(query_busqueda, params)
     prestamos_eliminados = dict_factory(query)
 
     query.close()
@@ -332,16 +349,22 @@ def buscar_visitante_e():
     filtro_busqueda = request.args.get("filtro-busqueda","Usuario")
     filtro_rol = request.args.get("rol","Todos")
     
+    # Construir filtros SQL de manera segura
     if filtro_busqueda == "Usuario":
-        SQL_where_busqueda = (f" and a.usuario like '%{busqueda}%'")
+        SQL_where_busqueda = " and a.usuario like ?"
+        param_busqueda = f"%{busqueda}%"
+        params = [param_busqueda]
     else:
         # Para cantidad, buscamos en ambos campos (hombres y mujeres)
-        SQL_where_busqueda = (f" and (le.nombre_lector like '%{busqueda}%' or le.titulo like '%{busqueda}%')")
+        SQL_where_busqueda = " and (le.nombre_lector like ? or le.titulo like ?)"
+        param_busqueda = f"%{busqueda}%"
+        params = [param_busqueda, param_busqueda]
     
     if filtro_rol == "Todos":
         SQL_where_rol = ""
     else:
-        SQL_where_rol = (f" and r.rol = '{filtro_rol}'")
+        SQL_where_rol = " and r.rol = ?"
+        params.append(filtro_rol)
 
     pagina = request.args.get("page", 1, type=int) #Recibe el parametro de la URL llamado page
     visitantes_por_pagina = 10
@@ -351,7 +374,7 @@ def buscar_visitante_e():
     query.execute(f"""select count(*) from logs_eliminados le 
                     join administradores a on le.id_administrador = a.id_administrador 
                     join roles r on a.id_rol = r.id_rol 
-                    where tabla_afectada = 'Visitantes' {SQL_where_busqueda}{SQL_where_rol}""")
+                    where tabla_afectada = 'Visitantes' {SQL_where_busqueda}{SQL_where_rol}""", params)
     total_visitantes_eliminados = query.fetchone()[0]
     total_paginas = math.ceil(total_visitantes_eliminados / visitantes_por_pagina) #Calculo para cantidad de paginas, redondeando hacia arriba (ej, 2.1 = 3)
 
@@ -376,9 +399,11 @@ def buscar_visitante_e():
                             join roles r on a.id_rol =  r.id_rol
                             where tabla_afectada = 'Visitantes' {SQL_where_busqueda}{SQL_where_rol}
                             order by le.fecha desc
-                            limit {visitantes_por_pagina} offset {offset}""")
+                            limit ? offset ?""")
 
-    query.execute(query_busqueda)
+    # Agregar parámetros de paginación
+    params.extend([visitantes_por_pagina, offset])
+    query.execute(query_busqueda, params)
     visitantes_eliminados = dict_factory(query)
 
     query.close()
@@ -418,11 +443,11 @@ def libros_modificados():
                             lm.portada as old_portada,
                             lm.ISBN_antiguo as old_isbn,
                             lm.ano_publicacion_antiguo as old_anio,
-                            -- Datos actuales (de la tabla libros)
+                            -- Datos actuales (de la tabla libros) - cantidad real incluyendo prestados
                             l.Titulo as titulo_actual, 
                             l.Tomo as tomo_actual, 
                             l.numero_paginas as num_paginas_actual, 
-                            l.numero_copias as num_copias_actual, 
+                            (l.numero_copias + COALESCE(prestados_activos.cantidad_prestada, 0)) as num_copias_actual, 
                             l.portada as portada_actual,
                             l.ISBN as isbn_actual,
                             l.ano_publicacion as anio_actual,
@@ -458,14 +483,19 @@ def libros_modificados():
                             join Administradores a on lm.id_administrador = a.id_administrador
                             join roles r on a.id_rol = r.id_rol
                             join libros l on lm.id_libro = l.id_libro
-                            -- Referencias actuales
+                            -- Subconsulta para contar préstamos activos por libro
+                            left join (
+                                SELECT id_libro, COUNT(*) as cantidad_prestada
+                                FROM Prestamos 
+                                WHERE id_estado IN (1, 2) -- Estados: Vencido y Activo
+                                GROUP BY id_libro
+                            ) prestados_activos ON prestados_activos.id_libro = l.id_libro
                             join RegistroLibros rl on rl.id_libro = l.id_libro
                             join Notaciones not_new on not_new.id_notacion = rl.id_notacion
                             join Editoriales ed_new on ed_new.id_editorial = not_new.id_editorial
                             join Autores aut_new on aut_new.id_autor = not_new.id_autor
                             join Lugares lug_new on lug_new.id_lugar = rl.id_lugar
                             join SistemaDewey sd_new on sd_new.codigo_seccion = rl.codigo_seccion
-                            -- Referencias antiguas (pueden ser NULL si no se almacenaron)
                             left join Notaciones not_old on not_old.id_notacion = lm.id_notacion_antigua
                             left join Editoriales ed_old on ed_old.id_editorial = lm.id_editorial_antigua
                             left join Autores aut_old on aut_old.id_autor = lm.id_autor_antiguo
@@ -499,15 +529,21 @@ def buscar_libro_m():
     #Obtiene los datos del formulario filtros en libros.html
     filtro_busqueda = request.args.get("filtro-busqueda","Titulo")
     filtro_rol = request.args.get("rol","Todos")
+    
+    # Construir filtros SQL de manera segura
     if filtro_busqueda == "Titulo":
-        SQL_where_busqueda = (f" and lm.titulo like '%{busqueda}%'")
+        SQL_where_busqueda = " and lm.titulo like ?"
     else:
-        SQL_where_busqueda = (f" and a.usuario like '%{busqueda}%'")
+        SQL_where_busqueda = " and a.usuario like ?"
+    
+    param_busqueda = f"%{busqueda}%"
+    params = [param_busqueda]
     
     if filtro_rol == "Todos":
         SQL_where_rol = ""
     else:
-        SQL_where_rol = (f" and r.rol = '{filtro_rol}'")
+        SQL_where_rol = " and r.rol = ?"
+        params.append(filtro_rol)
 
     #Paginacion
     pagina = request.args.get("page", 1, type=int) #Recibe el parametro de la URL llamado page
@@ -519,7 +555,7 @@ def buscar_libro_m():
                     join administradores a on lm.id_administrador = a.id_administrador 
                     join roles r on a.id_rol = r.id_rol 
                     join libros l on lm.id_libro = l.id_libro
-                    where 1=1 {SQL_where_busqueda}{SQL_where_rol}""")
+                    where 1=1 {SQL_where_busqueda}{SQL_where_rol}""", params)
     total_libros = query.fetchone()[0]
     total_paginas = math.ceil(total_libros / libros_por_pagina)
 
@@ -533,22 +569,19 @@ def buscar_libro_m():
                             lm.ISBN_antiguo as old_isbn,
                             lm.ano_publicacion_antiguo as old_anio,
                             lm.id_modificacion, 
-                            -- Datos actuales (de la tabla libros)
                             l.Titulo as titulo_actual, 
                             l.Tomo as tomo_actual, 
                             l.numero_paginas as num_paginas_actual, 
-                            l.numero_copias as num_copias_actual, 
+                            (l.numero_copias + COALESCE(prestados_activos.cantidad_prestada, 0)) as num_copias_actual, 
                             l.portada as portada_actual,
                             l.ISBN as isbn_actual,
                             l.ano_publicacion as anio_actual,
                             lm.id_libro,
-                            -- Referencias antiguas de RegistroLibros
                             ed_old.editorial as old_editorial,
                             aut_old.nombre_autor || ' ' || aut_old.apellido_autor as old_autor,
                             not_old.notacion as old_notacion,
                             lug_old.lugar as old_lugar,
                             lm.codigo_seccion_antiguo || ' - ' || sd_old.seccion as old_seccion,
-                            -- Referencias actuales de RegistroLibros
                             ed_new.editorial as editorial_actual,
                             aut_new.nombre_autor || ' ' || aut_new.apellido_autor as autor_actual,
                             not_new.notacion as notacion_actual,
@@ -573,6 +606,13 @@ def buscar_libro_m():
                             join Administradores a on lm.id_administrador = a.id_administrador
                             join roles r on a.id_rol = r.id_rol
                             join libros l on lm.id_libro = l.id_libro
+                            -- Subconsulta para contar préstamos activos por libro
+                            left join (
+                                SELECT id_libro, COUNT(*) as cantidad_prestada
+                                FROM Prestamos 
+                                WHERE id_estado IN (1, 2) -- Estados: Vencido y Activo
+                                GROUP BY id_libro
+                            ) prestados_activos ON prestados_activos.id_libro = l.id_libro
                             -- Referencias actuales
                             join RegistroLibros rl on rl.id_libro = l.id_libro
                             join Notaciones not_new on not_new.id_notacion = rl.id_notacion
@@ -580,7 +620,6 @@ def buscar_libro_m():
                             join Autores aut_new on aut_new.id_autor = not_new.id_autor
                             join Lugares lug_new on lug_new.id_lugar = rl.id_lugar
                             join SistemaDewey sd_new on sd_new.codigo_seccion = rl.codigo_seccion
-                            -- Referencias antiguas (pueden ser NULL si no se almacenaron)
                             left join Notaciones not_old on not_old.id_notacion = lm.id_notacion_antigua
                             left join Editoriales ed_old on ed_old.id_editorial = lm.id_editorial_antigua
                             left join Autores aut_old on aut_old.id_autor = lm.id_autor_antiguo
@@ -588,7 +627,10 @@ def buscar_libro_m():
                             left join SistemaDewey sd_old on sd_old.codigo_seccion = lm.codigo_seccion_antiguo
                             where 1=1 {SQL_where_busqueda}{SQL_where_rol}
                             order by lm.fecha_modificacion desc
-                            limit {libros_por_pagina} offset {offset}""")
+                            limit ? offset ?""")
+    
+    # Agregar parámetros de paginación
+    params.extend([libros_por_pagina, offset])
     libros_m = dict_factory(query)
 
     query.close()
@@ -632,9 +674,18 @@ def revertir_cambios(id_modificacion):
     antiguo_id_lugar = modificacion[11]
     antiguo_codigo_seccion = modificacion[12]
 
-    # Obtener los datos actuales del libro
-    query.execute("""SELECT id_libro, titulo, tomo, numero_paginas, numero_copias, portada, 
-                     ISBN, ano_publicacion FROM libros WHERE id_libro = ?""", (id_libro,))
+    # Obtener los datos actuales del libro y contar préstamos activos
+    query.execute("""SELECT l.id_libro, l.titulo, l.tomo, l.numero_paginas, l.numero_copias, l.portada, 
+                     l.ISBN, l.ano_publicacion,
+                     COALESCE(prestados_activos.cantidad_prestada, 0) as prestados_activos
+                     FROM libros l
+                     LEFT JOIN (
+                         SELECT id_libro, COUNT(*) as cantidad_prestada
+                         FROM Prestamos 
+                         WHERE id_estado IN (1, 2) -- Estados: Vencido y Activo
+                         GROUP BY id_libro
+                     ) prestados_activos ON prestados_activos.id_libro = l.id_libro
+                     WHERE l.id_libro = ?""", (id_libro,))
     libro_actual = query.fetchone()
 
     if not libro_actual:
@@ -642,13 +693,22 @@ def revertir_cambios(id_modificacion):
         conexion.close()
         return "Libro no encontrado", 404
 
+    # Calcular la cantidad de ejemplares disponibles que debe quedar
+    # Cantidad antigua - préstamos activos = ejemplares disponibles después de revertir
+    prestamos_activos_count = libro_actual[8]
+    ejemplares_disponibles_revertidos = antiguo_num_copias - prestamos_activos_count
+
+    # Asegurar que no sea negativo
+    if ejemplares_disponibles_revertidos < 0:
+        ejemplares_disponibles_revertidos = 0
+
     # Revertir los cambios en la tabla Libros
     query.execute("""
         UPDATE libros
         SET Titulo = ?, Tomo = ?, numero_paginas = ?, numero_copias = ?, portada = ?,
             ISBN = ?, ano_publicacion = ?
         WHERE id_libro = ?
-    """, (antiguo_titulo, antiguo_tomo, antiguo_num_paginas, antiguo_num_copias, 
+    """, (antiguo_titulo, antiguo_tomo, antiguo_num_paginas, ejemplares_disponibles_revertidos, 
           antigua_portada, antiguo_isbn, antiguo_anio, id_libro))
 
     # Revertir los cambios en RegistroLibros (si existen referencias antiguas)

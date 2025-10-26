@@ -175,37 +175,42 @@ def buscar_usuario():
     usuarios_por_pagina = 20
     offset = (pagina - 1) * usuarios_por_pagina
     
+    # Construir filtros SQL de manera segura
+    params = [f"%{busqueda}%"]
+    
     if filtro_rol != "Todos":
-        SQL_where_rol = (f"and r.rol = '{filtro_rol}'")
+        SQL_where_rol = "and r.rol = ?"
+        params.append(filtro_rol)
     else:
         SQL_where_rol = " "
 
     if filtro_estado == "Activo":
-        SQL_where_estado = (f"and ea.estado = 'Activo'")
+        SQL_where_estado = "and ea.estado = 'Activo'"
     elif filtro_estado == "Inactivo":
-        SQL_where_estado = (f"and ea.estado = 'Inactivo'")
+        SQL_where_estado = "and ea.estado = 'Inactivo'"
     else:
         SQL_where_estado = " "
 
     # Consulta para contar usuarios con filtros
-    query_count = (f"""SELECT COUNT(*) FROM administradores a
+    query_count = f"""SELECT COUNT(*) FROM administradores a
                     join roles r on a.id_rol = r.id_rol
                     join estados_administradores ea on a.id_estado = ea.id_estado
-                    where a.usuario like '%{busqueda}%' """)
-    query_count = query_count + SQL_where_rol + SQL_where_estado
-    query.execute(query_count)
+                    where a.usuario like ? {SQL_where_rol} {SQL_where_estado}"""
+    query.execute(query_count, params)
     total_usuarios = query.fetchone()[0]
     total_paginas = math.ceil(total_usuarios / usuarios_por_pagina)
 
-    query_busqueda = (f"""Select a.id_rol,r.rol,a.usuario,a.contrasena,a.telefono,a.id_administrador,a.email,ea.estado,a.tiempo_bloqueo,
+    query_busqueda = f"""Select a.id_rol,r.rol,a.usuario,a.contrasena,a.telefono,a.id_administrador,a.email,ea.estado,a.tiempo_bloqueo,
                     (select motivo from logs_eliminados where id_eliminado = a.id_administrador and tabla_afectada = 'Usuarios' order by fecha desc limit 1) as motivo
                     from administradores a
                     join roles r on a.id_rol = r.id_rol
                     join estados_administradores ea on a.id_estado = ea.id_estado
-                    where a.usuario like '%{busqueda}%' """)
+                    where a.usuario like ? {SQL_where_rol} {SQL_where_estado}
+                    order by a.usuario asc LIMIT ? OFFSET ?"""
 
-    query_busqueda = query_busqueda + SQL_where_rol + SQL_where_estado + f" order by a.usuario asc LIMIT {usuarios_por_pagina} OFFSET {offset}"
-    query.execute(query_busqueda)
+    # Agregar parámetros de paginación
+    params.extend([usuarios_por_pagina, offset])
+    query.execute(query_busqueda, params)
     usuarios = dict_factory(query)
     print(usuarios)
         

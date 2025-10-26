@@ -125,8 +125,9 @@ function convertLegacyAlerts() {
                 type = 'success';
                 customIcon = 'bi-arrow-return-left';
             }
-            // Registro exitoso
-            else if (messageLower.includes('registrad') && messageLower.includes('exitosa')) {
+            // Registro exitoso (incluyendo variantes)
+            else if ((messageLower.includes('registrad') || messageLower.includes('registro')) && 
+                     (messageLower.includes('exitosa') || messageLower.includes('exitoso'))) {
                 type = 'success';
                 customIcon = 'bi-plus-circle-fill';
             }

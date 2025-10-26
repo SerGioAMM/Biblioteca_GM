@@ -85,15 +85,27 @@ def buscar_prestamo():
     exito = request.args.get("exito","")
     devuelto = request.args.get("devuelto","")
 
+    # Construir filtros SQL de manera segura con parámetros
     if filtro_busqueda == "Titulo":
-        SQL_where_busqueda = (f" where l.titulo || ' (' || p.nombre || ' ' || p.apellido || ')' like '%{busqueda}%'")
+        SQL_where_busqueda = " where l.titulo || ' (' || p.nombre || ' ' || p.apellido || ')' like ?"
     else:
-        SQL_where_busqueda = (f" where p.nombre || ' ' || p.apellido like '%{busqueda}%'")
+        SQL_where_busqueda = " where p.nombre || ' ' || p.apellido like ?"
+    
+    param_busqueda = f"%{busqueda}%"
     
     if estados == "Todos":
-        SQL_where_estado =" "
+        SQL_where_estado = " "
+        param_estado = None
     else:
-        SQL_where_estado = (f" and e.estado = '{estados}'")
+        SQL_where_estado = " and e.estado = ?"
+        param_estado = estados
+
+    # Preparar lista de parámetros
+    params_count = [param_busqueda]
+    params_query = [param_busqueda]
+    if param_estado is not None:
+        params_count.append(param_estado)
+        params_query.append(param_estado)
 
     pagina = request.args.get("page", 1, type=int) #Recibe el parametro de la URL llamado page
     prestamos_por_pagina = 10
@@ -103,7 +115,7 @@ def buscar_prestamo():
     query.execute(f"""select count(*) from Prestamos p
                     join Libros l on p.id_libro = l.id_libro
                     join Estados_prestamos e on p.id_estado = e.id_estado 
-                    {SQL_where_busqueda}{SQL_where_estado}""")
+                    {SQL_where_busqueda}{SQL_where_estado}""", params_count)
     
     total_prestamos = query.fetchone()[0]
     total_paginas = math.ceil(total_prestamos / prestamos_por_pagina) #Calculo para cantidad de paginas, redondeando hacia arriba (ej, 2.1 = 3)
@@ -175,9 +187,12 @@ def buscar_prestamo():
                     join Estados_prestamos e on p.id_estado = e.id_estado
                     {SQL_where_busqueda}{SQL_where_estado}
                     order by e.id_estado asc, p.fecha_prestamo desc
-                    limit {prestamos_por_pagina} offset {offset}""")
+                    limit ? offset ?""")
 
-    query.execute(query_busqueda)
+    # Agregar parámetros de paginación
+    params_query.extend([prestamos_por_pagina, offset])
+    
+    query.execute(query_busqueda, params_query)
     prestamos = dict_factory(query)
 
     for p in prestamos:

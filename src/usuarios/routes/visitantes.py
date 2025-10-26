@@ -96,8 +96,16 @@ def visitantes():
 
     #Paginacion
     pagina = request.args.get("page", 1, type=int)
-    visitantes_por_pagina = 30
+    visitantes_por_pagina = 100
     offset = (pagina - 1) * visitantes_por_pagina
+
+    # Obtener rangos de edad para el filtro
+    query.execute("SELECT * FROM Rangos_Edad ORDER BY id_rango")
+    rangos_edad = dict_factory(query)
+
+    # Obtener tipos de visitantes para el filtro
+    query.execute("SELECT * FROM Tipos_Visitantes ORDER BY tipo_visitante")
+    tipos_visitantes = dict_factory(query)
 
     # Consulta para contar todos los visitantes
     query.execute("SELECT COUNT(*) FROM Visitantes")
@@ -117,7 +125,11 @@ def visitantes():
     query.close()
     conexion.close()
 
-    return render_template("visitantes.html", visitantes=visitantes, exito=exito, pagina=pagina, total_paginas=total_paginas, fecha_inicio="", fecha_fin="")
+    return render_template("visitantes.html", visitantes=visitantes, exito=exito, 
+                          pagina=pagina, total_paginas=total_paginas, 
+                          fecha_inicio="", fecha_fin="", rango_edad_seleccionado="",
+                          tipo_visitante_seleccionado="",
+                          rangos_edad=rangos_edad, tipos_visitantes=tipos_visitantes)
 
 # ----------------------------------------------------- ELIMINAR VISITANTE ----------------------------------------------------- #
 
@@ -173,12 +185,22 @@ def buscar_visitante():
     conexion = conexion_BD()
     query = conexion.cursor()
 
+    # Obtener rangos de edad para el filtro
+    query.execute("SELECT * FROM Rangos_Edad ORDER BY id_rango")
+    rangos_edad = dict_factory(query)
+
+    # Obtener tipos de visitantes para el filtro
+    query.execute("SELECT * FROM Tipos_Visitantes ORDER BY tipo_visitante")
+    tipos_visitantes = dict_factory(query)
+
     fecha_inicio = request.args.get("fecha_inicio", "")
     fecha_fin = request.args.get("fecha_fin", "")
+    rango_edad_seleccionado = request.args.get("rango_edad", "")
+    tipo_visitante_seleccionado = request.args.get("tipo_visitante", "")
     
     #Paginacion
     pagina = request.args.get("page", 1, type=int)
-    visitantes_por_pagina = 30
+    visitantes_por_pagina = 100
     offset = (pagina - 1) * visitantes_por_pagina
     
     SQL_where_fecha = ""
@@ -203,12 +225,22 @@ def buscar_visitante():
         ultimo_dia = calendar.monthrange(año, mes)[1]
         fecha_fin_completa = f"{fecha_fin}-{ultimo_dia:02d}"
         SQL_where_fecha = f"AND v.fecha <= '{fecha_fin_completa}'"
+    
+    # Filtro de rango de edad
+    SQL_where_rango = ""
+    if rango_edad_seleccionado:
+        SQL_where_rango = f"AND v.id_rango_edad = {rango_edad_seleccionado}"
+    
+    # Filtro de tipo de visitante
+    SQL_where_tipo = ""
+    if tipo_visitante_seleccionado:
+        SQL_where_tipo = f"AND v.id_tipo_visitante = {tipo_visitante_seleccionado}"
 
     # Consulta para contar visitantes con filtros
     query_count = f"""SELECT COUNT(*) FROM Visitantes v
                         JOIN Tipos_Visitantes tv ON v.id_tipo_visitante = tv.id_tipo_visitante
                         LEFT JOIN Rangos_Edad re ON v.id_rango_edad = re.id_rango
-                        WHERE 1=1 {SQL_where_fecha}"""
+                        WHERE 1=1 {SQL_where_fecha} {SQL_where_rango} {SQL_where_tipo}"""
     query.execute(query_count)
     total_visitantes = query.fetchone()[0]
     total_paginas = math.ceil(total_visitantes / visitantes_por_pagina)
@@ -219,7 +251,7 @@ def buscar_visitante():
                             FROM Visitantes v
                             JOIN Tipos_Visitantes tv ON v.id_tipo_visitante = tv.id_tipo_visitante
                             LEFT JOIN Rangos_Edad re ON v.id_rango_edad = re.id_rango
-                            WHERE 1=1 {SQL_where_fecha}
+                            WHERE 1=1 {SQL_where_fecha} {SQL_where_rango} {SQL_where_tipo}
                             ORDER BY v.fecha DESC
                             LIMIT {visitantes_por_pagina} OFFSET {offset}"""
 
@@ -231,4 +263,7 @@ def buscar_visitante():
 
     return render_template("visitantes.html", visitantes=visitantes, exito=exito, 
                             fecha_inicio=fecha_inicio, fecha_fin=fecha_fin,
+                            rango_edad_seleccionado=rango_edad_seleccionado,
+                            tipo_visitante_seleccionado=tipo_visitante_seleccionado,
+                            rangos_edad=rangos_edad, tipos_visitantes=tipos_visitantes,
                             pagina=pagina, total_paginas=total_paginas)

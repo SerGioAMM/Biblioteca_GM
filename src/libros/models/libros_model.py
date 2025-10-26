@@ -68,12 +68,13 @@ def get_catalogo(libros_por_pagina,offset):
     conexion.close()
     return libros
 
-def get_catalogo_filtrado(libros_por_pagina,offset,filtro):
+def get_catalogo_filtrado(libros_por_pagina, offset, filtro, params):
     conexion = conexion_BD()
     query = conexion.cursor()
 
     #? Selecciona todos los libros disponibles
-    # Consulta paginada
+    # Consulta paginada con parámetros seguros
+    params_completos = params + [libros_por_pagina, offset]
     query.execute(f"""
         select l.id_libro, Titulo, tomo, ano_publicacion, ISBN, numero_paginas, numero_copias,
         sd.codigo_seccion, sd.seccion, a.nombre_autor, a.apellido_autor, e.editorial, n.notacion, lu.lugar, l.portada
@@ -87,7 +88,7 @@ def get_catalogo_filtrado(libros_por_pagina,offset,filtro):
         {filtro}
         order by sd.codigo_seccion asc,Titulo asc
         limit ? offset ?
-    """, (libros_por_pagina, offset))
+    """, params_completos)
     libros = dict_factory(query)
     query.close()
     conexion.close()
@@ -140,18 +141,29 @@ def get_destacados(seccion):
     conexion.close()
     return resultado
 
-def total_libros(filtro):
+def total_libros(filtro, params=None):
     conexion = conexion_BD()
     query = conexion.cursor()
-    query.execute(f"""
-        select count(*) from Libros l
-        join RegistroLibros r on r.id_libro = l.id_libro
-        join SistemaDewey sd on sd.codigo_seccion = r.codigo_seccion 
-        join notaciones n on n.id_notacion = r.id_notacion
-        join Autores a on a.id_autor = n.id_autor
-        join Editoriales e on e.id_editorial = n.id_editorial
-        join Lugares lu on r.id_lugar = lu.id_lugar
-        {filtro}""")
+    if params:
+        query.execute(f"""
+            select count(*) from Libros l
+            join RegistroLibros r on r.id_libro = l.id_libro
+            join SistemaDewey sd on sd.codigo_seccion = r.codigo_seccion 
+            join notaciones n on n.id_notacion = r.id_notacion
+            join Autores a on a.id_autor = n.id_autor
+            join Editoriales e on e.id_editorial = n.id_editorial
+            join Lugares lu on r.id_lugar = lu.id_lugar
+            {filtro}""", params)
+    else:
+        query.execute(f"""
+            select count(*) from Libros l
+            join RegistroLibros r on r.id_libro = l.id_libro
+            join SistemaDewey sd on sd.codigo_seccion = r.codigo_seccion 
+            join notaciones n on n.id_notacion = r.id_notacion
+            join Autores a on a.id_autor = n.id_autor
+            join Editoriales e on e.id_editorial = n.id_editorial
+            join Lugares lu on r.id_lugar = lu.id_lugar
+            {filtro}""")
     total = query.fetchone()[0]
     query.close()
     conexion.close()

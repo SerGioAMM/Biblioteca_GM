@@ -115,6 +115,38 @@ body{
     position: absolute;
     right: 1rem;
     top: 1rem;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+/* Estilos para el efecto hover de los badges de estado */
+.card .badge .badge-text {
+    display: inline-block;
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-left: 0;
+    transition: max-width 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+                opacity 0.2s ease-out,
+                margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card .badge:hover .badge-text {
+    max-width: 200px;
+    opacity: 1;
+    margin-left: 0.5rem;
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                opacity 0.25s ease-in 0.05s,
+                margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card .badge i {
+    transition: transform 0.2s ease-out;
+}
+
+.card .badge:hover i {
+    transform: scale(1.1);
 }
 
 .card-margin {
@@ -219,6 +251,8 @@ body{
     justify-content: center;
     flex-direction: column;
     background-color: #e8faf8;
+    min-width: 4rem;
+    min-height: 4rem;
     width: 4rem;
     height: 4rem;
     border-radius: 50%;
@@ -244,6 +278,8 @@ body{
     justify-content: center;
     flex-direction: column;
     background-color: #ebf7ff;
+    min-width: 4rem;
+    min-height: 4rem;
     width: 4rem;
     height: 4rem;
     border-radius: 50%;
@@ -269,6 +305,8 @@ body{
     justify-content: center;
     flex-direction: column;
     background-color: floralwhite;
+    min-width: 4rem;
+    min-height: 4rem;
     width: 4rem;
     height: 4rem;
     border-radius: 50%;
@@ -294,6 +332,8 @@ body{
     justify-content: center;
     flex-direction: column;
     background-color: #feeeef;
+    min-width: 4rem;
+    min-height: 4rem;
     width: 4rem;
     height: 4rem;
     border-radius: 50%;
@@ -319,6 +359,8 @@ body{
     justify-content: center;
     flex-direction: column;
     background-color: #fefeff;
+    min-width: 4rem;
+    min-height: 4rem;
     width: 4rem;
     height: 4rem;
     border-radius: 50%;
@@ -344,6 +386,8 @@ body{
     justify-content: center;
     flex-direction: column;
     background-color: #ebedee;
+    min-width: 4rem;
+    min-height: 4rem;
     width: 4rem;
     height: 4rem;
     border-radius: 50%;
@@ -369,6 +413,8 @@ body{
     justify-content: center;
     flex-direction: column;
     background-color: #f0fafb;
+    min-width: 4rem;
+    min-height: 4rem;
     width: 4rem;
     height: 4rem;
     border-radius: 50%;
