@@ -38,7 +38,7 @@ def init_app(config):
                 now = datetime.now()
                 inactive_time = now - last_activity_time
                 
-                # Si han pasado más de 3 minutos de inactividad
+                # Si han pasado más de 3 minutos de inactividad #! Cambiar a timedelta(minutes=15) para 15 minutos
                 if inactive_time > timedelta(minutes=3):
                     # Limpiar sesión y redirigir a login
                     session.clear()

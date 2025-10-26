@@ -36,7 +36,6 @@
 -->
 {% set perfil_items = [
     ('usuarios.ver_perfil', 'Ver perfil', 'bi-person-circle'),
-    ('datos.reporte_INE', 'Generar reporte (INE)', 'bi-file-earmark-bar-graph'),
     ('datos.graficas_generales', 'Gráficas generales', 'bi-bar-chart-line'),
     ('login.logout', 'Cerrar sesión', 'bi-box-arrow-right')
 ] %}
@@ -181,7 +180,7 @@
     <!-- Script para notificaciones en navbar -->
     <script src="{{ url_for('static', filename='js/notificaciones.js') }}"></script>
     <!-- Script para timeout de sesión -->
-    <!-- <script src="{{ url_for('static', filename='js/session_timeout.js') }}"></script> -->
+    <script src="{{ url_for('static', filename='js/session_timeout.js') }}"></script>
     <!-- Script para badge de opiniones pendientes 
     <script src="{{ url_for('static', filename='js/opiniones_badge.js') }}"></script>
     -->
