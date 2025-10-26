@@ -109,11 +109,11 @@
         {% if (exito) %}
         <span class="exito-ingreso" data-alert-message="{{exito}}" style="display: none;"></span>
         {% endif %} 
-        <div class="contendor-usuarios bg-light-custom" id="grupousuario">
+        <div class="contendor-usuarios bg-lighter-custom" id="grupousuario">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="table-responsive rounded-4">
-                        <table class="table user-list bg-light-custom mb-0">
+                        <table class="table user-list bg-lighter-custom mb-0">
                             <thead>
                                 <tr>
                                     <th><span>Usuario</span></th>
@@ -180,7 +180,7 @@
                                     <tr>
                                         <td colspan="6" class="p-0 border-0">
                                             <div class="collapse" id="desactivar{{usuario.id_administrador}}" data-bs-parent="#grupousuario">
-                                                <div class="bg-light">
+                                                <div class="bg-light border-bottom border-secondary-subtle">
                                                     <form class="frm-desactivar-usuario w-75 mx-auto" action="/desactivar_usuario" method="POST">
                                                         <br><h6><strong>¿Está seguro de que desea desactivar este usuario?</strong></h6>
                                                         <input type="hidden" value="{{usuario.id_administrador}}" name="id_usuario" readonly>
@@ -203,7 +203,7 @@
                                     <tr>
                                         <td colspan="6" class="p-0 border-0">
                                             <div class="collapse" id="activar{{usuario.id_administrador}}" data-bs-parent="#grupousuario">
-                                                <div class="bg-light">
+                                                <div class="bg-light border-bottom border-secondary-subtle">
                                                     <form class="frm-activar-usuario w-75 mx-auto" action="/activar_usuario" method="POST">
                                                         <br><input type="hidden" value="{{usuario.id_administrador}}" name="id_usuario" readonly>
                                                         <label for=""> Este usuario fue desactivado por el siguiente motivo: <strong>{{usuario.motivo}}</strong>

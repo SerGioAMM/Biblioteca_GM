@@ -300,9 +300,13 @@ def renovar_prestamo():
         # Calcular nueva fecha de préstamo y entrega
         from datetime import timedelta
         hoy = datetime.today().date()
+
+        # Actualizar estado del préstamo anterior a devuelto
+        query.execute("UPDATE Prestamos SET id_estado = 3, fecha_devolucion = ? WHERE id_prestamo = ?", (hoy, id_prestamo_anterior))
+
         # Calcular duración del préstamo anterior para mantener la misma duración
         fecha_prestamo_anterior = datetime.strptime(fecha_estimada_anterior, "%Y-%m-%d").date()
-        dias_prestamo = 15  # Duración predeterminada de 15 días
+        dias_prestamo = 7  # Duración predeterminada de 7 días
         nueva_fecha_entrega = hoy + timedelta(days=dias_prestamo)
         
         # Crear nuevo préstamo
@@ -313,7 +317,7 @@ def renovar_prestamo():
                         (dpi, nombre, apellido, direccion, telefono, id_libro, grado, hoy, nueva_fecha_entrega))
         
         # Reducir número de copias disponibles
-        query.execute("UPDATE Libros SET numero_copias = (numero_copias - 1) WHERE id_libro = ?", (id_libro,))
+        #query.execute("UPDATE Libros SET numero_copias = (numero_copias - 1) WHERE id_libro = ?", (id_libro,))
         
         conexion.commit()
         

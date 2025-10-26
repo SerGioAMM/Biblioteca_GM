@@ -34,10 +34,9 @@
 	<div class="container-fluid div-container-login">
 		<div class="row main-content bg-custom text-center m-auto mt-5 w-50" style="min-width: 300px;">
 			<div class="col-md-4 text-center company__info p-3">
-				<span class="company__logo"><h2><span class="fa fa-android"></span></h2></span>
 				<h6 class="company_title text-dark-custom"> <i class="bi bi-exclamation-triangle"></i> ATENCIÓN <br><br> Este login es unicamente para uso del personal de la biblioteca.</h6>
 			</div>
-			<div class="col-md-8 col-xs-12 col-sm-12 login_form p-5">
+			<div class="col-md-8 col-xs-12 col-sm-12 login_form p-5 bg-lighter-custom">
 				<div class="container-fluid">
 					<div class="row mb-4">
 						<h2 class="text-dark-custom"><i class="bi bi-person-fill-gear"></i> <br>Inicio de sesión</h2>
@@ -45,11 +44,11 @@
 					<div class="row">
 						<form  method="POST" action="/login" control="" class="form-group">
 							<div class="row w-75 mx-auto">
-								<input value="sergio" type="text" name="usuario" id="username" class="form__input" placeholder="Usuario" required autocomplete="off">
+								<input value="sergio" type="text" name="usuario" id="username" class="form__input bg-lighter-custom rounded-2" placeholder="Usuario" required autocomplete="off">
 							</div>
 							<div class="row w-75 mx-auto">
 								<span class="fa fa-lock"></span>
-								<input value="Admin1234" type="password" name="password" id="password" class="form__input" placeholder="Contraseña" required autocomplete="off">
+								<input value="Admin1234" type="password" name="password" id="password" class="form__input bg-lighter-custom rounded-2" placeholder="Contraseña" required autocomplete="off">
 							</div>
 							<div class="row">
 								<input type="submit" value="Entrar" class="btn mx-auto boton">

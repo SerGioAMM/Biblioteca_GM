@@ -16,6 +16,9 @@
     <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
     <!--? Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!--? jsPDF para generar PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body class="bg-custom">
     <header>
@@ -28,6 +31,13 @@
                 <br> <br>
                 <h1 id="h1-titulo pt-5">Graficas</h1>
                 <h5 id="h5-nota">Aqui podrás ver las graficas generales de los libros y préstamos.</h5>
+                <br>
+                <!-- Botón para generar PDF -->
+                <div class="mt-3 mb-3">
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalConfirmarPDF">
+                        <i class="bi bi-file-earmark-pdf"></i> Generar PDF
+                    </button>
+                </div>
             </div>
         </div>
         <div class="contenedor-datos bg-light-custom p-lg-5 p-2">
@@ -77,7 +87,7 @@
             <div class="mx-auto col-md-6 mb-3">
                 <div class="card text-center border-tertiary">
                     <div class="card-body bg-light-custom">
-                    <h5 class="">Visitantes por mes y tipo</h5>
+                    <h5 class="">Visitantes por mes y género</h5>
                         <h6 class="card-title"> Total de Visitantes {{ total_visitantes }}</h6>
                     </div>
                 </div>
@@ -87,7 +97,7 @@
                 <br>
                 <div class="col-lg-10 col-12 mx-auto">
                     <div>
-                    <canvas class="w-100" id="grafica3" height="600"></canvas>
+                    <canvas class="w-100" id="grafica3" height="400"></canvas>
                     </div>
                 </div>
                 <br>
@@ -96,12 +106,55 @@
     {% endif %}
     </main>
 
+    <!-- Modal de confirmación para generar PDF -->
+    <div class="modal fade" id="modalConfirmarPDF" tabindex="-1" aria-labelledby="modalConfirmarPDFLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0 bg-light-custom">
+                    <h5 class="modal-title" id="modalConfirmarPDFLabel">
+                        <i class="bi bi-file-earmark-pdf text-danger"></i> Generar PDF
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body bg-lighter-custom">
+                    <div class="text-center mb-3">
+                        <i class="bi bi-info-circle text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                    <p class="text-center">Se generará un PDF con los siguientes gráficos:</p>
+                    <ul class="list-unstyled text-start">
+                        <li class="mb-2">
+                            <i class="bi bi-pie-chart text-warning me-2"></i>
+                            <strong>Gráfico de pie:</strong> Muestra la cantidad de libros por categoría principal.
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-bar-chart text-info me-2"></i>
+                            <strong>Gráfico de barras:</strong> Préstamos por mes y estado (activo, devuelto, vencido).
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-bar-chart text-success me-2"></i>
+                            <strong>Gráfico de barras:</strong> Cantidad de visitantes por mes.
+                        </li>
+                    </ul>
+                    <div class="alert alert-info mt-3">
+                        <i class="bi bi-calendar3 me-2"></i>
+                        <strong>Nota:</strong> Los gráficos son generados tomando datos de los últimos 8 meses.
+                    </div>
+                </div>
+                <div class="modal-footer border-0 bg-light-custom">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Cancelar
+                    </button>
+                    <button type="button" class="btn btn-danger" onclick="generarPDF()" data-bs-dismiss="modal">
+                        <i class="bi bi-file-earmark-pdf"></i> Generar PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Footer -->
     {% include 'footer.html' %}
-    
-    <!-- Custom Scripts -->
-    <script src="/static/js/exportar_libros.js" ></script>
 
     <!--! Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
@@ -114,14 +167,8 @@
     <div id="datos_activos" data-values='{{ datos_activos | tojson }}'></div>
     <div id="datos_devueltos" data-values='{{ datos_devueltos | tojson }}'></div>
     <div id="labels_visitantes_mes" data-values='{{ labels_visitantes_mes | tojson }}'></div>
-    <div id="datos_universitarios" data-values='{{ datos_universitarios | tojson }}'></div>
-    <div id="datos_primaria" data-values='{{ datos_primaria | tojson }}'></div>
-    <div id="datos_nivel_medio" data-values='{{ datos_nivel_medio | tojson }}'></div>
-    <div id="datos_profesionales" data-values='{{ datos_profesionales | tojson }}'></div>
-    <div id="datos_trabajadores" data-values='{{ datos_trabajadores | tojson }}'></div>
-    <div id="datos_personal_institucion" data-values='{{ datos_personal_institucion | tojson }}'></div>
-    <div id="datos_otros_usuarios" data-values='{{ datos_otros_usuarios | tojson }}'></div>
-    <div id="datos_creados" data-values='{{ datos_creados | tojson }}'></div>
+    <div id="datos_hombres" data-values='{{ datos_hombres | tojson }}'></div>
+    <div id="datos_mujeres" data-values='{{ datos_mujeres | tojson }}'></div>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const ctx1 = document.getElementById('grafica1');
@@ -132,14 +179,8 @@
         const datosactivos = JSON.parse(document.getElementById('datos_activos').dataset.values);
         const datosdevueltos = JSON.parse(document.getElementById('datos_devueltos').dataset.values);
         const labelsvisitantesmes = JSON.parse(document.getElementById('labels_visitantes_mes').dataset.values);
-        const datosuniversitarios = JSON.parse(document.getElementById('datos_universitarios').dataset.values);
-        const datosprimaria = JSON.parse(document.getElementById('datos_primaria').dataset.values);
-        const datosnivelmedio = JSON.parse(document.getElementById('datos_nivel_medio').dataset.values);
-        const datosprofesionales = JSON.parse(document.getElementById('datos_profesionales').dataset.values);
-        const datostrabajadores = JSON.parse(document.getElementById('datos_trabajadores').dataset.values);
-        const datospersonalinstitucion = JSON.parse(document.getElementById('datos_personal_institucion').dataset.values);
-        const datosotrosusuarios = JSON.parse(document.getElementById('datos_otros_usuarios').dataset.values);
-        const datoscreados = JSON.parse(document.getElementById('datos_creados').dataset.values);
+        const datoshombres = JSON.parse(document.getElementById('datos_hombres').dataset.values);
+        const datosmujeres = JSON.parse(document.getElementById('datos_mujeres').dataset.values);
         new Chart(ctx1, {
             type: 'pie',
             data: {
@@ -177,6 +218,8 @@
             },
             options: {
                 responsive: false,
+                maintainAspectRatio: true,
+                aspectRatio: 1.2,
                 plugins: {
                     legend: {
                         position: 'right',
@@ -269,7 +312,7 @@
             }
         });
 
-        // Tercer grafico - Visitantes por mes y tipo 
+        // Tercer grafico - Visitantes por mes y género
         const ctx3 = document.getElementById('grafica3');
 
         new Chart(ctx3, {
@@ -277,59 +320,17 @@
             data: {
                 labels: labelsvisitantesmes,
                 datasets: [{
-                    label: 'Estudiantes Universitarios',
-                    data: datosuniversitarios,
-                    backgroundColor: 'rgba(153, 102, 255, 0.8)', // Morado
-                    borderColor: 'rgba(153, 102, 255, 1)',
-                    borderWidth: 2,
-                    borderRadius: 5
-                }, {
-                    label: 'Estudiantes de Primaria',
-                    data: datosprimaria,
-                    backgroundColor: 'rgba(100, 200, 100, 0.6)', // Verde
-                    borderColor: 'rgba(100, 200, 100, 1)',
-                    borderWidth: 2,
-                    borderRadius: 5
-                }, {
-                    label: 'Estudiantes Nivel Medio',
-                    data: datosnivelmedio,
-                    backgroundColor: 'rgba(75, 192, 192, 0.8)', // Acua
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 2,
-                    borderRadius: 5
-                }, {
-                    label: 'Profesionales',
-                    data: datosprofesionales,
-                    backgroundColor: 'rgba(255, 159, 64, 0.8)', // Naranja
-                    borderColor: 'rgba(255, 159, 64, 1)',
-                    borderWidth: 2,
-                    borderRadius: 5
-                }, {
-                    label: 'Trabajadores',
-                    data: datostrabajadores,
-                    backgroundColor: 'rgba(139, 139, 139, 0.8)', // Gris
-                    borderColor: 'rgba(139, 139, 139, 1)',
-                    borderWidth: 2,
-                    borderRadius: 5
-                }, {
-                    label: 'Personal de la Institución',
-                    data: datospersonalinstitucion,
+                    label: 'Hombres',
+                    data: datoshombres,
                     backgroundColor: 'rgba(54, 162, 235, 0.8)', // Azul
                     borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 2,
                     borderRadius: 5
                 }, {
-                    label: 'Otros Usuarios',
-                    data: datosotrosusuarios,
-                    backgroundColor: 'rgba(220, 53, 69, 0.8)', // Rojo
-                    borderColor: 'rgba(220, 53, 69, 1)',
-                    borderWidth: 2,
-                    borderRadius: 5
-                }, {
-                    label: 'Creados (Personalizados)',
-                    data: datoscreados,
-                    backgroundColor: 'rgba(255, 99, 255, 0.8)', // Rosa (mismo que Arte, música y deportes)
-                    borderColor: 'rgba(255, 99, 255, 1)',
+                    label: 'Mujeres',
+                    data: datosmujeres,
+                    backgroundColor: 'rgba(255, 99, 132, 0.8)', // Rosa
+                    borderColor: 'rgba(255, 99, 132, 1)',
                     borderWidth: 2,
                     borderRadius: 5
                 }]
@@ -342,18 +343,16 @@
                         position: 'top',
                         labels: {
                             boxWidth: 12,
-                            padding: 8,
+                            padding: 10,
                             font: {
-                                size: 10
+                                size: 14
                             }
                         }
                     },
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                const label = context.dataset.label || '';
-                                const value = context.parsed.y;
-                                return label + ': ' + value + ' visitantes';
+                                return context.dataset.label + ': ' + context.parsed.y + ' visitantes';
                             }
                         }
                     }
@@ -362,8 +361,9 @@
                     x: {
                         stacked: true,
                         ticks: {
-                            maxRotation: 90,
-                            minRotation: 45
+                            font: {
+                                size: 12
+                            }
                         }
                     },
                     y: {
@@ -377,6 +377,154 @@
             }
         });
     });
+
+    // Función para generar PDF
+    function generarPDF() {
+        // Mostrar alerta de progreso
+        if (window.showAlert) {
+            window.showAlert('Generando PDF, por favor espere...', 'info', 8000, 'bi-file-earmark-pdf');
+        }
+
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        
+        // Título del documento
+        pdf.setFontSize(20);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Gráficas Generales - Biblioteca Gabriela Mistral', 20, 20);
+        
+        // Fecha actual
+        const fecha = new Date().toLocaleDateString('es-ES', {
+            year: 'numeric',
+            month: 'long', 
+            day: 'numeric'
+        });
+        pdf.setFontSize(12);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text(`Fecha de generación: ${fecha}`, 20, 30);
+        
+        let currentY = 50;
+        
+        // Función para agregar gráfica al PDF con mejor calidad
+        function agregarGrafica(canvasId, titulo, isFirstChart = false, callback) {
+            const canvas = document.getElementById(canvasId);
+            
+            // Crear un canvas temporal optimizado para PDF
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            
+            // Configurar dimensiones según el tipo de gráfico para mejor calidad
+            let width, height;
+            if (isFirstChart) {
+                // Para el gráfico de pie, usar dimensiones que mantengan buena proporción
+                width = 650;  // Ancho optimizado para el gráfico de pie
+                height = 500; // Alto optimizado para el gráfico de pie
+            } else {
+                // Para gráficos de barras
+                width = 800;
+                height = 500;
+            }
+            
+            tempCanvas.width = width;
+            tempCanvas.height = height;
+            
+            // Fondo blanco para el PDF
+            tempCtx.fillStyle = 'white';
+            tempCtx.fillRect(0, 0, width, height);
+            
+            // Obtener las dimensiones actuales del canvas original
+            const originalWidth = canvas.width;
+            const originalHeight = canvas.height;
+            
+            // Escalar y dibujar el canvas original en el temporal
+            // Calcular la escala para mantener la proporción
+            const scaleX = width / originalWidth;
+            const scaleY = height / originalHeight;
+            const scale = Math.min(scaleX, scaleY);
+            
+            // Calcular posición para centrar la imagen
+            const scaledWidth = originalWidth * scale;
+            const scaledHeight = originalHeight * scale;
+            const offsetX = (width - scaledWidth) / 2;
+            const offsetY = (height - scaledHeight) / 2;
+            
+            // Dibujar el canvas original escalado y centrado
+            tempCtx.drawImage(canvas, offsetX, offsetY, scaledWidth, scaledHeight);
+            
+            const imgData = tempCanvas.toDataURL('image/png', 1.0);
+            
+            // Verificar si necesitamos nueva página
+            if (currentY > 180) {
+                pdf.addPage();
+                currentY = 20;
+            }
+            
+            // Título de la gráfica
+            pdf.setFontSize(14);
+            pdf.setFont('helvetica', 'bold');
+            pdf.text(titulo, 20, currentY);
+            currentY += 10;
+            
+            // Calcular dimensiones para el PDF
+            let pdfWidth, pdfHeight;
+            if (isFirstChart) {
+                // Gráfico de pie: mantener proporciones optimizadas
+                pdfWidth = 160;
+                pdfHeight = 120;
+            } else {
+                // Gráficos de barras: más ancho, menos alto
+                pdfWidth = 170;
+                pdfHeight = 100;
+            }
+            
+            // Centrar la imagen
+            const xPosition = (210 - pdfWidth) / 2; // 210mm es el ancho de A4
+            
+            // Agregar imagen de la gráfica con mejor calidad
+            pdf.addImage(imgData, 'PNG', xPosition, currentY, pdfWidth, pdfHeight, '', 'FAST');
+            currentY += pdfHeight + 15;
+            
+            if (callback) callback();
+        }
+        
+        // Agregar las tres gráficas con tiempos de espera para renderizado
+        setTimeout(() => {
+            agregarGrafica('grafica1', 'Distribución de libros por categoría (Sistema Dewey)', true, () => {
+                setTimeout(() => {
+                    agregarGrafica('grafica2', 'Préstamos por mes y estado', false, () => {
+                        setTimeout(() => {
+                            agregarGrafica('grafica3', 'Visitantes por mes y género', false, () => {
+                                // Información adicional en la última página
+                                pdf.addPage();
+                                pdf.setFontSize(16);
+                                pdf.setFont('helvetica', 'bold');
+                                pdf.text('Información adicional', 20, 30);
+                                
+                                pdf.setFontSize(12);
+                                pdf.setFont('helvetica', 'normal');
+                                pdf.text('• Los datos mostrados corresponden a los últimos 8 meses', 20, 50);
+                                pdf.text('• Sistema de clasificación: Dewey Decimal Classification', 20, 65);
+                                pdf.text('• Estados de préstamos: Activo, Devuelto, Vencido', 20, 80);
+                                pdf.text('• Visitantes clasificados por género', 20, 95);
+                                
+                                pdf.setFontSize(10);
+                                pdf.text('Generado por Sistema de Biblioteca Gabriela Mistral', 20, 280);
+                                
+                                // Guardar el PDF
+                                const nombreArchivo = 'graficas-biblioteca-' + new Date().toISOString().split('T')[0] + '.pdf';
+                                pdf.save(nombreArchivo);
+                                
+                                // Mostrar alerta de éxito
+                                if (window.showAlert) {
+                                    window.showAlert('PDF generado exitosamente: ' + nombreArchivo, 'success', 4000, 'bi-check-circle-fill');
+                                }
+                            });
+                        }, 1000);
+                    });
+                }, 1000);
+            });
+        }, 1000);
+    }
     </script>
 </body>
 </html>

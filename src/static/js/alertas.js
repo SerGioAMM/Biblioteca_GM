@@ -142,7 +142,7 @@ function convertLegacyAlerts() {
             else if (messageLower.includes('sesión expirada') || messageLower.includes('sesion expirada')) {
                 type = 'danger';
                 customIcon = 'bi-clock-history';
-                duration = 6000; // 6 segundos para que el usuario lo vea
+                duration = 120000; // 120 segundos para que el usuario lo vea
             }
             // Login erróneo / Datos incorrectos
             else if (messageLower.includes('datos incorrectos') || messageLower.includes('datos erroneos') || 
