@@ -132,7 +132,7 @@
                         <div class="card-body pt-0">
                             <div class="widget-49 row">
                                 <div class="widget-49-title-wrapper col-8">
-                                    <div class="widget-49-date-{{badge}}">
+                                    <div class="widget-49-date-{{badge}} d-none d-md-flex">
                                         <span class="widget-49-date-day">{{ prestamo.dia_estimado }}</span>
                                         <span class="widget-49-date-month">{{ prestamo.mes_estimado }}</span>
                                     </div>
@@ -211,10 +211,9 @@
                                     </form>
                                 </div>                 
                             </div>
-                            <span class="badge d-flex text-center p-1 rounded-pill text-{{badge}}-emphasis bg-{{badge}}-subtle border border-{{badge}}-subtle">
+                            <span class="badge d-flex text-center p-2 rounded-pill text-{{badge}}-emphasis bg-{{badge}}-subtle border border-{{badge}}-subtle">
                                 <i class="bi {{icono}}"></i>
-                                <span class="vr mx-2" ></span>
-                                {{prestamo.estado}} &nbsp;&nbsp;&nbsp;
+                                <span class="badge-text">{{prestamo.estado}}</span>
                             </span>
                         </div>
                     </div>

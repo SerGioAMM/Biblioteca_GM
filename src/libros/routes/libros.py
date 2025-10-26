@@ -106,23 +106,33 @@ def buscar_libro():
     # Secciones Dewey para filtros
     categorias = libros_model.get_categorias()
 
+    # Construir filtros SQL de manera segura
     if filtro_busqueda == "Titulo":
-        SQL_where_busqueda = (f"where l.titulo like '%{busqueda}%'")
+        SQL_where_busqueda = "where l.titulo like ?"
+        param_busqueda = f"%{busqueda}%"
     else:
-        SQL_where_busqueda = (f"where (a.nombre_autor || ' ' || a.apellido_autor) like '%{busqueda}%'")
+        SQL_where_busqueda = "where (a.nombre_autor || ' ' || a.apellido_autor) like ?"
+        param_busqueda = f"%{busqueda}%"
 
     if not Seccion or Seccion == "Todas":
         SQL_where_seccion = ""
+        param_seccion = None
     else:
-        SQL_where_seccion = (f" and sd.codigo_seccion = {Seccion}")
+        SQL_where_seccion = " and sd.codigo_seccion = ?"
+        param_seccion = Seccion
 
     filtro_total = SQL_where_busqueda + SQL_where_seccion
 
+    # Preparar parámetros para la consulta
+    params = [param_busqueda]
+    if param_seccion is not None:
+        params.append(param_seccion)
+
     # Conteo total para paginación
-    total_paginas = math.ceil((libros_model.total_libros(filtro_total)) / libros_por_pagina) #Redondea el resultado hacia arriba, si hay (11 libros / 10 libros por pagina) = 1.1, math.ceil(1.1) = 2 paginas
+    total_paginas = math.ceil((libros_model.total_libros(filtro_total, params)) / libros_por_pagina)
 
     # Consulta paginada
-    libros = libros_model.get_catalogo_filtrado(libros_por_pagina,offset,filtro_total)
+    libros = libros_model.get_catalogo_filtrado(libros_por_pagina, offset, filtro_total, params)
     
     if not libros:
         alerta = "No se encontraron libros."
