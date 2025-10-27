@@ -1095,3 +1095,6 @@ sqlite3.OperationalError: database is locked
 2025-10-26 14:17:47 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: mayda
 2025-10-26 14:18:40 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 2:06. - Usuario: mayda
 2025-10-26 14:18:52 | ERROR | Cuenta bloqueada temporalmente por intentos fallidos. Intente de nuevo en 1:54. - Usuario: mayda
+2025-10-26 18:04:21 | ERROR | Datos incorrectos, intentos fallidos: 1 - Usuario: mayda
+2025-10-26 18:04:30 | ERROR | Datos incorrectos, intentos fallidos: 2 - Usuario: mayda
+2025-10-26 18:04:34 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: mayda

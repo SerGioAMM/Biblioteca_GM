@@ -15,7 +15,7 @@
     }
     
     // Configuración
-    const INACTIVITY_TIMEOUT = 3 * 60 * 1000; // 3 minutos en milisegundos //! Cambiar a 15 * 60 * 1000 para 15 minutos
+    const INACTIVITY_TIMEOUT = 2 * 60 * 1000; // 2 minutos en milisegundos //! Cambiar a 15 * 60 * 1000 para 15 minutos
     const CHECK_INTERVAL = 10 * 1000; // Verificar cada 10 segundos
     const WARNING_TIME = 1 * 60 * 1000; // Advertir 1 minuto antes
     
@@ -60,7 +60,7 @@
     
     // Función para crear alerta con diseño del sistema de alertas
     function createSessionAlert() {
-        // Crear contenedor de alertas si no existe (igual que alertas.js)
+        // Crear contenedor de alertas si no existe
         let container = document.querySelector('.alert-container');
         if (!container) {
             container = document.createElement('div');
@@ -193,6 +193,7 @@
     function checkInactivity() {
         const now = Date.now();
         const inactiveTime = now - lastActivity;
+        console.log(`Tiempo inactivo: ${Math.floor(inactiveTime / 1000)} segundos`);
         // Si quedan 1 minuto o menos, mostrar advertencia
         if (inactiveTime >= (INACTIVITY_TIMEOUT - WARNING_TIME) && !warningShown) {
             showWarningAlert();
