@@ -1098,3 +1098,80 @@ sqlite3.OperationalError: database is locked
 2025-10-26 18:04:21 | ERROR | Datos incorrectos, intentos fallidos: 1 - Usuario: mayda
 2025-10-26 18:04:30 | ERROR | Datos incorrectos, intentos fallidos: 2 - Usuario: mayda
 2025-10-26 18:04:34 | ERROR | Demasiados intentos fallidos. Su cuenta está bloqueada por 3 minutos. - Usuario: mayda
+2025-10-26 19:05:10 | ERROR | database is locked
+2025-10-26 19:05:10 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 94, in login
+    query.execute("""
+    ~~~~~~~~~~~~~^^^^
+        UPDATE administradores
+        ^^^^^^^^^^^^^^^^^^^^^^
+        SET login_fail = ?
+        ^^^^^^^^^^^^^^^^^^
+        WHERE id_administrador = ?
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    """, (new_fails, id_admin))
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: database is locked
+
+2025-10-26 19:05:15 | ERROR | Datos incorrectos - Usuario: '
+2025-10-26 19:05:30 | ERROR | Datos incorrectos - Usuario: ' OR '1'='1';
+2025-10-26 19:05:53 | ERROR | database is locked
+2025-10-26 19:05:53 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 94, in login
+    query.execute("""
+    ~~~~~~~~~~~~~^^^^
+        UPDATE administradores
+        ^^^^^^^^^^^^^^^^^^^^^^
+        SET login_fail = ?
+        ^^^^^^^^^^^^^^^^^^
+        WHERE id_administrador = ?
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    """, (new_fails, id_admin))
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: database is locked
+
+2025-10-26 19:05:54 | ERROR | database is locked
+2025-10-26 19:05:54 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 94, in login
+    query.execute("""
+    ~~~~~~~~~~~~~^^^^
+        UPDATE administradores
+        ^^^^^^^^^^^^^^^^^^^^^^
+        SET login_fail = ?
+        ^^^^^^^^^^^^^^^^^^
+        WHERE id_administrador = ?
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    """, (new_fails, id_admin))
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: database is locked
+
+2025-10-26 19:06:07 | ERROR | database is locked
+2025-10-26 19:06:07 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 70, in login
+    query.execute("""
+    ~~~~~~~~~~~~~^^^^
+        UPDATE administradores
+        ^^^^^^^^^^^^^^^^^^^^^^
+        SET login_fail = 0, tiempo_bloqueo = NULL
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        WHERE id_administrador = ?
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    """, (id_admin,))
+    ^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: database is locked
+
+2025-10-26 19:06:24 | ERROR | database is locked
+2025-10-26 19:06:24 | ERROR | Traceback (most recent call last):
+  File "C:\Users\Lenovo\Desktop\Proyecto Biblioteca\BibliotecaGM\src\usuarios\routes\login.py", line 70, in login
+    query.execute("""
+    ~~~~~~~~~~~~~^^^^
+        UPDATE administradores
+        ^^^^^^^^^^^^^^^^^^^^^^
+        SET login_fail = 0, tiempo_bloqueo = NULL
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        WHERE id_administrador = ?
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    """, (id_admin,))
+    ^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: database is locked
+
