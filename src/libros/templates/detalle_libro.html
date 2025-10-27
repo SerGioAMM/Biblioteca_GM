@@ -48,7 +48,7 @@
                         {% endif %}
                     </div>
                     <div class="d-grid m-0">
-                    {% if session %}
+                    {% if "usuario" in session %}
                         <button class="btn btn-outline-primary my-1 boton" type="button" id="btn-editar"> <i class="bi bi-pencil-square"></i> <span>Editar</span></button>
                         <button class="btn btn-outline-danger my-1 boton" type="button" id="btn-eliminar" data-bs-toggle="modal" data-bs-target="#modalEliminar"><i class="bi bi-trash"></i> Eliminar</button>
                         <button type="submit" class="btn btn-outline-primary my-1 d-none boton" id="btn-guardar" form="form-editar-libro" disabled><i class="bi bi-floppy"></i> Guardar cambios</button>
