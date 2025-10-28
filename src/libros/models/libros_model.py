@@ -51,7 +51,7 @@ def get_catalogo(libros_por_pagina,offset):
     #? Selecciona todos los libros disponibles
     # Consulta paginada
     query.execute("""
-        select l.id_libro, titulo, tomo, ano_publicacion, ISBN, numero_paginas, numero_copias,
+        select l.id_libro, titulo, l.tomo, ano_publicacion, ISBN, numero_paginas, numero_copias,
         sd.codigo_seccion, sd.seccion, a.nombre_autor, a.apellido_autor, e.editorial, n.notacion,lu.lugar, l.portada
         from Libros l
         join RegistroLibros r ON r.id_libro = l.id_libro
@@ -76,7 +76,7 @@ def get_catalogo_filtrado(libros_por_pagina, offset, filtro, params):
     # Consulta paginada con parámetros seguros
     params_completos = params + [libros_por_pagina, offset]
     query.execute(f"""
-        select l.id_libro, Titulo, tomo, ano_publicacion, ISBN, numero_paginas, numero_copias,
+        select l.id_libro, Titulo, l.tomo, ano_publicacion, ISBN, numero_paginas, numero_copias,
         sd.codigo_seccion, sd.seccion, a.nombre_autor, a.apellido_autor, e.editorial, n.notacion, lu.lugar, l.portada
         from Libros l
         join RegistroLibros r on r.id_libro = l.id_libro
@@ -108,15 +108,15 @@ def get_detalle_libro(id_libro):
     conexion = conexion_BD()
     query = conexion.cursor()
 
-    query.execute("""select l.id_libro, Titulo, tomo, ano_publicacion, ISBN, numero_paginas, numero_copias,
+    query.execute("""select l.id_libro, Titulo, l.tomo, ano_publicacion, ISBN, numero_paginas, numero_copias,
         sd.codigo_seccion, sd.seccion, a.nombre_autor, a.apellido_autor, e.editorial, n.notacion, lu.lugar , l.portada
         from Libros l
-        join RegistroLibros r on r.id_libro = l.id_libro
-        join SistemaDewey sd on sd.codigo_seccion = r.codigo_seccion 
-        join notaciones n on n.id_notacion = r.id_notacion
-        join Autores a on a.id_autor = n.id_autor
-        join Editoriales e on e.id_editorial = n.id_editorial
-        join Lugares lu on r.id_lugar = lu.id_lugar 
+        left join RegistroLibros r on r.id_libro = l.id_libro
+        left join SistemaDewey sd on sd.codigo_seccion = r.codigo_seccion 
+        left join notaciones n on n.id_notacion = r.id_notacion
+        left join Autores a on a.id_autor = n.id_autor
+        left join Editoriales e on e.id_editorial = n.id_editorial
+        left join Lugares lu on r.id_lugar = lu.id_lugar 
         where l.id_libro = ?;""",(id_libro,))
     detalle = dict_factory(query)
     query.close()
@@ -234,7 +234,7 @@ def registrar_libro(Titulo,NumeroPaginas,ISBN,tomo,NumeroCopias,NombreAutor,Apel
             Portada_url = 'book.png'
 
         # Verificar si ya existe un libro con el mismo título (normalizado)
-        query.execute("Select id_libro from libros where LOWER(titulo) = LOWER(?)",(Titulo,))
+        query.execute("Select id_libro from libros where LOWER(titulo) = LOWER(?) and tomo = ?",(Titulo,tomo))
         libro_existente = query.fetchone()
         
         if libro_existente:
@@ -243,8 +243,7 @@ def registrar_libro(Titulo,NumeroPaginas,ISBN,tomo,NumeroCopias,NombreAutor,Apel
 
         #? INSERT DE LIBROS
         query.execute(f"Insert into Libros (Titulo,ano_publicacion,numero_paginas,isbn,tomo,numero_copias,portada) values (?,?,?,?,?,?,?)",(Titulo,AnoPublicacion,NumeroPaginas,ISBN,tomo,NumeroCopias,Portada_url))
-        query.execute("Select id_libro from libros where titulo = ?",(Titulo,))
-        id_libro = query.fetchone()[0]
+        id_libro = query.lastrowid
         
         #?INSERT DE LUGARES
         #Si no existe insertar nuevo ya que columna lugar es UNIQUE
