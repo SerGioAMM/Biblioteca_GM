@@ -8,6 +8,8 @@ src/database/Biblioteca_GM.sqbpro
 src/database/Biblioteca_GM.db-journal
 src/database/Biblioteca_GM - BACKUP.db
 src/database/Biblioteca_GM2.db.sql
+#src/database/Biblioteca_GM.db
+src/database/Biblioteca_GM_vacia.db
 
 #Ignorar archivo excel de prueba
 Datos de biblioteca de prueba.xlsx
