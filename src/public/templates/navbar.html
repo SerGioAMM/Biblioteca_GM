@@ -1,0 +1,221 @@
+{% set libros_items = [
+    ('libros.libros', 'Catálogo', 'bi-book'),
+    ('libros.registro_libros', 'Registrar libros', 'bi-plus-circle'),
+    ('opiniones.opiniones_pendientes', 'Reseñas pendientes', 'bi-clock-history'),
+    ('data_managment.importar_libros', 'Importar libros', 'bi-download'),
+    ('data_managment.exportar_libros', 'Exportar libros', 'bi-upload')
+] %}
+
+{% set prestamos_items = [
+    ('prestamos.prestamos', 'Todos los préstamos', 'bi-list-check'),
+    ('prestamos.registro_prestamos', 'Registrar préstamo', 'bi-plus-square')
+    ] %}
+    <!--
+        ('prestamos.devueltos', 'Devueltos'),
+        -->
+
+{% set usuarios_items = [
+    ('usuarios.usuarios', 'Todos los usuarios', 'bi-people'),
+    ('usuarios.registro_usuarios', 'Registrar usuario', 'bi-person-plus')
+] %}
+
+{% set visitantes_items = [
+    ('visitantes.visitantes', 'Todos los visitantes', 'bi-people-fill'),
+    ('visitantes.registro_visitantes', 'Registrar visitantes', 'bi-person-plus-fill')
+] %}
+
+{% set logs_items = [
+    ('eliminados.libros_modificados', 'Libros modificados', 'bi-pencil-square'),
+    ('eliminados.libros_e', 'Libros eliminados', 'bi-trash'),
+    ('eliminados.prestamos_e', 'Préstamos eliminados', 'bi-x-circle'),
+    ('eliminados.visitantes_e', 'Visitantes eliminados', 'bi-person-x'),
+    ('opiniones.opiniones_rechazadas', 'Reseñas rechazadas', 'bi-x-circle-fill')
+] %}
+<!--
+    ('usuarios.cambiar_contraseña', 'Cambiar contraseña'),
+-->
+{% set perfil_items = [
+    ('usuarios.ver_perfil', 'Ver perfil', 'bi-person-circle'),
+    ('datos.graficas_generales', 'Gráficas generales', 'bi-bar-chart-line'),
+    ('login.logout', 'Cerrar sesión', 'bi-box-arrow-right')
+] %}
+
+
+
+{% if ((session["rol"]) == "Administrador") or ((session["rol"]) == "Bibliotecario") %} <!-- Si es admin o bibliotecario, mostrar navbar con opciones completas -->
+    <nav class="navbar navbar-expand-lg bg-custom">
+        <div class="container-fluid justify-content-start">
+            <a class="navbar-brand" href="/">Biblioteca Gabriela Mistral</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse me-5 flex-grow-0 ms-auto" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle position-relative {% if (request.endpoint.startswith('libros.')) or (request.endpoint.startswith('opiniones.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-book"></i> Libros
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        {% for endpoint, label, icon in libros_items %}
+                            <li>
+                                <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
+                                    href="{{ url_for(endpoint) }}">
+                                    <i class="bi {{ icon }}"></i> {{ label }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('prestamos.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-card-checklist"></i> Préstamos
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        {% for endpoint, label, icon in prestamos_items %}
+                            <li>
+                                <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
+                                    href="{{ url_for(endpoint) }}">
+                                    <i class="bi {{ icon }}"></i> {{ label }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('visitantes.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-people"></i> Visitantes
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        {% for endpoint, label, icon in visitantes_items %}
+                            <li>
+                                <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
+                                    href="{{ url_for(endpoint) }}">
+                                    <i class="bi {{ icon }}"></i> {{ label }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    </li>
+                    {% if session["rol"] == 'Administrador' %}
+                    <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('eliminados.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-journal-text"></i> Logs
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        {% for endpoint, label, icon in logs_items %}
+                            <li>
+                                <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
+                                    href="{{ url_for(endpoint) }}">
+                                    <i class="bi {{ icon }}"></i> {{ label }}
+                                </a>
+                            </li>
+                        {% endfor %}    
+                    </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('usuarios.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-gear"></i> Usuarios
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        {% for endpoint, label, icon in usuarios_items %}
+                            <li>
+                                <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
+                                    href="{{ url_for(endpoint) }}">
+                                    <i class="bi {{ icon }}"></i> {{ label }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    </li>
+                    {% endif %}
+                    <!-- Notificaciones -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" id="notificaciones-dropdown">
+                            <i class="bi bi-bell"></i>
+                            <span class="position-relative badge rounded-pill bg-danger d-none badge-pulse" id="badge-notificaciones" style="width: 8px; height: 8px; font-size: 0; padding: 0; transform: translate(-70%, -80%) !important;">
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" style="width: 350px; max-height: 400px; overflow-y: auto;" id="dropdown-notificaciones">
+                            <li><h6 class="dropdown-header">Notificaciones</h6></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <div id="notificaciones-container">
+                                <li><span class="dropdown-item-text text-muted">Cargando notificaciones...</span></li>
+                            </div>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <button class="dropdown-item text-center d-none" id="btn-marcar-leidas-navbar">
+                                    <i class="bi bi-check-all"></i> Marcar todas como leídas
+                                </button>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-center" href="{{ url_for('usuarios.ver_perfil') }}#notificaciones">
+                                    <i class="bi bi-eye"></i> Ver todas las notificaciones
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" target="_blank" href="https://www.canva.com/design/DAGnUI0PU7M/cDvkG9fCgPKL4FTZee_YLQ/edit">Ayuda</a>
+                    </li>
+                    <li class="nav-item dropdown ms-lg-3 mb-lg-0">
+                    <a class="nav-link dropdown-toggle {% if (request.endpoint.startswith('eliminados.')) %} text-body-emphasis {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle"></i> {{ session["usuario"] }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        {% for endpoint, label, icon in perfil_items %}
+                            <li>
+                                <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
+                                    href="{{ url_for(endpoint) }}">
+                                    <i class="bi {{ icon }}"></i> {{ label }}
+                                </a>
+                            </li>
+                        {% endfor %}    
+                    </ul>
+                </ul>
+                
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Script para notificaciones en navbar -->
+    <script src="{{ url_for('static', filename='js/notificaciones.js') }}"></script>
+    <!-- Script para timeout de sesión -->
+    <script src="{{ url_for('static', filename='js/session_timeout.js') }}"></script>
+    <!-- Script para badge de opiniones pendientes 
+    <script src="{{ url_for('static', filename='js/opiniones_badge.js') }}"></script>
+    -->
+{% else %} <!-- Si no es admin o bibliotecario, mostrar navbar normal -->
+    <nav class="navbar navbar-expand-lg bg-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Biblioteca Gabriela Mistral</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <script src="{{ url_for('static', filename='js/sugerencias.js') }}"></script>
+            <div class="collapse navbar-collapse me-5" id="navbarSupportedContent">
+                {% if (request.endpoint == 'main.inicio') or (request.endpoint == 'main.acercade') %}
+                <form class="d-flex" role="search" action="/buscar_libro" method="GET" id="form-busqueda">
+                    <input class="d-none" value="Titulo" id="filtro-busqueda" type="text">
+                    <select class="w-a" name="buscar" id="cuadro-busqueda" data-placeholder="Buscar..."  autocomplete="off" cursor="text" style="min-width: 150px;"></select>
+                    <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i> Buscar</button>
+                </form>
+                {% endif %}
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('libros.libros') }}"> <i class="bi bi-book"></i> Catálogo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.acercade') }}"> <i class="bi bi-file-earmark-person"></i> Acerca de</a>
+                    </li>
+                    
+                </ul>
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login.login') }}"> <i class="bi bi-box-arrow-in-right"></i> Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% endif %}

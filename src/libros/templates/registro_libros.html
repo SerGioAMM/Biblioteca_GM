@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de libros</title>
+    <link rel="icon" href="/static/img/books_3145874.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo_inicio.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
+    
+    <!--? Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <!--? Tom Select CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+    
+    <!--* Nuevos estilos de alertas y animaciones -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/alertas.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animaciones.css') }}">
+</head>
+<body>
+    <header>
+        {% include './navbar.html' %}
+    </header>
+    <main class="main">
+        {% if ((session["rol"]) == "Administrador") or ((session["rol"]) == "Bibliotecario") %}
+        <div class="seccion-principal text-middle text-center">
+            <div class="fondo-principal">
+                <br> <br>
+                <h1 id="h1-titulo pt-5">Registrar nuevo libro</h1>
+                <h5 id="h5-nota">Complete el formulario para agregar un nuevo libro al catálogo de la biblioteca.</h5>
+            </div>
+        </div>
+            <div class="container-fluid">
+                <div class="row flex-nowrap">
+                    <div class="col py-3 bg-custom text-body text-center">
+                        <br><br>
+                        <div class="container-fluid w-75 bg-light-custom rounded">
+                            <form method="POST" action="/registro_libros" class="row g-3 text-start" enctype="multipart/form-data">
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label for="titulom" class="form-label">Titulo*</label>
+                                    <input class="form-control" type="text" name="titulo" placeholder="" autocomplete="off" required>
+                                </div>
+                                <div class="col-6 col-md-3 mb-3">
+                                    <label for="nombre_autor apellido_autor" class="form-label p-0">Datos del autor</label>
+                                    <input type="text" name="nombre_autor" class="form-control" placeholder="Nombre" autocomplete="off">
+                                </div>
+                                <div class="col-6 col-md-3 mb-3">
+                                    <label for="nombre_autor apellido_autor" class="form-label p-0"> &nbsp; </label>
+                                    <input type="text" name="apellido_autor" class="form-control" placeholder="Apellido" autocomplete="off">
+                                </div>
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label for="ISBN" class="form-label">ISBN</label>
+                                    <input name="ISBN" type="text" class="form-control" id="" placeholder="" maxlength="30">
+                                </div>
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label for="editorial" class="form-label">Editorial</label>
+                                    <input name="editorial" type="text" class="input-editorial" id="cuadro-busqueda" placeholder="">
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <label for="tomo" class="form-label">Tomo</label>
+                                    <input name="tomo" type="number" class="form-control" min="0" id="" placeholder="">
+                                </div>
+                                <div class="col-12 col-md-3 mb-3">
+                                    <label for="anio" class="form-label">Año de Publicación</label>
+                                    <input name="anio" type="number" class="form-control" min="0" id="" placeholder="" maxlength="4">
+                                </div>
+                                <div class="col-12 col-md-3 mb-3">
+                                    <label for="num_paginas" class="form-label">Número de Páginas*</label>
+                                    <input name="num_paginas" type="number" class="form-control" min="1" id="" placeholder="" required>
+                                </div>
+                                <div class="col-12 col-md-3 mb-3">
+                                    <label for="num_copias" class="form-label">Número de Copias*</label>
+                                    <input name="num_copias" type="number" class="form-control" min="0" id="" placeholder="" required>
+                                </div>
+                                <div class="col-12 col-md-4 mb-3">
+                                    <label for="lugar" class="form-label">Lugar de Publicación</label>
+                                    <input name="lugar" type="text" class="input-lugar" id="cuadro-busqueda2" placeholder="">
+                                </div>
+                                <div class="col-12 col-md-4 mb-3">
+                                    <label for="portada" class="form-label">Portada</label> <!--! Portada -->
+                                    <input name="portada" type="file" class="form-control" placeholder="" accept="image/*">
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <label for="inputState" class="form-label">Sistema Dewey</label>
+                                    <select name="sistema_dewey" id="" class="form-select">
+                                        {% for ultima in ultima_seccion %}
+                                            <option value="{{ ultima[0] }}">{{ ultima[0] }} - {{ ultima[1] }} (Última selección)</option>
+                                        {% endfor %}
+                                        {% for seccion in secciones %}
+                                            <option value="{{ seccion[0] }}">{{ seccion[0] }} - {{ seccion[1] }}</option>
+                                        {% endfor %}
+                                </select>
+                                </div>
+                                <div class="col-12 col-md-6 mx-auto text-center mb-3">
+                                    <br>
+                                    <button type="submit" class="btn btn-success w-50 boton">Registrar libro</button>
+                                    <br><br>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        
+        {% if (alerta) %}
+        <span class="error-eliminacion" data-alert-message="{{alerta}}" style="display: none;"></span>
+        {% elif (registro_exitoso) %}
+        <span class="exito-ingreso" data-alert-message="{{registro_exitoso}}" style="display: none;"></span>
+        {% endif %}           
+
+    </main>
+    <!-- Footer -->
+    {% include 'footer.html' %}
+
+    <!--? Tom Select JS -->
+    <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="{{ url_for('static', filename='js/sugerencias.js') }}"></script>
+
+    <!--! Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    
+    <!--* Scripts de alertas y animaciones -->
+    <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animaciones.js') }}"></script>
+
+</body>
+</html>
+

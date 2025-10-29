@@ -1,0 +1,50 @@
+[
+    {
+        "titulo": "Hora del cuento",
+        "descripcion": "Lectura dirigida a niños de 4 a 7 años de edad con previa programación por bibliotecario y docente.",
+        "imagen": "img/actividades/hora_del_cuento.png",
+        "tipo": "Educativa"
+    },
+    {
+        "titulo": "Estimulación Temprana",
+        "descripcion": "Desarrollo de la motricidad mediante juego y lecturas con niños de 0 a 3 años de edad Horario: Lunes de 9:00AM a 10:00AM.",
+        "imagen": "img/actividades/estimulacion_temprana.png",
+        "tipo": "Educativa"
+    },
+    {
+        "titulo": "Club de Tecnología",
+        "descripcion": "Jovenes voluntarios imparten clases o talleres básicos de temas de computación y tecnología.",
+        "imagen": "img/actividades/club_tecnologia.png",
+        "tipo": "Educativa"
+    },
+    {
+        "titulo": "Club de Mentes Brillantes",
+        "descripcion": "Grupo de jóvenes voluntarios que llevan lecturas a los centros básicos de la comunidad y alrededores con previa programación entre docentes y voluntarios.",
+        "imagen": "img/actividades/mente_brillante.png",
+        "tipo": "Educativa"
+    },
+    {
+        "titulo": "Clases Vacacionales",
+        "descripcion": "Planificación de actividades manuales y creativas en el periodo de vacaciones.",
+        "imagen": "img/actividades/clases_vacacionales.png",
+        "tipo": "Educativa"
+    },
+    {
+        "titulo": "Juegos",
+        "descripcion": "-Ajedrez \n -Damas \n -Legos \n -Juegos de memorización",
+        "imagen": "img/actividades/ajedrez2.png",
+        "tipo": "Recreativa"
+    },
+    {
+        "titulo": "Actividades Recreativas",
+        "descripcion": "-Tarde de Película. \n -Tarde de Karaoke.",
+        "imagen": "img/actividades/tarde_de_pelicula.png",
+        "tipo": "Recreativa"
+    },
+    {
+        "titulo": "Club de Lectura",
+        "descripcion": "Se llevan lecturas de cuentos, fabulas o narrativas cortas, a escuelas ya establecidas para leer y comentar con los niños.",
+        "imagen": "img/actividades/lectura.png",
+        "tipo": "Social"
+    }
+]

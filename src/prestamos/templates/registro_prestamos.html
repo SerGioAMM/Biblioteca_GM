@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de prestamos</title>
+    <link rel="icon" href="/static/img/books_3145874.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo_inicio.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
+
+    <!--! Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <!--? Tom Select CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+    
+    <!--* Nuevos estilos de alertas y animaciones -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/alertas.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animaciones.css') }}">
+</head>
+<body>
+    <header>
+        {% include './navbar.html' %}
+    </header>
+    <main class="main">
+        {% if ((session["rol"]) == "Administrador") or ((session["rol"]) == "Bibliotecario") %}
+        <div class="seccion-principal text-middle text-center">
+            <div class="fondo-principal">
+                <br> <br>
+                <h1 id="h1-titulo">Registrar nuevos préstamos</h1>
+                <h5 id="h5-nota">Complete el formulario para agregar un nuevo préstamo.</h5>
+            </div>
+        </div>
+            <div class="container-fluid">
+                <div class="row flex-nowrap">
+                    <div class="col py-3 bg-custom text-body text-center">
+                        <br><br>
+                        <div class="container-fluid w-75 bg-light-custom rounded">
+                            <form method="POST" action="/registro_prestamos" class="row g-3 text-start">
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label for="inputEmail4" class="form-label">DPI*</label>
+                                    <input class="form-control" type="text" name="DPI" id="input-dpi" placeholder="" maxlength="13" autocomplete="off" required>
+                                    <div class="text-end mt-1">
+                                        <small class="text-muted">
+                                            <span id="contador-dpi">0</span>/13 dígitos
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3 mb-3">
+                                    <label for="nombre_lector apellido_lector" class="form-label p-0">Lector*</label>
+                                    <input type="text" name="nombre_lector" class="form-control" placeholder="Nombre" autocomplete="off" required>
+                                </div>
+                                <div class="col-6 col-md-3 mb-3">
+                                    <label for="nombre_lector apellido_lector" class="form-label p-0"> &nbsp; </label>
+                                    <input type="text" name="apellido_lector" class="form-control" placeholder="Apellido" autocomplete="off" required>
+                                </div>
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label for="direccion" class="form-label">Dirección*</label>
+                                    <input name="direccion" type="text" class="form-control" id="" placeholder="" required>
+                                </div>
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label for="num_telefono" class="form-label">Número de Teléfono*</label>
+                                    <input name="num_telefono" type="text" class="form-control" placeholder="" required>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <label for="libro" class="form-label">Libro*</label>
+                                    <input name="libro" type="text" class="buscar-libro-prestamo" id="cuadro-busqueda" placeholder="" required>
+                                </div>
+                                <div class="col-12 col-md-3 mb-3">
+                                    <label for="grado" class="form-label">Grado de Estudio</label>
+                                    <input name="grado" type="text" class="form-control" id="" placeholder="">
+                                </div>
+                                <div class="col-12 col-md-3 mb-3">
+                                    <label for="fecha_prestamo" class="form-label">Fecha de préstamo</label>
+                                    <input name="fecha_prestamo" type="date" class="form-control" id="fecha_prestamo" placeholder="" required>
+                                </div>
+                                <div class="col-12 col-md-3 mb-3">
+                                    <label for="fecha_entrega_estimada" class="form-label">Fecha límite de entrega</label>
+                                    <input name="fecha_entrega_estimada" type="date" class="form-control" id="fecha_entrega_estimada" required>
+                                </div>
+                                <div class="col-12 col-md-6 mx-auto text-center mb-3">
+                                    <br>
+                                    <button type="submit" class="btn btn-secondary w-50 boton">Registrar préstamo</button>
+                                    <br><br>
+                                </div>
+                                <section class="filtro d-none">
+                                    <h4> Buscar por: &nbsp;&nbsp;</h4>
+                                    <select name="filtro-busqueda" id="filtro-busqueda">
+                                        <option value="Titulo">Titulo</option>
+                                    </select>
+                                </section>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        
+        <!-- Las alertas antiguas serán convertidas automáticamente por el JS -->
+        {% if (alerta) %}
+        <span class="error-eliminacion" data-alert-type="danger" data-alert-message="{{alerta}}"></span>
+        {% elif (registro_exitoso) %}
+        <span class="exito-ingreso" data-alert-type="success" data-alert-message="{{registro_exitoso}}"></span>
+        {% endif %}           
+
+    </main>
+
+    <!-- Footer -->
+    {% include 'footer.html' %}
+
+    <!--! Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    
+    <!--? Tom Select JS -->
+    <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+
+    <!-- Custom Scripts -->
+    <script src="/static/js/sugerencias.js"></script>
+    <script src="/static/js/obtener_fecha.js"></script>
+    
+    <script>
+        // Validación de DPI (solo números, máximo 13 dígitos)
+        document.addEventListener('DOMContentLoaded', function() {
+            const dpiInput = document.getElementById('input-dpi');
+            const contadorDpi = document.getElementById('contador-dpi');
+            
+            // Función para validar y formatear DPI
+            function validarDPI(input) {
+                // Remover cualquier carácter que no sea número
+                let valor = input.value.replace(/\D/g, '');
+                
+                // Limitar a 13 dígitos
+                if (valor.length > 13) {
+                    valor = valor.substring(0, 13);
+                }
+                
+                // Actualizar el input
+                input.value = valor;
+                
+                // Actualizar contador con color
+                contadorDpi.textContent = valor.length;
+                
+                // Cambiar color según la longitud
+                if (valor.length === 0) {
+                    contadorDpi.className = 'text-muted';
+                } else if (valor.length <= 10) {
+                    contadorDpi.className = 'text-primary';
+                } else if (valor.length <= 12) {
+                    contadorDpi.className = 'text-warning';
+                } else {
+                    contadorDpi.className = 'text-danger';
+                }
+            }
+            
+            // Validar en tiempo real mientras se escribe
+            dpiInput.addEventListener('input', function() {
+                validarDPI(this);
+            });
+            
+            // Validar al pegar contenido
+            dpiInput.addEventListener('paste', function(e) {
+                // Permitir que se complete el paste y luego validar
+                setTimeout(() => {
+                    validarDPI(this);
+                }, 10);
+            });
+            
+            // Prevenir entrada de caracteres no numéricos
+            dpiInput.addEventListener('keypress', function(e) {
+                // Permitir: backspace, delete, tab, escape, enter
+                if ([8, 9, 27, 13, 46].indexOf(e.keyCode) !== -1 ||
+                    // Permitir: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+                    (e.keyCode === 65 && e.ctrlKey === true) ||
+                    (e.keyCode === 67 && e.ctrlKey === true) ||
+                    (e.keyCode === 86 && e.ctrlKey === true) ||
+                    (e.keyCode === 88 && e.ctrlKey === true)) {
+                    return;
+                }
+                
+                // Asegurar que solo sean números (0-9)
+                if (e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) {
+                    e.preventDefault();
+                }
+            });
+            
+            // Inicializar contador
+            validarDPI(dpiInput);
+        });
+
+        // Validación de fechas de préstamo
+        document.addEventListener('DOMContentLoaded', function() {
+            const fechaPrestamoInput = document.getElementById('fecha_prestamo');
+            const fechaEntregaInput = document.getElementById('fecha_entrega_estimada');
+            const form = document.querySelector('form');
+            
+            // Obtener fecha de hoy
+            const hoy = new Date();
+            
+            // Formatear fechas para input type="date" (YYYY-MM-DD)
+            const formatearFecha = (fecha) => {
+                const año = fecha.getFullYear();
+                const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+                const dia = String(fecha.getDate()).padStart(2, '0');
+                return `${año}-${mes}-${dia}`;
+            };
+            
+            const hoyStr = formatearFecha(hoy);
+            
+            // Establecer fecha de hoy por defecto y máximo = hoy
+            fechaPrestamoInput.value = hoyStr;
+            fechaPrestamoInput.max = hoyStr;
+            
+            // Cuando cambia la fecha de préstamo, actualizar mínimo de fecha de entrega
+            fechaPrestamoInput.addEventListener('change', function() {
+                // La fecha de entrega no puede ser antes de la fecha de préstamo
+                fechaEntregaInput.min = this.value;
+                
+                // Si la fecha de entrega ya está seleccionada y es menor, resetearla
+                if (fechaEntregaInput.value && fechaEntregaInput.value < this.value) {
+                    fechaEntregaInput.value = '';
+                    alert('La fecha límite de entrega debe ser igual o posterior a la fecha de préstamo.');
+                }
+            });
+            
+            // Validación al enviar el formulario
+            form.addEventListener('submit', function(e) {
+                const fechaPrestamo = new Date(fechaPrestamoInput.value);
+                const fechaEntrega = new Date(fechaEntregaInput.value);
+                const hoyTemprano = new Date(hoyStr);
+                const dpiInput = document.getElementById('input-dpi');
+                
+                // Validar DPI
+                if (dpiInput.value.length < 8) {
+                    e.preventDefault();
+                    alert('El DPI debe tener al menos 8 dígitos.');
+                    dpiInput.focus();
+                    return false;
+                }
+                
+                if (dpiInput.value.length > 13) {
+                    e.preventDefault();
+                    alert('El DPI no puede tener más de 13 dígitos.');
+                    dpiInput.focus();
+                    return false;
+                }
+                
+                // Validar que fecha de préstamo no sea mayor a hoy
+                if (fechaPrestamo > hoyTemprano) {
+                    e.preventDefault();
+                    alert('La fecha de préstamo no puede ser posterior a hoy.');
+                    fechaPrestamoInput.focus();
+                    return false;
+                }
+                
+                // Validar que fecha de entrega no sea antes de fecha de préstamo
+                if (fechaEntrega < fechaPrestamo) {
+                    e.preventDefault();
+                    alert('La fecha límite de entrega debe ser igual o posterior a la fecha de préstamo.');
+                    fechaEntregaInput.focus();
+                    return false;
+                }
+            });
+            
+            // Inicializar el mínimo de fecha de entrega
+            if (fechaPrestamoInput.value) {
+                fechaEntregaInput.min = fechaPrestamoInput.value;
+            }
+        });
+    </script>
+    
+    <!--* Nuevos scripts de alertas y animaciones -->
+    <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animaciones.js') }}"></script>
+</body>
+</html>
+

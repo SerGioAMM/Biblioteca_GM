@@ -1,0 +1,107 @@
+.div-container-login {
+    padding: 25px 105px;
+    text-align: center;
+	min-height: 80vh;
+}
+/*
+.formulario-login{
+    gap: 15px;
+    display: grid;
+    grid-template-columns: repeat(1,1fr);
+}
+.formulario-login input{
+    margin-bottom: 2px;
+    height: 2rem;
+    border-radius: 5px;
+}
+.formulario-login label{
+    font-size: 1.4rem;
+}
+
+h5{
+    color: rgb(255, 112, 112);
+    margin-top: 3px;
+    margin-bottom: 3px;
+    font-size: 1.4rem;
+}
+
+.navbar{
+    align-items: center !important;
+    justify-content: space-between !important;
+}
+*/
+
+/*-----------------------------------------------------*/
+.main-content{
+	width: 50%;
+	border-radius: 10px;
+	box-shadow: 0 5px 5px rgba(0,0,0,.4);
+	margin: 5em auto;
+	display: flex;
+}
+.company__info{
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+.fa-android{
+	font-size:3em;
+}
+@media screen and (max-width: 640px) {
+	.main-content{width: 90%;}
+
+	.login_form{
+		border-top-left-radius:10px;
+		border-bottom-left-radius:10px;
+	}
+}
+@media screen and (min-width: 642px) and (max-width:800px){
+	.main-content{width: 70%;}
+}
+.login_form{
+	background-color: #fff;
+	border-top-right-radius:10px;
+	border-bottom-right-radius:10px;
+	border-top:1px solid #ccc;
+	border-right:1px solid #ccc;
+}
+form{
+	padding: 0 2em;
+}
+.form__input{
+	width: 100%;
+	border:0px solid transparent;
+	border-radius: 0;
+	border-bottom: 1px solid #aaa;
+	padding: 1em .5em .5em;
+	padding-left: 2em;
+	outline:none;
+	margin:1.5em auto;
+	transition: all .5s ease;
+}
+.form__input:focus{
+	border-bottom-color: #715c3a;
+	box-shadow: 0 0 5px rgba(80, 33, 0, 0.4); 
+	border-radius: 4px;
+}
+
+form .btn{
+	transition: all .5s ease;
+	width: 70%;
+	border-radius: 10px;
+	color:#715c3a;
+	font-weight: 600;
+	border: 1px solid #715c3a;
+	margin-top: 1.5em;
+	margin-bottom: 1em;
+}
+form .btn:hover{
+	background-color: black;
+}
+
+form .btn:hover, form .btn:focus{
+	background-color: #715c3a;
+	color:#fff;
+}

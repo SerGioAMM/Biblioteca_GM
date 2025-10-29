@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle Libro</title>
+    <link rel="icon" href="/static/img/books_3145874.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo_inicio.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
+    
+    <!--! Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    
+    <!--? Tom Select CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+    
+    <!--* Nuevos estilos de alertas y animaciones -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/alertas.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animaciones.css') }}">
+</head>
+<body class="bg-light-custom">
+    <header>
+        {% include 'navbar.html'   %}
+    </header>
+    <!-- Las alertas antiguas serán convertidas automáticamente por el JS -->
+    {% if (alerta) %}
+        <span class="error-eliminacion" data-alert-type="danger" data-alert-message="{{alerta}}"></span>
+    {% elif (exito) %}
+        <span class="exito-ingreso" data-alert-type="success" data-alert-message="{{exito}}"></span>
+    {% endif %}
+    <section class="py-3 py-md-5 py-xl-8">
+    <div class="container">
+        <div class="row gy-4 gy-lg-0">
+        <div class="col-12 col-lg-4 col-xl-3">
+            <div class="row gy-4">
+                <div class="col-12">
+                {% if detalle %}
+                {% set libro = detalle[0] %}
+                <div class="card widget-card border-light shadow bg-lighter-custom">
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                        {% if libro.portada == "book.png" %}
+                        <img src="{{ url_for('static', filename='img/book.png') }}" class="card-img-top mx-auto" style="max-width: 300px; max-height: 350px;" alt="...">
+                        {% else %}
+                        <img src="{{ libro.portada }}" class="card-img-top mx-auto" style="max-width: 300px; max-height: 350px;" alt="...">
+                        {% endif %}
+                    </div>
+                    <div class="d-grid m-0">
+                    {% if "usuario" in session %}
+                        <button class="btn btn-outline-primary my-1 boton" type="button" id="btn-editar"> <i class="bi bi-pencil-square"></i> <span>Editar</span></button>
+                        <button class="btn btn-outline-danger my-1 boton" type="button" id="btn-eliminar" data-bs-toggle="modal" data-bs-target="#modalEliminar"><i class="bi bi-trash"></i> Eliminar</button>
+                        <button type="submit" class="btn btn-outline-primary my-1 d-none boton" id="btn-guardar" form="form-editar-libro" disabled><i class="bi bi-floppy"></i> Guardar cambios</button>
+                    {% endif %}
+                    <button class="btn btn-outline-dark my-1 boton" type="button" id="btn-resena" data-bs-toggle="modal" data-bs-target="#modalResena"> <i class="bi bi-chat-right-text"></i> <span>Escribir reseña</span></button>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="col-12 col-lg-8 col-xl-9">
+            <div class="card widget-card border-light shadow">
+            <div class="card-body p-4 bg-tertiary-custom">
+                <div class="tab-content pt-4" id="profileTabContent">
+                <div class="tab-pane fade show active detalles-libro" id="overview-tab-pane" role="tabpanel" aria-labelledby="overview-tab" tabindex="0">
+                    <h1> {{libro.Titulo}} </h1>
+                    <h4 class="text-body-secondary"> de {{libro.nombre_autor}}&nbsp;{{libro.apellido_autor}}</h4>
+                    <p> Seccion: <span class="fw-semibold" id="h4-seccion-{{ (libro.codigo_seccion|int // 100) if (libro.codigo_seccion|int < 1000) else 9 }}" style="border-radius: 10px; padding: 5px; font-size: 90%;">{{ libro.codigo_seccion }} - {{ libro.seccion }}</span></p>
+                    <p> Número de copias: {{libro.numero_copias}}</p>
+                    <div class="col-12 col-md-12 mb-3 align-items-stretch">
+                        <br>
+                        <h6>Detalles</h6>
+                    </div>
+                    <div class="col-12 col-md-12 mb-3 row">
+                        <div class="col-12 mb-3 col-md-3 bg-lighter-custom rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
+                            <p class="p-2 m-0"> 
+                            <span class="text-body-secondary">Año de publicacion</span><br>
+                            <span>{% if libro.ano_publicacion %}{{libro.ano_publicacion}}{% else %}-{% endif %}</span></p>
+                        </div>
+                        <div class="col-12 mb-3 col-md-3 bg-lighter-custom rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
+                            <p class="m-0 p-2"> <span class="text-body-secondary">Editorial</span><br>
+                            <span>{{libro.editorial}}</span></p>
+                        </div>
+                        <div class="col-12 mb-3 col-md-3 bg-lighter-custom rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
+                            <p class="m-0 p-2"> <span class="text-body-secondary">Tomo</span><br>
+                            <span>{% if libro.Tomo %}{{libro.Tomo}}{% else %}-{% endif %}</span></p>
+                        </div>
+                    </div>
+
+                        <div class="col-12 col-md-12 mb-3 row">
+                            <div class="col-12 mb-3 col-md-3 bg-lighter-custom rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
+                                <p class="p-2 m-0"> 
+                                <span class="text-body-secondary">Numero de paginas</span><br>
+                                <span>{{ libro.numero_paginas }}</span></p>
+                            </div>
+                            <div class="col-12 mb-3 col-md-3 bg-lighter-custom rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
+                                <p class="m-0 p-2"> <span class="text-body-secondary">Lugar de publicacion</span><br>
+                                <span>{% if libro.lugar %}{{libro.lugar}}{% else %}-{% endif %}</span></p>
+                            </div>
+                            <div class="col-12 mb-3 col-md-3 bg-lighter-custom rounded border border-gray text-center mx-2 d-flex flex-column justify-content-center h-100">
+                                <p class="m-0 p-2"> <span class="text-body-secondary">ISBN</span><br>
+                                <span> {% if libro.ISBN %}{{ libro.ISBN }}{% else %}-{% endif %} </span></p>
+                            </div>
+                        </div>
+                        
+                        <!-- Promedio de valoración -->
+                        <div class="col-12 col-md-12 mb-4 mt-4" id="seccion-ratings">
+                            <hr>
+                            <h5><i class="bi bi-star-fill text-warning"></i> Valoración Promedio</h5>
+                            {% if total_valoraciones > 0 %}
+                                <div class="d-flex align-items-center">
+                                    <h2 class="me-3 mb-0">{{ promedio_valoracion }}</h2>
+                                    <div>
+                                        {% set promedio_int = promedio_valoracion|int %}
+                                        {% set tiene_media = (promedio_valoracion - promedio_int) >= 0.5 %}
+                                        
+                                        {% for i in range(promedio_int) %}
+                                            <i class="bi bi-star-fill text-warning fs-5"></i>
+                                        {% endfor %}
+                                        
+                                        {% if tiene_media %}
+                                            <i class="bi bi-star-half text-warning fs-5"></i>
+                                        {% endif %}
+                                        
+                                        {% for i in range(5 - promedio_int - (1 if tiene_media else 0)) %}
+                                            <i class="bi bi-star text-warning fs-5"></i>
+                                        {% endfor %}
+                                        
+                                        <p class="text-muted mb-0">Basado en {{ total_valoraciones }} reseña{% if total_valoraciones != 1 %}s{% endif %}</p>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <p class="text-muted">Este libro aún no tiene valoraciones.</p>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Reseñas -->
+                        {% if opiniones %}
+                        <div class="col-12 col-md-12 mb-4" id="seccion-resenas">
+                            <hr>
+                            <h5><i class="bi bi-chat-right-text"></i> Reseñas</h5>
+                            
+                            {% for opinion in opiniones %}
+                            <div class="card mb-3 border-tertiary  bg-lighter-custom">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h6 class="mb-0">{{ opinion.nombre_creador }} {{ opinion.apellido_creador }}</h6>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <small class="text-muted">{{ opinion.fecha_opinion }}</small>
+                                            {% if session and session.rol in ['Administrador', 'Bibliotecario'] %}
+                                            <button class="btn btn-outline-danger btn-sm boton" type="button" data-bs-toggle="collapse" 
+                                                    data-bs-target="#eliminarOpinion{{ opinion.id_opinion }}" 
+                                                    aria-expanded="false" aria-controls="eliminarOpinion{{ opinion.id_opinion }}">
+                                                <i class="bi bi-trash"></i> Eliminar
+                                            </button>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="mb-2">
+                                        {% for i in range(opinion.valoracion) %}
+                                            <i class="bi bi-star-fill text-warning"></i>
+                                        {% endfor %}
+                                        {% for i in range(5 - opinion.valoracion) %}
+                                            <i class="bi bi-star"></i>
+                                        {% endfor %}
+                                        <span class="text-muted">({{ opinion.valoracion }}/5)</span>
+                                    </div>
+                                    <p class="mb-0">{{ opinion.opinion }}</p>
+                                    
+                                    {% if session and session.rol in ['Administrador', 'Bibliotecario'] %}
+                                    <div class="collapse" id="eliminarOpinion{{ opinion.id_opinion }}" data-bs-parent="#grupoPrestamo">
+                                        <form class="frm-eliminar-opinion-aceptada mt-3 text-center p-3 border border-secondary-subtle rounded border-opacity-50" action="/eliminar_opinion_aceptada" method="POST">
+                                            <div class="mb-3">
+                                                <h6><strong>¿Está seguro de que desea eliminar esta opinión?</strong></h6>
+                                                <input type="hidden" name="id_opinion" value="{{ opinion.id_opinion }}">
+                                                <input type="hidden" name="id_libro" value="{{ libro.id_libro }}">
+                                                <input type="hidden" name="titulo_libro" value="{{ libro.Titulo }}">
+                                                <input class="form-control" type="text" id="motivo-eliminar-opinion-{{ opinion.id_opinion }}" placeholder="Escribe el motivo de la eliminación de la opinión." name="motivo" maxlength="200" required autocomplete="off">
+                                                <div class="text-end mt-1">
+                                                    <small class="text-muted">
+                                                        <span id="contador-eliminar-opinion-{{ opinion.id_opinion }}">0</span>/200 caracteres
+                                                    </small>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-sm btn-outline-danger boton" type="submit"><i class="bi bi-trash"></i> Confirmar eliminación</button> 
+                                        </form>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                            
+                            {% if total_opiniones > 3 %}
+                            <div class="text-center">
+                                <a href="{{ url_for('libros.todas_resenas', ID=libro.id_libro, Titulo=libro.Titulo) }}" class="btn btn-outline-primary boton">
+                                    Ver todas las reseñas ({{ total_opiniones }})
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Libros Recomendados -->
+                        <div class="col-12 col-md-12 mb-4" id="seccion-recomendaciones">
+                            <hr>
+                            <h5><i class="bi bi-bookmark-fill"></i> Libros Recomendados</h5>
+                            {% if recomendaciones and recomendaciones|length > 0 %}
+                            <div class="row row-cols-1 row-cols-md-4 g-4">
+                                {% for rec in recomendaciones %}
+                                <div class="col">
+                                    <div class="card h-100 text-center">
+                                        <div class="card-header bg-transparent border-secondary p-0">
+                                            <span class="span-notacion"
+                                                id="h2-seccion-{{ (rec.codigo_seccion|int // 100) if (rec.codigo_seccion|int < 1000) else 9 }}">
+                                                <h2>{{ rec.notacion }}</h2>
+                                            </span>
+                                        </div>
+                                        
+                                        {% if rec.portada == "book.png" %}
+                                        <img src="{{ url_for('static', filename='img/book.png') }}" class="card-img-top mx-auto" style="max-width: 200px; max-height: 250px;" alt="...">
+                                        {% else %}
+                                        <img src="{{ rec.portada }}" class="card-img-top mx-auto" style="max-width: 200px; max-height: 250px;" alt="...">
+                                        {% endif %}
+                                        
+                                        <div class="card-body d-flex flex-column h-100">
+                                            <h6 class="card-title">{{ rec.Titulo }}</h6>
+                                            <small class="card-text mb-2">{{ rec.nombre_autor }}&nbsp;{{ rec.apellido_autor }}
+                                            {% if rec.ano_publicacion %}{{ rec.ano_publicacion }}{% endif %}</small>
+                                        </div>
+                                        
+                                        <div class="card-footer">
+                                            <a href="{{ url_for('libros.detalle_libro', ID=rec.id_libro )}}">
+                                                <button class="btn btn-outline-primary btn-sm m-2 rounded-3 boton"> <small>Ver detalles</small> </button>
+                                            </a>
+                                            <span id="span-info-libro-d"> 
+                                                <h5 id="h4-seccion-{{ (rec.codigo_seccion|int // 100) if (rec.codigo_seccion|int < 1000) else 9 }}">
+                                                    <small class="fw-semibold">{{ rec.codigo_seccion }} - {{ rec.seccion }}</small> 
+                                                </h5>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <div class="alert alert-info text-center">
+                                <i class="bi bi-info-circle"></i> No hay libros recomendados disponibles para esta obra.
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <form action="/editar_libro" method="POST" class="row gy-3 gy-xxl-4 d-none" id="form-editar-libro" enctype="multipart/form-data">
+                        <h3><i class="bi bi-pencil-square"></i> Editar Libro</h3>
+                        <hr>
+                        <input type="hidden" name="id_libro" value="{{libro.id_libro}}" class="" readonly>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="titulo" class="form-label">Título*</label>
+                            <input class="form-control editable" type="text" name="titulo" placeholder="" autocomplete="off" value="{{ libro.Titulo }}" required>
+                        </div>
+                        <div class="col-6 col-md-3 mb-3">
+                            <label for="nombre_autor" class="form-label p-0">Datos del autor</label>
+                            <input type="text" name="nombre_autor" class="form-control editable" placeholder="Nombre" autocomplete="off" value="{{ libro.nombre_autor }}">
+                        </div>
+                        <div class="col-6 col-md-3 mb-3">
+                            <label for="apellido_autor" class="form-label p-0">&nbsp;</label>
+                            <input type="text" name="apellido_autor" class="form-control editable" placeholder="Apellido" autocomplete="off" value="{{libro.apellido_autor}}">
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="ISBN" class="form-label">ISBN</label>
+                            <input name="ISBN" type="text" class="form-control editable" id="" placeholder="" autocomplete="off" value="{{libro.ISBN}}">
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="editorial" class="form-label">Editorial</label>
+                            <input name="editorial" type="text" class="input-editorial editable" id="cuadro-busqueda" placeholder="" autocomplete="off" value="{{libro.editorial}}">
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <label for="tomo" class="form-label">Tomo</label>
+                            <input name="tomo" type="number" class="form-control editable" min="0" id="" placeholder="" autocomplete="off" value="{{libro.Tomo}}">
+                        </div>
+                        <div class="col-12 col-md-3 mb-3">
+                            <label for="anio" class="form-label">Año de Publicación</label>
+                            <input name="anio" type="number" class="form-control editable" min="0" id="" placeholder="" autocomplete="off" value="{{libro.ano_publicacion}}">
+                        </div>
+                        <div class="col-12 col-md-3 mb-3">
+                            <label for="numero_paginas" class="form-label">Número de Páginas*</label>
+                            <input name="numero_paginas" type="number" class="form-control editable" min="1" id="" placeholder="" autocomplete="off" value="{{libro.numero_paginas}}" required>
+                        </div>
+                        <div class="col-12 col-md-3 mb-3">
+                            <label for="numero_copias" class="form-label">Número de Copias*</label>
+                            <input name="numero_copias" type="number" class="form-control editable" min="0" id="" placeholder="" required autocomplete="off" value="{{libro.numero_copias}}" required>
+                        </div>
+                        <div class="col-12 col-md-4 mb-3">
+                            <label for="lugar" class="form-label">Lugar de Publicación</label>
+                            <input name="lugar" type="text" class="input-lugar editable" id="cuadro-busqueda2" placeholder="" autocomplete="off" value="{{libro.lugar}}">
+                        </div>
+                        <div class="col-12 col-md-4 mb-3">
+                            <label for="portada" class="form-label">Portada</label>
+                            <input id="portadainput" name="portada" type="file" class="form-control" placeholder="" accept="image/*">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label for="sistema_dewey" class="form-label">Sistema Dewey*</label>
+                            <select name="sistema_dewey" id="" class="form-select editable">
+                                <option value="{{ libro.codigo_seccion }}" selected>{{ libro.codigo_seccion }} - {{ libro.seccion }} (Actual)</option>
+                                {% for seccion in secciones %}
+                                    {% if seccion[0] != libro.codigo_seccion %}
+                                        <option value="{{ seccion[0] }}">{{ seccion[0] }} - {{ seccion[1] }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-12 mb-2">
+                            <label for="motivo" class="form-label">Motivo de modificación*</label>
+                            <input name="motivo" type="text" class="form-control" id="motivo-editar-libro" placeholder="Escribe un motivo" maxlength="200" required autocomplete="off" disabled>
+                            <div class="text-end mt-1">
+                                <small class="text-muted">
+                                    <span id="contador-editar-libro">0</span>/200 caracteres
+                                </small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                {% else %}
+                <h4>No se encontró el libro.</h4>
+                {% endif %}
+                
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Modal para crear reseña -->
+    <div class="modal fade" id="modalResena" tabindex="-1" aria-labelledby="modalResenaLabel">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalResenaLabel"><i class="bi bi-chat-right-text"></i> Escribir Reseña</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="/crear_opinion" method="POST">
+                    <div class="modal-body">
+                        <input type="hidden" name="id_libro" value="{{libro.id_libro}}">
+                        <input type="hidden" name="titulo_libro" value="{{libro.Titulo}}">
+                        
+                        <div class="mb-3">
+                            <label for="nombre_creador" class="form-label">Tu nombre*</label>
+                            <input type="text" class="form-control" id="nombre_creador" name="nombre_creador" required autocomplete="off">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="apellido_creador" class="form-label">Tu apellido*</label>
+                            <input type="text" class="form-control" id="apellido_creador" name="apellido_creador" required autocomplete="off">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="valoracion" class="form-label">Valoración*</label>
+                            <div class="rating-input">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="valoracion" id="val1" value="1" required>
+                                    <label class="form-check-label" for="val1">1 <i class="bi bi-star-fill text-warning"></i></label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="valoracion" id="val2" value="2">
+                                    <label class="form-check-label" for="val2">2 <i class="bi bi-star-fill text-warning"></i></label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="valoracion" id="val3" value="3">
+                                    <label class="form-check-label" for="val3">3 <i class="bi bi-star-fill text-warning"></i></label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="valoracion" id="val4" value="4">
+                                    <label class="form-check-label" for="val4">4 <i class="bi bi-star-fill text-warning"></i></label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="valoracion" id="val5" value="5">
+                                    <label class="form-check-label" for="val5">5 <i class="bi bi-star-fill text-warning"></i></label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="opinion" class="form-label">Tu reseña*</label>
+                            <textarea class="form-control" id="opinion" name="opinion" rows="4" maxlength="200" required autocomplete="off" placeholder="Escribe tu opinión sobre este libro..." style="resize: none;"></textarea>
+                            <div class="text-end mt-1">
+                                <small class="text-muted">
+                                    <span id="charCount">0</span>/200 caracteres
+                                </small>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i> Tu reseña será revisada por un administrador antes de ser publicada.
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Enviar reseña</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para eliminar libro -->
+    <div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="modalEliminarLabel">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="modalEliminarLabel"><i class="bi bi-trash"></i> Eliminar Libro</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="/eliminar_libro" method="POST">
+                    <div class="modal-body">
+                        <input type="hidden" value="{{libro.id_libro}}" name="id_libro" readonly>
+                        
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle"></i> <strong>¿Está seguro de que desea eliminar este libro?</strong>
+                            <p class="mb-0 mt-2">Esta acción no se puede deshacer.</p>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="motivo-eliminar-libro" class="form-label">Motivo de eliminación*</label>
+                            <input class="form-control" type="text" id="motivo-eliminar-libro" placeholder="Escribe el motivo de la eliminación del libro." name="motivo" maxlength="200" required autocomplete="off">
+                            <div class="text-end mt-1">
+                                <small class="text-muted">
+                                    <span id="contador-eliminar-libro">0</span>/200 caracteres
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i> Confirmar eliminación</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<!-- Footer -->
+{% include 'footer.html' %}
+
+<!--! Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+
+<!--? Tom Select JS -->
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+
+<!-- Custom Scripts -->
+<script src="{{ url_for('static', filename='js/contador_caracteres.js') }}"></script>
+<script src="{{ url_for('static', filename='js/sugerencias.js') }}"></script>
+<script src="{{ url_for('static', filename='js/detalle_libro.js') }}"></script>
+
+<!--* Nuevos scripts de alertas y animaciones -->
+<script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
+<script src="{{ url_for('static', filename='js/animaciones.js') }}"></script>
+    
+</body>
+</html>

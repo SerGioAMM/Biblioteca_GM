@@ -19,3 +19,8 @@ def conexion_BD():
     except Exception as ex:
         logger.add_to_log("error", str(ex))
         logger.add_to_log("error", traceback.format_exc())
+        raise RuntimeError("No se pudo conectar a la base de datos")
+
+def dict_factory(cursor):
+    columns = [col[0] for col in cursor.description]
+    return [dict(zip(columns, row)) for row in cursor.fetchall()]

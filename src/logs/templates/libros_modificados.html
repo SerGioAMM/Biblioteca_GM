@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libros modificados</title>
+    <link rel="icon" href="/static/img/books_3145874.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/prestamos.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
+
+    <!--! Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <!--? Tom Select CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+    
+    <!--* Nuevos estilos de animaciones -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animaciones.css') }}">
+</head>
+<body class="bg-custom">
+    <header>
+        {% include './navbar.html' %}
+    </header>
+    {% if (session["rol"] == 'Administrador') %}
+    <main>
+        {% if (devuelto) %}
+        <span class="devuelto">
+            <h4><strong>{{devuelto}}</strong></h4>
+        </span>
+        {% elif (exito) %}
+        <span class="exito-ingreso">
+            <h4><strong>{{exito}}</strong></h4>
+        </span>
+        {% endif %}
+
+        <div class="div-busqueda h-100">
+            <div class="m-auto fondo-principal p-3 p-md-5">
+                <h2 class="text-center">Libros modificados</h2>
+                <h4 class="p-2 p-md-3 text-center">Visualiza los libros modificados, sus cambios y motivo.</h4>
+                <form class="frm-libros_m" action="/buscar_libro_m" method="GET" id="form-busqueda">
+                    <!-- Barra de búsqueda principal -->
+                    <div class="row justify-content-center mb-3">
+                        <div class="col-12 col-md-10 col-lg-8 col-xl-6">
+                            <div class="input-group">
+                                <select class="form-control p-0" name="buscar" id="cuadro-busqueda" 
+                                        data-placeholder="Buscar..." autocomplete="off" style="min-height: 44px;">
+                                </select>
+                                <button class="btn btn-success px-3 px-md-4" type="submit" style="min-width: 100px;">
+                                    <i class="bi bi-search"></i> <span class="d-none d-sm-inline">Buscar</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Filtros -->
+                    <div class="row justify-content-center">
+                        <div class="col-10 col-md-10 col-lg-8 col-xl-6">
+                            <div class="row g-2 g-md-3">
+                                <!-- Filtro de búsqueda por campo -->
+                                <div class="col-sm-6">
+                                    <select name="filtro-busqueda" id="filtro-busqueda" 
+                                            class="form-select btn btn-secondary" style="min-height: 30px;">
+                                        <option value="Titulo" 
+                                            {% if filtro_busqueda == "Titulo" %}
+                                                selected
+                                            {% endif %}>
+                                            Titulo
+                                        </option>
+                                        <option value="Usuario" 
+                                            {% if filtro_busqueda == "Usuario" %}
+                                                selected
+                                            {% endif %}>
+                                            Usuario
+                                        </option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Filtro de roles -->
+                                <div class="col-sm-6">
+                                    <select name="rol" id="filtro-categorias" 
+                                            class="form-select btn btn-secondary" style="min-height: 30px;">
+                                        <option value="Todos" 
+                                            {% if rol == "Todos" %}
+                                                selected
+                                            {% endif %}>
+                                            Todos
+                                        </option>
+                                        <option value="Administrador" 
+                                            {% if rol == "Administrador" %}
+                                                selected
+                                            {% endif %}>
+                                            Administradores
+                                        </option>
+                                        <option value="Bibliotecario" 
+                                            {% if rol == "Bibliotecario" %}
+                                                selected
+                                            {% endif %}>
+                                            Bibliotecarios
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="container mx-a mt-3 bg-light-custom p-3 contenedor-prestamos" id="grupoLibrosModificados">
+            <br>
+            {% for log in logs %}
+            <div class="row">
+                <div class="col-12 col-md-8 mx-auto">
+                    <div class="card card-margin mx-auto">
+                        <div class="card-header no-border h-25">
+                            <span class="badge d-inline-flex text-center p-2 rounded-pill text-info-emphasis bg-info-subtle border border-info-subtle">
+                                <i class="bi bi-pencil-fill"></i>
+                                <span class="badge-text">Modificado</span>
+                            </span>
+                        </div>
+                        <div class="card-body pt-0">
+                            <div class="widget-49 row">
+                                <div class="widget-49-title-wrapper">
+                                    <div class="widget-49-date-dark d-none d-md-flex">
+                                        <span class="widget-49-date-day">{{ log.dia }}</span>
+                                        <span class="widget-49-date-month">{{ log.mes }}</span>
+                                    </div>
+                                    <div class="widget-49-meeting-info">
+                                        <h5>{{log.rol}} {{log.usuario}}</h5>
+                                        <span class="widget-49-pro-title">Editó el libro <strong>{{log.titulo_actual}}</strong>.</span>
+                                        <span class="widget-49-meeting-time">Actividad registrada el <strong>{{ log.fecha }}</strong></span>
+                                        <span class="widget-49-meeting-time">Motivo: <strong>{{ log.motivo }}</strong></span>
+                                        <br>
+                                    </div>
+                                    <div class="widget-49-meeting-action mb-2 col-4 text-end ms-auto">
+                                        <br><br><br>
+                                        <a data-bs-toggle="collapse" href="#cambios{{log.id_modificacion}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-primary mb-1 boton">Mostrar cambios</a>
+                                        <a data-bs-toggle="collapse" href="#revertir{{log.id_modificacion}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-danger mb-1 boton">Revertir cambios</a>
+                                    </div>
+                                </div>
+                                <div class="collapse" id="cambios{{log.id_modificacion}}" data-bs-parent="#grupoLibrosModificados">
+                                    <div class="card card-body">
+                                        <span class="info-lector">
+                                            Cambios registrados:
+                                            <ul>
+                                                {% if log.old_titulo != log.titulo_actual %}
+                                                <li><strong>Título:</strong> {{ log.old_titulo }} → <strong>{{ log.titulo_actual }}</strong></li>
+                                                {% endif %}
+                                                {% if log.old_tomo != log.tomo_actual %}
+                                                <li><strong>Tomo:</strong> {{ log.old_tomo }} → <strong>{{ log.tomo_actual }}</strong></li>
+                                                {% endif %}
+                                                {% if log.old_num_paginas != log.num_paginas_actual %}
+                                                <li><strong>Número de páginas:</strong> {{ log.old_num_paginas }} → <strong>{{ log.num_paginas_actual }}</strong></li>
+                                                {% endif %}
+                                                {% if log.old_num_copias != log.num_copias_actual %}
+                                                <li><strong>Número de copias:</strong> {{ log.old_num_copias }} → <strong>{{ log.num_copias_actual }}</strong></li>
+                                                {% endif %}
+                                                {% if log.old_editorial and log.old_editorial != log.editorial_actual %}
+                                                <li><strong>Editorial:</strong> {{ log.old_editorial }} → <strong>{{ log.editorial_actual }}</strong></li>
+                                                {% endif %}
+                                                {% if log.old_autor and log.old_autor != log.autor_actual %}
+                                                <li><strong>Autor:</strong> {{ log.old_autor }} → <strong>{{ log.autor_actual }}</strong></li>
+                                                {% endif %}
+                                                {% if log.old_notacion and log.old_notacion != log.notacion_actual %}
+                                                <li><strong>Notación:</strong> {{ log.old_notacion }} → <strong>{{ log.notacion_actual }}</strong></li>
+                                                {% endif %}
+                                                {% if log.old_isbn and log.old_isbn != log.isbn_actual %}
+                                                <li><strong>ISBN:</strong> {{ log.old_isbn }} → <strong>{{ log.isbn_actual }}</strong></li>
+                                                {% elif not log.old_isbn and log.isbn_actual %}
+                                                <li><strong>ISBN:</strong> <strong>{{ log.isbn_actual }}</strong> (nuevo)</li>
+                                                {% endif %}
+                                                {% if log.old_anio and log.old_anio != log.anio_actual %}
+                                                <li><strong>Año de publicación:</strong> {{ log.old_anio }} → <strong>{{ log.anio_actual }}</strong></li>
+                                                {% elif not log.old_anio and log.anio_actual %}
+                                                <li><strong>Año de publicación:</strong> <strong>{{ log.anio_actual }}</strong> (nuevo)</li>
+                                                {% endif %}
+                                                {% if log.old_lugar and log.old_lugar != log.lugar_actual %}
+                                                <li><strong>Lugar:</strong> {{ log.old_lugar }} → <strong>{{ log.lugar_actual }}</strong></li>
+                                                {% endif %}
+                                                {% if log.old_seccion and log.old_seccion != log.seccion_actual %}
+                                                <li><strong>Sección Dewey:</strong> {{ log.old_seccion }} → <strong>{{ log.seccion_actual }}</strong></li>
+                                                {% endif %}
+                                                {% if log.old_portada != log.portada_actual %}
+                                                <li><strong>Portada:</strong> Actualizada
+                                                    <div class="mt-2">
+                                                        <small class="text-muted">Anterior:</small><br>
+                                                        <img src="{{ log.old_portada if log.old_portada != 'book.png' else url_for('static', filename='img/book.png') }}" 
+                                                            style="max-width: 100px; max-height: 150px;" class="mb-2">
+                                                        <br>
+                                                        <small class="text-muted">Actual:</small><br>
+                                                        <img src="{{ log.portada_actual if log.portada_actual != 'book.png' else url_for('static', filename='img/book.png') }}" 
+                                                            style="max-width: 100px; max-height: 150px;">
+                                                    </div>
+                                                </li>
+                                                {% endif %}
+                                            </ul>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="collapse" id="revertir{{log.id_modificacion}}" data-bs-parent="#grupoLibrosModificados">
+                                    <div class="card card-body text-center">
+                                        <form class="frm-revertir-cambios mt-3 info-lector" action="/revertir_cambios/{{log.id_modificacion}}" method="POST">
+                                            <input type="hidden" value="{{log.id_modificacion}}" name="id_log" readonly>
+                                            <label for=""> Este libro fue editado por el siguiente motivo: <strong>{{log.motivo}}</strong>
+                                                <br> ¿Seguro que quieres revertir los cambios? </label><br>
+                                            <button class="btn btn-sm btn-outline-success mb-3 mt-1 boton" type="submit">
+                                                Confirmar reversión
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+            <div class="paginacion">
+                {% if pagina > 1 %} <!-- Verifica que la pagina actual sea despues de la primera, para mostrar un boton de "Anterior" -->
+                    <a href="{{ url_for('eliminados.buscar_libro_e', page=pagina - 1, buscar=busqueda, filtro_busqueda=filtro_busqueda) }}">Anterior</a> <!-- Este enlace lleva a la pagina anterior "pagina-1" -->
+                {% endif %}
+                
+                {% for p in range(pagina - 1, pagina + 2) %}
+                    {% if 1 <= p <= total_paginas %}
+                        {% if p == pagina %} <!-- Verifica cual es la pagina actual para aplicarle otro estilo -->
+                            <strong>{{ p }}</strong>
+                        {% else %} <!-- Genera todos los demas enlaces o "numeros de pagina", "[1],[2],[3]" -->
+                            <a href="{{ url_for('eliminados.buscar_libro_e', page=p, buscar=busqueda, filtro_busqueda=filtro_busqueda) }}">{{ p }}</a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}   
+                
+                {% if pagina < total_paginas %} <!-- Verifica que la pagina actual no sea la ultima, para mostrar un boton de "Siguiente" -->
+                    <a href="{{ url_for('eliminados.buscar_libro_e', page=pagina + 1, buscar=busqueda, filtro_busqueda=filtro_busqueda) }}">Siguiente</a> <!-- Este enlace lleva a la pagina siguiente "pagina+1" -->
+                {% endif %}
+            </div> 
+        </main>
+    {% endif %}
+
+    <!-- Footer -->
+    {% include 'footer.html' %}
+        
+    <!--? Tom Select JS -->
+    <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+
+    <!-- Custom Scripts -->
+    <script src="/static/js/sugerencias.js"></script>
+
+    <!--! Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+</body>
+</html>

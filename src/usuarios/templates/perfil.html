@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil</title>
+    <link rel="icon" href="/static/img/books_3145874.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo_inicio.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
+    
+    <!--! Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    
+    <!--* Nuevos estilos de alertas y animaciones -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/alertas.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animaciones.css') }}">
+</head>
+<body class="bg-light-custom">
+    <header>
+        {% include 'navbar.html' %}
+    </header>
+    {% if (alerta) %}
+        <span class="error-eliminacion" data-alert-message="{{alerta}}" style="display: none;"></span>
+    {% elif (exito) %}
+        <span class="exito-ingreso" data-alert-message="{{exito}}" style="display: none;"></span>
+    {% endif %}
+    
+    <section class="py-3 py-md-5 py-xl-8" style="min-height: 80vh;">
+        <div class="container">
+            <div class="row gy-4 gy-lg-0">
+                <div class="col-12 col-lg-4 col-xl-3">
+                    <div class="row gy-4">
+                        <div class="col-12">
+                            {% if perfil %}
+                            {% set usuario = perfil[0] %}
+                            <div class="card widget-card border-light shadow-sm">
+                                <div class="card-body text-center">
+                                    <div class="mb-3">
+                                        {% if usuario.rol == 'Administrador' %}
+                                            <i class="bi bi-person-fill-gear display-1 text-dark"></i>
+                                        {% else %}
+                                            <i class="bi bi-person-fill display-1 text-dark"></i>
+                                        {% endif %}
+                                    </div>
+                                    <h5 class="card-title">{{ usuario.usuario }}</h5>
+                                    {% if usuario.rol == 'Administrador' %}
+                                        <span class="badge text-center p-1 rounded-pill text-warning-emphasis bg-warning-subtle border border-warning-subtle mb-3">{{ usuario.rol }}</span>
+                                    {% else %}
+                                        <span class="badge text-center p-1 rounded-pill text-primary-emphasis bg-primary-subtle border border-primary-subtle mb-3">{{ usuario.rol }}</span>
+                                    {% endif %}
+                                    
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-dark boton" type="button" id="btn-perfil">
+                                            <i class="bi bi-person"></i> Mi Perfil
+                                        </button>
+                                        <button class="btn btn-outline-primary boton" type="button" id="btn-actividad">
+                                            <i class="bi bi-clock-history"></i> Actividad Reciente
+                                        </button>
+                                        <button class="btn btn-outline-primary boton" type="button" id="btn-notificaciones">
+                                            <i class="bi bi-bell"></i> Notificaciones
+                                            {% if notificaciones_no_vistas > 0 %}
+                                                <span class="badge bg-danger">{{ notificaciones_no_vistas }}</span>
+                                            {% endif %}
+                                        </button>
+                                        <button class="btn btn-outline-primary boton" type="button" id="btn-editar">
+                                            <i class="bi bi-pencil-square"></i> <span>Editar Perfil</span>
+                                        </button>
+                                        <button type="submit" class="btn btn-outline-primary boton d-none" id="btn-guardar" form="form-editar-perfil" disabled>
+                                            <i class="bi bi-floppy"></i> Guardar Cambios
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-12 col-lg-8 col-xl-9">
+                    <div class="card widget-card border-light shadow-sm">
+                        <div class="card-body p-4">
+                            
+                            <!-- Detalles del perfil -->
+                            <div class="tab-content pt-4" id="profileTabContent">
+                                <div class="tab-pane fade show active detalles-perfil" id="overview-tab-pane" role="tabpanel" aria-labelledby="overview-tab" tabindex="0">
+                                    <h1>Mi Perfil</h1>
+                                    <h4 class="text-body-secondary">Información personal y configuración</h4>
+                                    
+                                    <div class="row mt-4">
+                                        <div class="col-md-6 mb-3">
+                                            <div class="bg-light rounded border p-3">
+                                                <strong class="text-body-secondary">Usuario</strong><br>
+                                                <span class="fs-5">{{ usuario.usuario }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="bg-light rounded border p-3">
+                                                <strong class="text-body-secondary">Rol</strong><br>
+                                                <span class="fs-5">{{ usuario.rol }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="bg-light rounded border p-3">
+                                                <strong class="text-body-secondary">Email</strong><br>
+                                                <span class="fs-5">{{ usuario.email if usuario.email else '-' }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="bg-light rounded border p-3">
+                                                <strong class="text-body-secondary">Teléfono</strong><br>
+                                                <span class="fs-5">{{ usuario.telefono if usuario.telefono else '-' }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Actividad Reciente -->
+                                <div class="actividad-reciente d-none" id="actividad-section">
+                                    <h3><i class="bi bi-clock-history"></i> Actividad Reciente</h3>
+                                    <hr>
+                                    {% if actividad_reciente %}
+                                        {% for actividad in actividad_reciente %}
+                                        <div class="card mb-2">
+                                            <div class="card-body py-2">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <i class="bi bi-trash text-danger me-2"></i>
+                                                        <span>{{ actividad.descripcion }}</span>
+                                                    </div>
+                                                    <small class="text-muted">{{ actividad.fecha_formateada }}</small>
+                                                </div>
+                                                {% if actividad.motivo %}
+                                                <small class="text-muted ms-4">Motivo: {{ actividad.motivo }}</small>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    {% else %}
+                                        <div class="alert alert-info">
+                                            <i class="bi bi-info-circle"></i> No hay actividad reciente registrada.
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Notificaciones -->
+                                <div class="notificaciones d-none" id="notificaciones-section">
+                                    <h3><i class="bi bi-bell"></i> Notificaciones</h3>
+                                    <hr>
+                                    {% if notificaciones_hoy %}
+                                        <h6 class="text-muted mb-3">Hoy</h6>
+                                        {% for notificacion in notificaciones_hoy %}
+                                        <div class="card mb-2 {{ 'border-primary' if not notificacion.visto else '' }}">
+                                            <div class="card-body py-2">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        {% if not notificacion.visto %}
+                                                            <i class="bi bi-circle-fill text-primary me-2" style="font-size: 0.5rem;"></i>
+                                                        {% else %}
+                                                            <i class="bi bi-circle text-muted me-2" style="font-size: 0.5rem;"></i>
+                                                        {% endif %}
+                                                        <span>{{ notificacion.detalle }}</span>
+                                                    </div>
+                                                    <small class="text-muted">{{ notificacion.hora_formateada }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    
+                                    {% if notificaciones_ayer %}
+                                        <div class="collapse" id="notificaciones-ayer">
+                                            <h6 class="text-muted mb-3 mt-4">Ayer</h6>
+                                            {% for notificacion in notificaciones_ayer %}
+                                            <div class="card mb-2 {{ 'border-primary' if not notificacion.visto else '' }}">
+                                                <div class="card-body py-2">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            {% if not notificacion.visto %}
+                                                                <i class="bi bi-circle-fill text-primary me-2" style="font-size: 0.5rem;"></i>
+                                                            {% else %}
+                                                                <i class="bi bi-circle text-muted me-2" style="font-size: 0.5rem;"></i>
+                                                            {% endif %}
+                                                            <span>{{ notificacion.detalle }}</span>
+                                                        </div>
+                                                        <small class="text-muted">{{ notificacion.hora_formateada }}</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="text-center mt-3" id="btn-ayer-container">
+                                            <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#notificaciones-ayer">
+                                                <i class="bi bi-chevron-down"></i> Ayer ({{ notificaciones_ayer|length }})
+                                            </button>
+                                        </div>
+                                    {% endif %}
+                                    
+                                    {% if notificaciones_anteriores %}
+                                        <div class="collapse" id="notificaciones-todas">
+                                            <h6 class="text-muted mb-3 mt-4">Anteriores</h6>
+                                            {% for notificacion in notificaciones_anteriores %}
+                                            <div class="card mb-2 {{ 'border-primary' if not notificacion.visto else '' }}">
+                                                <div class="card-body py-2">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            {% if not notificacion.visto %}
+                                                                <i class="bi bi-circle-fill text-primary me-2" style="font-size: 0.5rem;"></i>
+                                                            {% else %}
+                                                                <i class="bi bi-circle text-muted me-2" style="font-size: 0.5rem;"></i>
+                                                            {% endif %}
+                                                            <span>{{ notificacion.detalle }}</span>
+                                                        </div>
+                                                        <small class="text-muted">{{ notificacion.fecha_formateada }}</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="text-center mt-3" id="btn-todas-container">
+                                            <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#notificaciones-todas">
+                                                <i class="bi bi-chevron-down"></i> Todas ({{ notificaciones_anteriores|length }})
+                                            </button>
+                                        </div>
+                                    {% endif %}
+                                    
+                                    {% if notificaciones_no_vistas > 0 %}
+                                    <div class="text-center mt-4">
+                                        <button class="btn btn-outline-primary" id="btn-marcar-leidas">
+                                            <i class="bi bi-check-all"></i> Marcar todas como leídas
+                                        </button>
+                                    </div>
+                                    {% endif %}
+                                    
+                                    {% if not notificaciones_hoy and not notificaciones_ayer and not notificaciones_anteriores %}
+                                        <div class="alert alert-info">
+                                            <i class="bi bi-info-circle"></i> No tienes notificaciones.
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Formulario de edición -->
+                                <form action="/editar_perfil" method="POST" class="row gy-3 gy-xxl-4 d-none" id="form-editar-perfil">
+                                    <h3><i class="bi bi-pencil-square"></i> Editar Perfil</h3>
+                                    <hr>
+                                    
+                                    <div class="col-12 col-md-6 mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input class="form-control editable" type="email" name="email" placeholder="Ingresa tu email" autocomplete="off" value="{{ usuario.email if usuario.email else '' }}">
+                                    </div>
+                                    <div class="col-12 col-md-6 mb-3">
+                                        <label for="telefono" class="form-label">Teléfono</label>
+                                        <input type="text" name="telefono" class="form-control editable" placeholder="Ingresa tu teléfono" autocomplete="off" value="{{ usuario.telefono if usuario.telefono else '' }}">
+                                    </div>
+                                    <div class="col-12 col-md-6 mb-3">
+                                        <label for="nueva_contrasena" class="form-label">Nueva Contraseña</label>
+                                        <input type="password" id="nueva_contrasena" name="nueva_contrasena" class="form-control editable" placeholder="Dejar vacío para no cambiar" autocomplete="off">
+                                        <!-- El feedback se generará dinámicamente aquí -->
+                                    </div>
+                                    <div class="col-12 col-md-6 mb-3">
+                                        <label for="confirmar_contrasena" class="form-label">Confirmar Contraseña</label>
+                                        <input type="password" name="confirmar_contrasena" class="form-control editable" placeholder="Confirma la nueva contraseña" autocomplete="off">
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="contrasena_actual" class="form-label">Contraseña Actual (requerida para cambios)</label>
+                                        <input name="contrasena_actual" type="password" class="form-control" placeholder="Ingresa tu contraseña actual" required autocomplete="off">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    {% include 'footer.html' %}
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    
+    <!--* Scripts de alertas y animaciones -->
+    <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animaciones.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/validacion_password.js') }}"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="{{ url_for('static', filename='js/perfil.js') }}"></script>
+</body>
+</html>

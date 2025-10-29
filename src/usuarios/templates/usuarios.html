@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios</title>
+    <link rel="icon" href="/static/img/books_3145874.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo_inicio.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
+
+    <!--! Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <!--? Tom Select CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!--* Nuevos estilos de alertas y animaciones -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/alertas.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animaciones.css') }}">
+
+</head>
+<body class="bg-custom">
+    <header>
+        {% include './navbar.html' %}
+    </header>
+    <main>
+        <div class="div-busqueda h-100">
+            <div class="m-auto fondo-principal p-3 p-md-5">
+                <h2 class="text-center">Gestión de Usuarios</h2>
+                <h4 class="p-2 p-md-3 text-center">Administra los usuarios del sistema existentes.</h4>
+                <form class="frm-usuarios" action="/buscar_usuario" method="GET" id="form-busqueda">
+                    <!-- Barra de búsqueda principal -->
+                    <div class="row justify-content-center mb-3">
+                        <div class="col-12 col-md-10 col-lg-8 col-xl-6">
+                            <div class="input-group">
+                                <select class="form-control p-0" name="buscar" id="cuadro-busqueda" 
+                                        data-placeholder="Buscar..." autocomplete="off" style="min-height: 44px;">
+                                </select>
+                                <button class="btn btn-success px-3 px-md-4" type="submit" style="min-width: 100px;">
+                                    <i class="bi bi-search"></i> <span class="d-none d-sm-inline">Buscar</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Filtros -->
+                    <div class="row justify-content-center">
+                        <div class="col-10 col-md-10 col-lg-8 col-xl-6">
+                            <div class="row g-2 g-md-3">
+                                <!-- Filtro de roles -->
+                                <div class="col-sm-6">
+                                    <select name="filtro-busqueda" id="filtro-busqueda" 
+                                            class="form-select btn btn-secondary" style="min-height: 30px;">
+                                        <option value="Todos"
+                                            {% if filtro_rol == "Todos" %}
+                                                selected
+                                            {% endif %}>
+                                            Todos los Roles
+                                        </option>
+                                        <option value="Administrador"
+                                            {% if filtro_rol == "Administrador" %}
+                                                selected
+                                            {% endif %}>
+                                            Administrador
+                                        </option>
+                                        <option value="Bibliotecario"
+                                            {% if filtro_rol == "Bibliotecario" %}
+                                                selected
+                                            {% endif %}>
+                                            Bibliotecario
+                                        </option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Filtro de estados -->
+                                <div class="col-sm-6">
+                                    <select name="filtro-categorias" id="filtro-categorias" 
+                                            class="form-select btn btn-secondary" style="min-height: 30px;">
+                                        <option value="Activo"
+                                            {% if filtro_estado == "Activo" %}
+                                                selected
+                                            {% endif %}>
+                                            Activos
+                                        </option>
+                                        <option value="Todos"
+                                            {% if filtro_estado == "Todos" %}
+                                                selected
+                                            {% endif %}>
+                                            Todos
+                                        </option>
+                                        <option value="Inactivo"
+                                            {% if filtro_estado == "Inactivo" %}
+                                                selected
+                                            {% endif %}>
+                                            Inactivos
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% if (exito) %}
+        <span class="exito-ingreso" data-alert-message="{{exito}}" style="display: none;"></span>
+        {% endif %} 
+        <div class="contendor-usuarios bg-lighter-custom" id="grupousuario">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive rounded-4">
+                        <table class="table user-list bg-lighter-custom mb-0">
+                            <thead>
+                                <tr>
+                                    <th><span>Usuario</span></th>
+                                    <th><span>Rol</span></th>
+                                    <th><span>Telefono</span></th>
+                                    <th><span>Correo</span></th>
+                                    <th><span>Estado</span></th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for usuario in usuarios %}
+                                    {% if usuario.estado == 'Activo' %} 
+                                        {% if usuario.tiempo_bloqueo %}
+                                            {% set badge = 'warning'%}
+                                            {% set icono = 'bi-exclamation-circle-fill' %}
+                                        {% else %}
+                                            {% set badge = 'success'%}
+                                            {% set icono = 'bi-circle-fill' %}
+                                        {% endif %}
+                                    {% elif usuario.estado == 'Inactivo'%} 
+                                        {% set badge = 'danger'%}
+                                        {% set icono = 'bi-x-circle' %}
+                                    {% endif %}
+                                    {% if usuario.rol == 'Administrador' %} 
+                                        {% set badge_rol = 'warning'%}
+                                    {% elif usuario.rol == 'Bibliotecario'%} 
+                                        {% set badge_rol = 'primary'%}
+                                    {% endif %}
+                                    <tr>
+                                        <td style="width: 15%;">
+                                            <span> {{ usuario.usuario }} </span>
+                                        </td>
+                                        <td class="text-center" style="width: 15%;">
+                                            <span class="badge text-center p-1 rounded-pill text-{{badge_rol}}-emphasis bg-{{badge_rol}}-subtle border border-{{badge_rol}}-subtle">
+                                                &nbsp;&nbsp;&nbsp; {{usuario.rol}} &nbsp;&nbsp;&nbsp;
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if not usuario.telefono %}-{% else %} {{ usuario.telefono }} {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if not usuario.email %}-{% else %} <a href="{{ usuario.email }}"> {{ usuario.email }} {% endif %} </a>
+                                        </td>
+                                        <td class="text-center" style="width: 15%;">
+                                            <span class="badge text-center p-1 rounded-pill text-{{badge}}-emphasis bg-{{badge}}-subtle border border-{{badge}}-subtle">
+                                                <i class="bi {{icono}}"></i>
+                                                <span class="vr mx-2" ></span>
+                                                {{usuario.estado}} {% if usuario.tiempo_bloqueo %}, bloqueado {% endif %} &nbsp;&nbsp;&nbsp;
+                                            </span>
+                                        </td>
+                                        <td style="width: 20%;">
+                                            {% if usuario.estado == 'Inactivo'%}
+                                                <a data-bs-toggle="collapse" href="#activar{{usuario.id_administrador}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-success boton"><i class="bi bi-check-circle"></i> Activar</a>
+                                            {% else %}
+                                                {% if usuario.id_administrador == 1 or session["id_administrador"] == usuario.id_administrador %}
+                                                <button class="btn btn-sm btn-outline-danger boton" disabled><i class="bi bi-x-circle"></i> Desactivar</button>
+                                                {% else %}
+                                                <a data-bs-toggle="collapse" href="#desactivar{{usuario.id_administrador}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="btn btn-sm btn-outline-danger boton"><i class="bi bi-x-circle"></i> Desactivar</a>
+                                                {% endif %}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6" class="p-0 border-0">
+                                            <div class="collapse" id="desactivar{{usuario.id_administrador}}" data-bs-parent="#grupousuario">
+                                                <div class="bg-light border-bottom border-secondary-subtle">
+                                                    <form class="frm-desactivar-usuario w-75 mx-auto" action="/desactivar_usuario" method="POST">
+                                                        <br><h6><strong>¿Está seguro de que desea desactivar este usuario?</strong></h6>
+                                                        <input type="hidden" value="{{usuario.id_administrador}}" name="id_usuario" readonly>
+                                                        <div class="mb-1">
+                                                            <input class="form-control" type="text" id="motivo-desactivar-{{usuario.id_administrador}}" placeholder="Escribe el motivo de la desactivación del usuario." name="motivo" maxlength="200" required autocomplete="off">
+                                                            <div class="text-end mt-1">
+                                                                <small class="text-muted">
+                                                                    <span id="contador-desactivar-{{usuario.id_administrador}}">0</span>/200 caracteres
+                                                                </small>
+                                                            </div>
+                                                        </div>
+                                                        <button class="btn btn-sm btn-outline-danger mb-3 boton" type="submit">
+                                                            <i class="bi bi-x-circle"></i> Confirmar desactivación
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6" class="p-0 border-0">
+                                            <div class="collapse" id="activar{{usuario.id_administrador}}" data-bs-parent="#grupousuario">
+                                                <div class="bg-light border-bottom border-secondary-subtle">
+                                                    <form class="frm-activar-usuario w-75 mx-auto" action="/activar_usuario" method="POST">
+                                                        <br><input type="hidden" value="{{usuario.id_administrador}}" name="id_usuario" readonly>
+                                                        <label for=""> Este usuario fue desactivado por el siguiente motivo: <strong>{{usuario.motivo}}</strong>
+                                                            <br> ¿Seguro que quieres activar este usuario? </label><br>
+                                                        <button class="btn btn-sm btn-outline-success mb-3 mt-1 boton" type="submit">
+                                                            <i class="bi bi-check-circle"></i> Confirmar activación
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            <br><br>
+            </div>        
+        </div>
+        
+        <div class="paginacion">
+            {% if pagina > 1 %}
+                <a href="{{ url_for('usuarios.buscar_usuario', page=pagina - 1, buscar=busqueda if busqueda else '', **request.args) }}">Anterior</a>
+            {% endif %}
+            
+            {% for p in range(pagina - 1, pagina + 2) %}
+                {% if 1 <= p <= total_paginas %}
+                    {% if p == pagina %}
+                        <strong>{{ p }}</strong>
+                    {% else %}
+                        <a href="{{ url_for('usuarios.buscar_usuario', page=p, buscar=busqueda if busqueda else '', **request.args) }}">{{ p }}</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}   
+            
+            {% if pagina < total_paginas %}
+                <a href="{{ url_for('usuarios.buscar_usuario', page=pagina + 1, buscar=busqueda if busqueda else '', **request.args) }}">Siguiente</a>
+            {% endif %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    {% include 'footer.html' %}
+
+    <!--? Tom Select JS -->
+    <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+    
+    <!-- Curstom Scripts -->
+    <script src="/static/js/sugerencias.js"></script>
+
+    <!--! Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="{{ url_for('static', filename='js/contador_caracteres.js') }}"></script>
+    
+    <!--* Scripts de alertas y animaciones -->
+    <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animaciones.js') }}"></script>
+    
+    <!--* Inicializar contadores -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar contadores para motivos de desactivación de usuarios
+            const motivosDesactivar = document.querySelectorAll('[id^="motivo-desactivar-"]');
+            motivosDesactivar.forEach(input => {
+                const usuarioId = input.id.replace('motivo-desactivar-', '');
+                inicializarContador(`motivo-desactivar-${usuarioId}`, `contador-desactivar-${usuarioId}`, 200);
+            });
+        });
+    </script>
+</body>
+</html>

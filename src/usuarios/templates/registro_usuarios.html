@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de libros</title>
+    <link rel="icon" href="/static/img/books_3145874.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo_inicio.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
+    
+    <!--? Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <!--* Nuevos estilos de alertas y animaciones -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/alertas.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animaciones.css') }}">
+
+</head>
+<body>
+    <header>
+        {% include './navbar.html' %}
+    </header>
+    <main class="main">
+        {% if ((session["rol"]) == "Administrador") or ((session["rol"]) == "Bibliotecario") %}
+        <div class="seccion-principal text-middle text-center">
+            <div class="fondo-principal">
+                <br> <br>
+                <h1 id="h1-titulo pt-5">Registrar nuevo usuario</h1>
+                <h5 id="h5-nota">Complete el formulario para agregar un nuevo usuario al sistema.</h5>
+            </div>
+        </div>
+            <div class="container-fluid">
+                <div class="row flex-nowrap">
+                    <div class="col py-3 bg-custom text-body text-center">
+                        <br><br>
+                        <div class="container-fluid w-75 bg-light-custom rounded">
+                            <form method="POST" action="/registro_usuarios" class="row g-3 text-start" id="form-registro-usuario">
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label for="usuario" class="form-label">Usuario*</label>
+                                    <input class="form-control" type="text" name="usuario" placeholder="" autocomplete="off" required>
+                                </div>
+                                <div class="col-12 col-md-3 mb-3">
+                                    <label for="email" class="form-label p-0"> Correo </label>
+                                    <input type="text" name="email" class="form-control" placeholder="Correo" autocomplete="off">
+                                </div>
+                                <div class="col-12 col-md-3 mb-3">
+                                    <label for="telefono" class="form-label p-0"> Teléfono </label>
+                                    <input type="text" name="telefono" class="form-control" placeholder="Telefono" autocomplete="off">
+                                </div>
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label for="contrasena" class="form-label p-0">Contraseña*</label>
+                                    <input type="password" id="contrasena" name="contrasena" class="form-control" placeholder="Contraseña" autocomplete="off" required>
+                                    <!-- El feedback se generará dinámicamente aquí -->
+                                </div>
+                                
+                                
+                                <div class="col-12 col-md-4 mb-3">
+                                    <label for="inputState" class="form-label">Rol</label>
+                                    <select name="rol" id="" class="form-select">
+                                        {% for rol in roles %}
+                                        <option value="{{ rol[0] }}">{{ rol[1] }}</option>
+                                        {% endfor %}
+                                    </select>
+                    
+                                </div>
+                                <div class="col-12 col-md-6 mx-auto text-center mb-3">
+                                    <br>
+                                    <button class="btn btn-secondary w-50 boton" type="submit">Registrar usuario</button>
+                                    <br><br>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        
+        {% if (alerta) %}
+        <span class="error-eliminacion" data-alert-type="danger" data-alert-message="{{alerta}}" style="display: none;"></span>
+        {% elif (registro_exitoso) %}
+        <span class="exito-ingreso" data-alert-type="success" data-alert-message="{{registro_exitoso}}" style="display: none;"></span>
+        {% endif %}           
+
+    </main>
+    <!-- Footer -->
+    {% include 'footer.html' %}
+
+    <!--! Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    
+    <!--* Scripts de alertas y animaciones -->
+    <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animaciones.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/validacion_password.js') }}"></script>
+</body>
+</html>
