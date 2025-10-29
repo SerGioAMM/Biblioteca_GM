@@ -24,6 +24,7 @@ body{
 .contenedor-prestamos{
     width: 90%;
     border-radius: 20px;
+    min-height: 50vh;
 }
 /*? Textos que muestran la disponibilidad de los libros */
 #span-estado-prestamo{

@@ -232,9 +232,9 @@
                 const dpiInput = document.getElementById('input-dpi');
                 
                 // Validar DPI
-                if (dpiInput.value.length < 8) {
+                if (dpiInput.value.length < 13) {
                     e.preventDefault();
-                    alert('El DPI debe tener al menos 8 dígitos.');
+                    alert('El DPI debe tener al menos 13 dígitos.');
                     dpiInput.focus();
                     return false;
                 }

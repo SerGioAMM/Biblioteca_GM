@@ -40,6 +40,13 @@
     ('login.logout', 'Cerrar sesión', 'bi-box-arrow-right')
 ] %}
 
+{% set perfil_items_admin = [
+    ('usuarios.ver_perfil', 'Ver perfil', 'bi-person-circle'),
+    ('datos.graficas_generales', 'Gráficas generales', 'bi-bar-chart-line'),
+    ('datos.descargar_bd', 'Descargar copia de seguridad', 'bi-download'),
+    ('login.logout', 'Cerrar sesión', 'bi-box-arrow-right')
+] %}
+
 
 
 {% if ((session["rol"]) == "Administrador") or ((session["rol"]) == "Bibliotecario") %} <!-- Si es admin o bibliotecario, mostrar navbar con opciones completas -->
@@ -163,14 +170,25 @@
                         <i class="bi bi-person-circle"></i> {{ session["usuario"] }}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        {% for endpoint, label, icon in perfil_items %}
-                            <li>
-                                <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
-                                    href="{{ url_for(endpoint) }}">
-                                    <i class="bi {{ icon }}"></i> {{ label }}
-                                </a>
-                            </li>
-                        {% endfor %}    
+                        {% if session["rol"] == 'Administrador' %}
+                            {% for endpoint, label, icon in perfil_items_admin %}
+                                <li>
+                                    <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
+                                        href="{{ url_for(endpoint) }}">
+                                        <i class="bi {{ icon }}"></i> {{ label }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            {% for endpoint, label, icon in perfil_items %}
+                                <li>
+                                    <a class="dropdown-item {% if request.endpoint == endpoint %} border-start border-dark border-4 {% endif %}"
+                                        href="{{ url_for(endpoint) }}">
+                                        <i class="bi {{ icon }}"></i> {{ label }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
                     </ul>
                 </ul>
                 

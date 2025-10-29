@@ -1,10 +1,25 @@
-from flask import Blueprint, session, redirect, request,render_template,url_for
+from flask import Blueprint, session, redirect, request,render_template,send_file
 from src.database.db_sqlite import conexion_BD, dict_factory
 from src.utils.logger import logger
 import traceback
 from datetime import datetime, timedelta
+import os
+from decouple import config
 
 bp_datos = Blueprint('datos',__name__, template_folder="../templates")
+
+# ----------------------------------------------------- Descargar BD ----------------------------------------------------- #
+
+@bp_datos.route('/descargar-bd')
+def descargar_bd():
+    if ("usuario" not in session) or (session["rol"]  != 'Administrador'):
+        return redirect("/") #Solo se puede acceder con session iniciada
+
+    # Obtener la ruta correcta de la base de datos
+    DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    RUTA_DB = os.path.join(DIR, 'database', config('DB_LOCAL'))
+    
+    return send_file(RUTA_DB, as_attachment=True)
 
 #!Generar reporte INE
 # ----------------------------------------------------- Generar reporte INE ----------------------------------------------------- #
