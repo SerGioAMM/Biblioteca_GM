@@ -1,5 +1,18 @@
 #Ignorar conexion a base de datos local y base de datos local
-Biblioteca_GM.db
+iniciarSQLiteCloud.py
+creacion_db.sql
+db_backup.py
+src/database/SQLAlchemy.py
+src/database/Biblioteca_GM.db.sql
+src/database/Biblioteca_GM.sqbpro
+src/database/Biblioteca_GM.db-journal
+src/database/Biblioteca_GM - BACKUP.db
+src/database/Biblioteca_GM2.db.sql
+#src/database/Biblioteca_GM.db
+src/database/Biblioteca_GM_vacia.db
+
+#Ignorar archivo excel de prueba
+Datos de biblioteca de prueba.xlsx
 
 #Ignorar variables de entorno para no exponerlas
 .env
@@ -14,4 +27,14 @@ __pycache__/
 .pytest_cache/
 
 #!Ignorar archivos de log MOMENTANEAMENTE
-src/utils/logs
+#src/utils/logs
+
+#!Ignorar partes del modulo libros en construccion ORM
+src/libros/services/
+src/public/services/
+
+#Ignorar archivo bandit (Analisis de codigo)
+.bandit
+
+#Ignorar markdowns
+markdown/
