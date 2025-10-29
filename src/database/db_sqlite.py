@@ -5,7 +5,7 @@ import traceback
 # pip install sqlitecloud
 def conexion_BD():
     try:
-        if config('ENV', default="Local") == "Produccion":
+        if config('ENV', default="Local") == "Cloud":
             # Open the connection to SQLite Cloud
             import sqlitecloud
             return sqlitecloud.connect(config('SQLITE_CLOUD_CONN'))
