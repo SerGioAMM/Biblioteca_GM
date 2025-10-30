@@ -162,9 +162,11 @@ def exportar_libros():
     if request.method == "POST":
         seccion = request.form["categorias"]
         if seccion == "Todas":
-            seccion = ""
+            filtro = ""
+            params = []
         else:
-            seccion = f" WHERE sd.codigo_seccion = '{seccion}'"
+            filtro = " WHERE sd.codigo_seccion = ?"
+            params = [seccion]
         
         cantidad_libros = request.form["cantidad"]
         if int(cantidad_libros) < 1:
@@ -174,7 +176,7 @@ def exportar_libros():
             conexion = conexion_BD()
             query = conexion.cursor()
             global exportar_datos
-            exportar_datos = libros_model.get_catalogo_filtrado(cantidad_libros, 0, seccion)
+            exportar_datos = libros_model.get_catalogo_filtrado(cantidad_libros, 0, filtro, params)
             for fila in exportar_datos:
                 fila["TITULO DEL LIBRO"] = fila["Titulo"]
                 del fila["Titulo"]
@@ -214,15 +216,17 @@ def exportar_libros():
 def vista_previa(cantidad, categoria):
     cantidad = to_int(cantidad)
     if categoria == "Todas":
-        categoria = ""
+        filtro = ""
+        params = []
     else:
-        categoria = f" WHERE sd.codigo_seccion = '{categoria}'"
+        filtro = " WHERE sd.codigo_seccion = ?"
+        params = [categoria]
     
     if cantidad < 1:
         cantidad = 1
     if cantidad > 5:
         cantidad = 5
-    datos_preview = libros_model.get_catalogo_filtrado(cantidad, 0, categoria)
+    datos_preview = libros_model.get_catalogo_filtrado(cantidad, 0, filtro, params)
     return jsonify(datos_preview)
 
 

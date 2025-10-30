@@ -127,7 +127,7 @@ def buscar_libro_e():
                             join roles r on a.id_rol =  r.id_rol
                             where tabla_afectada = 'Libros'{SQL_where_busqueda}{SQL_where_rol}
                             order by le.fecha desc
-                            limit ? offset ?""")
+                            limit {libros_por_pagina} offset {offset}""")
     
     # Agregar parámetros de paginación
     params.extend([libros_por_pagina, offset])
@@ -263,7 +263,7 @@ def buscar_prestamo_e():
                             join roles r on a.id_rol =  r.id_rol
                             where tabla_afectada = 'Prestamos' {SQL_where_busqueda}{SQL_where_rol}
                             order by le.fecha desc
-                            limit ? offset ?""")
+                            limit {prestamos_por_pagina} offset {offset}""")
 
     # Agregar parámetros de paginación
     params.extend([prestamos_por_pagina, offset])
@@ -399,7 +399,7 @@ def buscar_visitante_e():
                             join roles r on a.id_rol =  r.id_rol
                             where tabla_afectada = 'Visitantes' {SQL_where_busqueda}{SQL_where_rol}
                             order by le.fecha desc
-                            limit ? offset ?""")
+                            limit {visitantes_por_pagina} offset {offset}""")
 
     # Agregar parámetros de paginación
     params.extend([visitantes_por_pagina, offset])
@@ -435,7 +435,6 @@ def libros_modificados():
     total_paginas = math.ceil(total_libros / libros_por_pagina)
 
     query_busqueda = (f"""select a.usuario, r.rol, strftime('%d-%m-%Y', lm.fecha_modificacion) as fecha, lm.motivo, lm.id_modificacion,
-                            -- Datos antiguos (guardados en libros_modificados)
                             lm.titulo as old_titulo,
                             lm.tomo as old_tomo,
                             lm.num_paginas as old_num_paginas,
@@ -452,13 +451,11 @@ def libros_modificados():
                             l.ISBN as isbn_actual,
                             l.ano_publicacion as anio_actual,
                             lm.id_libro,
-                            -- Referencias antiguas de RegistroLibros
                             ed_old.editorial as old_editorial,
                             aut_old.nombre_autor || ' ' || aut_old.apellido_autor as old_autor,
                             not_old.notacion as old_notacion,
                             lug_old.lugar as old_lugar,
                             lm.codigo_seccion_antiguo || ' - ' || sd_old.seccion as old_seccion,
-                            -- Referencias actuales de RegistroLibros
                             ed_new.editorial as editorial_actual,
                             aut_new.nombre_autor || ' ' || aut_new.apellido_autor as autor_actual,
                             not_new.notacion as notacion_actual,
@@ -483,11 +480,10 @@ def libros_modificados():
                             join Administradores a on lm.id_administrador = a.id_administrador
                             join roles r on a.id_rol = r.id_rol
                             join libros l on lm.id_libro = l.id_libro
-                            -- Subconsulta para contar préstamos activos por libro
                             left join (
                                 SELECT id_libro, COUNT(*) as cantidad_prestada
                                 FROM Prestamos 
-                                WHERE id_estado IN (1, 2) -- Estados: Vencido y Activo
+                                WHERE id_estado IN (1, 2)
                                 GROUP BY id_libro
                             ) prestados_activos ON prestados_activos.id_libro = l.id_libro
                             join RegistroLibros rl on rl.id_libro = l.id_libro
@@ -560,7 +556,6 @@ def buscar_libro_m():
     total_paginas = math.ceil(total_libros / libros_por_pagina)
 
     query.execute(f"""select a.usuario, r.rol, strftime('%d-%m-%Y', lm.fecha_modificacion) as fecha, lm.motivo,
-                            -- Datos antiguos (guardados en libros_modificados)
                             lm.titulo as old_titulo,
                             lm.tomo as old_tomo,
                             lm.num_paginas as old_num_paginas,
@@ -606,14 +601,12 @@ def buscar_libro_m():
                             join Administradores a on lm.id_administrador = a.id_administrador
                             join roles r on a.id_rol = r.id_rol
                             join libros l on lm.id_libro = l.id_libro
-                            -- Subconsulta para contar préstamos activos por libro
                             left join (
                                 SELECT id_libro, COUNT(*) as cantidad_prestada
                                 FROM Prestamos 
                                 WHERE id_estado IN (1, 2) -- Estados: Vencido y Activo
                                 GROUP BY id_libro
                             ) prestados_activos ON prestados_activos.id_libro = l.id_libro
-                            -- Referencias actuales
                             join RegistroLibros rl on rl.id_libro = l.id_libro
                             join Notaciones not_new on not_new.id_notacion = rl.id_notacion
                             join Editoriales ed_new on ed_new.id_editorial = not_new.id_editorial
@@ -627,7 +620,7 @@ def buscar_libro_m():
                             left join SistemaDewey sd_old on sd_old.codigo_seccion = lm.codigo_seccion_antiguo
                             where 1=1 {SQL_where_busqueda}{SQL_where_rol}
                             order by lm.fecha_modificacion desc
-                            limit ? offset ?""")
+                            limit {libros_por_pagina} offset {offset}""")
     
     # Agregar parámetros de paginación
     params.extend([libros_por_pagina, offset])
@@ -651,10 +644,10 @@ def revertir_cambios(id_modificacion):
 
     # Obtener los datos de la modificación a revertir (incluyendo nuevos campos)
     query.execute("""SELECT id_libro, titulo, tomo, num_paginas, num_copias, portada, 
-                     ISBN_antiguo, ano_publicacion_antiguo,
-                     id_notacion_antigua, id_editorial_antigua, id_autor_antiguo, 
-                     id_lugar_antiguo, codigo_seccion_antiguo 
-                     FROM libros_modificados WHERE id_modificacion = ?""", (id_modificacion,))
+                        ISBN_antiguo, ano_publicacion_antiguo,
+                        id_notacion_antigua, id_editorial_antigua, id_autor_antiguo, 
+                        id_lugar_antiguo, codigo_seccion_antiguo 
+                        FROM libros_modificados WHERE id_modificacion = """, (id_modificacion,))
     modificacion = query.fetchone()
 
     if not modificacion:
@@ -676,16 +669,16 @@ def revertir_cambios(id_modificacion):
 
     # Obtener los datos actuales del libro y contar préstamos activos
     query.execute("""SELECT l.id_libro, l.titulo, l.tomo, l.numero_paginas, l.numero_copias, l.portada, 
-                     l.ISBN, l.ano_publicacion,
-                     COALESCE(prestados_activos.cantidad_prestada, 0) as prestados_activos
-                     FROM libros l
-                     LEFT JOIN (
-                         SELECT id_libro, COUNT(*) as cantidad_prestada
-                         FROM Prestamos 
-                         WHERE id_estado IN (1, 2) -- Estados: Vencido y Activo
-                         GROUP BY id_libro
-                     ) prestados_activos ON prestados_activos.id_libro = l.id_libro
-                     WHERE l.id_libro = ?""", (id_libro,))
+                        l.ISBN, l.ano_publicacion,
+                        COALESCE(prestados_activos.cantidad_prestada, 0) as prestados_activos
+                        FROM libros l
+                        LEFT JOIN (
+                            SELECT id_libro, COUNT(*) as cantidad_prestada
+                            FROM Prestamos 
+                            WHERE id_estado IN (1, 2) -- Estados: Vencido y Activo
+                            GROUP BY id_libro
+                        ) prestados_activos ON prestados_activos.id_libro = l.id_libro
+                        WHERE l.id_libro = ?""", (id_libro,))
     libro_actual = query.fetchone()
 
     if not libro_actual:
@@ -709,7 +702,7 @@ def revertir_cambios(id_modificacion):
             ISBN = ?, ano_publicacion = ?
         WHERE id_libro = ?
     """, (antiguo_titulo, antiguo_tomo, antiguo_num_paginas, ejemplares_disponibles_revertidos, 
-          antigua_portada, antiguo_isbn, antiguo_anio, id_libro))
+            antigua_portada, antiguo_isbn, antiguo_anio, id_libro))
 
     # Revertir los cambios en RegistroLibros (si existen referencias antiguas)
     if antigua_id_notacion and antiguo_id_lugar and antiguo_codigo_seccion:
