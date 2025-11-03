@@ -555,6 +555,10 @@ def buscar_libro_m():
     total_libros = query.fetchone()[0]
     total_paginas = math.ceil(total_libros / libros_por_pagina)
 
+    # Crear una copia de params para la segunda consulta
+    params_query = params.copy()
+    params_query.extend([libros_por_pagina, offset])
+    
     query.execute(f"""select a.usuario, r.rol, strftime('%d-%m-%Y', lm.fecha_modificacion) as fecha, lm.motivo,
                             lm.titulo as old_titulo,
                             lm.tomo as old_tomo,
@@ -620,10 +624,8 @@ def buscar_libro_m():
                             left join SistemaDewey sd_old on sd_old.codigo_seccion = lm.codigo_seccion_antiguo
                             where 1=1 {SQL_where_busqueda}{SQL_where_rol}
                             order by lm.fecha_modificacion desc
-                            limit {libros_por_pagina} offset {offset}""")
+                            limit ? offset ?""", params_query)
     
-    # Agregar parámetros de paginación
-    params.extend([libros_por_pagina, offset])
     libros_m = dict_factory(query)
 
     query.close()
@@ -647,7 +649,7 @@ def revertir_cambios(id_modificacion):
                         ISBN_antiguo, ano_publicacion_antiguo,
                         id_notacion_antigua, id_editorial_antigua, id_autor_antiguo, 
                         id_lugar_antiguo, codigo_seccion_antiguo 
-                        FROM libros_modificados WHERE id_modificacion = """, (id_modificacion,))
+                        FROM libros_modificados WHERE id_modificacion = ?""", (id_modificacion,))
     modificacion = query.fetchone()
 
     if not modificacion:
