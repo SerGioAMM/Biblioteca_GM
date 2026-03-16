@@ -1,4 +1,5 @@
 from src.database.db_sqlite import conexion_BD, dict_factory
+from flask import jsonify
 from decouple import config
 import cloudinary, cloudinary.uploader
 
@@ -541,3 +542,39 @@ def get_id_autor_libro(id_libro):
     query.close()
     conexion.close()
     return resultado[0] if resultado else None
+
+def get_books_by_quantity(quantity:int):
+    """
+    Returns n quantity of books in JSON format.
+    If quantity > total available books, returns all.
+    If quantity <= 0, returns error.
+    """
+    if quantity <= 0:
+        return jsonify({
+            "success": False,
+            "error": "La cantidad debe ser un numero positivo o mayor a 0."
+        }), 400
+    
+    #GET top n books (all books if quantity is major than total)
+    conexion = conexion_BD()
+    query = conexion.cursor()
+
+    query.execute("""
+        select l.id_libro, titulo, l.tomo, ano_publicacion, ISBN, numero_paginas, numero_copias,
+        sd.codigo_seccion, sd.seccion, a.nombre_autor, a.apellido_autor, e.editorial, n.notacion,lu.lugar, l.portada
+        from Libros l
+        join RegistroLibros r ON r.id_libro = l.id_libro
+        join SistemaDewey sd ON sd.codigo_seccion = r.codigo_seccion 
+        join notaciones n ON n.id_notacion = r.id_notacion
+        join Autores a ON a.id_autor = n.id_autor
+        join Editoriales e ON e.id_editorial = n.id_editorial
+        join Lugares lu ON r.id_lugar = lu.id_lugar
+        order by sd.codigo_seccion asc, Titulo asc
+        LIMIT ?
+    """, (quantity,))
+
+    books = dict_factory(query)
+
+    query.close()
+    conexion.close()
+    return books
