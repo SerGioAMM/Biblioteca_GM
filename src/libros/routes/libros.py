@@ -1,4 +1,6 @@
-from flask import Blueprint, session, redirect, request,render_template,url_for
+from flask import Blueprint, session, redirect, request,render_template,url_for, jsonify
+from flask_cors import CORS
+import random
 from datetime import datetime
 import math
 from src.database.db_sqlite import conexion_BD
