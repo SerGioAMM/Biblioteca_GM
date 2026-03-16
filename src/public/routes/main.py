@@ -10,7 +10,6 @@ from src.libros.models.libros_model import total_libros as _total_libros
 @main.route("/", methods=["GET"])
 def inicio():
     session.clear()
-
     secciones_principales = [
         "Generalidades",
         "Filosofia - Psicología",
@@ -23,7 +22,6 @@ def inicio():
         "Literatura",
         "Historia - Geografía - Biografía",
         "Recién añadidos"]
-
     libros_destacados = []
     for i in range(11):
         contador_aleatorios = 0
@@ -54,7 +52,7 @@ def inicio():
     #Agregar formato url_for a las imagenes
     for act in actividades:
         act["imagen"] = url_for('static', filename=act["imagen"])
-
+    
     return render_template("index.html",libros_destacados=libros_destacados, total_libros=total_libros, actividades=actividades)
 
 # ----------------------------------------------------- ACERCA DE ----------------------------------------------------- #
