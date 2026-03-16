@@ -7,7 +7,7 @@ bp_books = Blueprint('books',__name__, template_folder="../templates")
 
 @bp_books.after_request
 def add_cors_headers(response):
-    response.headers["Access-Control-Allow-Origin"]  = "*"
+    response.headers["Access-Control-Allow-Origin"]  = "https://luminous-chimera-869965.netlify.app/"
     response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
     response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
     return response
